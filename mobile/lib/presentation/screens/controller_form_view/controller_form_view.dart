@@ -34,6 +34,18 @@ class _ControllerFormViewState extends ConsumerState<ControllerFormView> {
   }
   
   @override
+  void dispose() {
+    
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
+    
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final _ = ref.watch(controllerEditProvider(widget.controllerId)

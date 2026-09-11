@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/presentation/providers/controllers_provider.dart';
 import 'package:game_controller/presentation/screens/controller_list_view/widgets/connection_header.dart';
@@ -17,12 +16,6 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> {
   @override
   void initState() {
     super.initState();
-
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
   }
   
   

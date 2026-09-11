@@ -11,7 +11,7 @@ import '../routes/v1/player_client.dart' as v1_player_client;
 import '../routes/_middleware.dart' as middleware;
 
 void main() async {
-  final address = InternetAddress.tryParse('') ?? InternetAddress.anyIPv6;
+  final address = InternetAddress.tryParse('0.0.0.0') ?? InternetAddress.anyIPv6;
   final port = int.tryParse(Platform.environment['PORT'] ?? '8080') ?? 8080;
   hotReload(() => createServer(address, port));
 }
