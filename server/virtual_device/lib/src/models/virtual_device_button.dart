@@ -31,12 +31,11 @@ class VirtualDeviceAxisButton implements VirtualDeviceButton{
 
   @override
   int scaleInputValue(double input) {
-    // TODO : repair this for not center to 0 ranges
     final clampedInput = input.clamp(-1.0, 1.0);
-  
+
     final scaled = clampedInput < 0
-        ? clampedInput * minAllowValue
-        : clampedInput * maxAllowValue;
+        ? clampedInput * minAllowValue.abs() // clampInput has the signal
+        : clampedInput * maxAllowValue.abs(); // por si acaso el abs 
 
     return scaled.round().clamp(minAllowValue, maxAllowValue);
   }

@@ -31,7 +31,7 @@ class SinglePressButtonPainter extends ConsumerWidget{
         ),
 
       child: InkWell(
-        onTap: () {
+        onTapDown: (details) {
           connectionRepo.send(ButtonPlayerEvent(
             btn: button.buttonCode, 
             axis: .depth, 
