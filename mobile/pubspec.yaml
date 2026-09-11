@@ -1,0 +1,75 @@
+name: game_controller
+description: "A new Flutter project."
+publish_to: 'none' 
+
+flutter_app_name:
+  name: "Game Controller"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  core:
+    path: ../core/
+  cupertino_icons: ^1.0.8
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  go_router: ^17.5.0
+  riverpod: ^3.3.2
+  flutter_riverpod: ^3.3.2
+  google_fonts: ^8.2.1
+  flutter_joystick_customisable: ^0.3.0
+  hive_ce_flutter: ^2.3.4
+  json_annotation: ^4.12.0
+  freezed_annotation: ^3.1.0
+  fast_immutable_collections: ^11.2.0
+  infinite_scroll_pagination: ^5.1.1
+  uuid: ^4.6.0
+  input_quantity: ^2.6.0
+  flutter_form_builder: ^10.3.0+2
+  timeago: ^3.7.1
+  web_socket_channel: ^3.0.3
+  rxdart: ^0.28.0
+  flutter_dotenv: ^6.0.1
+  device_info_plus: ^13.2.0
+  
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  flutter_app_name: ^0.1.1
+  flutter_launcher_icons: ^0.14.4
+  build_runner: ^2.4.0
+  hive_ce_generator: ^1.11.1
+  json_serializable: ^6.14.1
+  freezed: ^3.2.5
+  
+
+flutter:
+  generate : true
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - .env
+    - assets/icon/icon.png
+  
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #

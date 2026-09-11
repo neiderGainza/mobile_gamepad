@@ -1,0 +1,119 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+*.tmp
+*.temp
+*.bak
+*.orig
+.DS_Store
+Thumbs.db
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# Environment files
+.env
+.env.*
+*.env
+*.env.*
+.envrc
+**/.env
+**/.env.*
+!.env.example
+
+# Local configuration and IDEs
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Build and generated artifacts
+**/build/
+**/dist/
+**/out/
+**/target/
+**/coverage/
+**/generated/
+**/gen/
+**/.dart_tool/
+**/.pub/
+**/.pub-cache/
+**/.gradle/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.metadata
+**/android/.cxx/
+**/ios/Flutter/.last_build_id
+**/ios/Pods/
+**/web/.dart_tool/
+
+# Flutter / Dart / Pub related
+**/doc/api/
+**/ios/Flutter/Generated.xcconfig
+**/android/local.properties
+**/android/key.properties
+**/android/app/release/
+**/android/app/debug/
+**/android/app/profile/
+
+# Symbolication and obfuscation
+app.*.symbols
+app.*.map.json
+
+# Testing and coverage
+coverage/
+htmlcov/
+.pytest_cache/
+.dart_tool/test/
+
+# OS files
+.AppleDouble
+.LSOverride
+.Trashes
+
+# Node / frontend artifacts (if any are added later)
+node_modules/
+.npm/
+.pnpm-store/
+
+# Rust / cargo caches (if any are added later)
+/target/
+Cargo.lock
+
+# Java / Gradle build outputs
+*.class
+*.war
+*.ear
+
+# Go builds (if any are added later)
+/bin/
+/pkg/
+
+# Temporary directories
+tmp/
+temp/
+logs/
+cache/
+
+# Any general compiled outputs
+*.o
+*.so
+*.dll
+*.dylib
+*.exe
+*.a
+*.lib
+*.out
+
+# Keep examples visible when needed
+!example.env
+!*.example
+!**/.env.example
+!**/.env.sample
