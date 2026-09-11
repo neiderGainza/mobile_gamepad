@@ -62,6 +62,7 @@ class UinputXbox implements VirtualDevice {
         throw Exception('Error creating controller');
       }
     }catch(e){
+      /// Si el error sucedio luego del openAndAvilateEvent
       if(_fd >= 0) close_device(_fd); 
       throw InitVirtualDeviceException(e.toString());
     }
@@ -114,8 +115,7 @@ class UinputXbox implements VirtualDevice {
     _fd = open_device();
     if (_fd < 0) throw Exception('Could not open /dev/uinput');
     if (ioctl_ui_set_evbit(_fd, EV_ABS) < 0 ||
-        ioctl_ui_set_evbit(_fd, EV_KEY) < 0 ||
-        ioctl_ui_set_evbit(_fd, EV_FF ) < 0 ) {
+        ioctl_ui_set_evbit(_fd, EV_KEY) < 0 ) {
       throw Exception('Could not enable uinput events');
     }
   }
@@ -148,7 +148,6 @@ class UinputXbox implements VirtualDevice {
       );
     }
   }
-
 
 
   Future<void> _initIsolate() async {

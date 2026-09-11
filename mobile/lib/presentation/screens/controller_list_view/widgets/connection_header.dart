@@ -124,6 +124,7 @@ class TypeAddressBtn extends ConsumerWidget {
         final address = await DialogCollection.simplePopUpForm(
           context, 
           title: 'ServerAddress:ServerPort',
+          initValue: '127.0.0.1:8080'
         );
     
         if(address != null){

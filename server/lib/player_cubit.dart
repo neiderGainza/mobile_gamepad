@@ -96,12 +96,17 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _authTimer = Timer( const Duration(seconds: 8), close );
   }
 
-  void _createVirtualDevice(){
+  Future<void> _createVirtualDevice() async {
     try{
       _virtualDevice = VirtualDevice.platformDevice();
-      _virtualDevice!.start(playerNumber);
+      await _virtualDevice!.start(playerNumber);
     }catch(e){
-      /// TODO : send error message to frontend
+      if(e is VirtualDeviceException){
+        print("Error incialicing VD: ${e.message}");
+      }else{
+        print("Error incialicing VD: $e");
+      }
+      _virtualDevice = null;
     }
   }
 
@@ -162,5 +167,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _webSocketChannel.sink.close(status.goingAway);
     return super.close();
   }
+
 
 }

@@ -7,18 +7,18 @@ Future<void> main(List<String> args) async {
     if(input.config.buildCodeAssets){
       final packageName = input.packageName;
 
-      // switch(input.config.code.targetOS){
-      //   case .linux : 
+      switch(input.config.code.targetOS){
+        case .linux : 
           final uinputBridge = CLibrary(
             name: packageName,
-            assetName: 'virtual_device/uinput/uinput_bridge.dart',
+            assetName: 'src/uinput/uinput_bridge.dart',
             sources: [
               'src/uinput_bridge.c',
             ]
           );  
           await uinputBridge.build(input: input, output: output);
-          // break;
-      // } 
+          break;
+      } 
       
     }
   });
