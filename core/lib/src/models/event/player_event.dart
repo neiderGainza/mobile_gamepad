@@ -42,13 +42,17 @@ class ButtonPlayerEvent extends PlayerEvent {
   final PlayerButton btn; 
   final ButtonAxis axis; 
   final int _val; // int32
-  double get value => (_val / 32767);
+
+  double get value {
+    if (_val < 0) return _val / 32768.0;
+    return _val / 32767.0;
+  }
 
   ButtonPlayerEvent({
     required this.btn,
     required this.axis,
     required double value,
-  }) : _val = (value * 32767).round();
+  }) : _val = (value.clamp(-1.0, 1.0) * (value < 0 ? 32768 : 32767)).round();
 
   ButtonPlayerEvent._(
     this.btn,

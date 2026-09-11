@@ -80,6 +80,8 @@ class PlayerCubit extends Cubit<PlayerState?>{
 
     final vdb = _virtualDevice!.getDefaultVDBfor(event.btn);
     if(vdb != null){
+      print(event.value);
+
       _virtualDevice!.proccessEvent([
         VirtualDeviceInput(button: vdb, axis:event.axis, value: event.value)
       ]);
