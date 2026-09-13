@@ -5,11 +5,10 @@ import 'package:core/core.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
 import 'package:virtual_device/virtual_device.dart';
 
-import 'package:web_socket_channel/status.dart' as status;
-
 
 /// Encargado de recibir los eventos del player mutar el estado
-/// y emitir los eventos del sever hacia el player
+/// emitir los eventos del sever hacia el player
+/// Puente entre virtualDevice y player
 class PlayerCubit extends Cubit<PlayerState?>{
   ///
   PlayerCubit(this._webSocketChannel, {
@@ -43,22 +42,25 @@ class PlayerCubit extends Cubit<PlayerState?>{
   
 
   // subscritpions
-  StreamSubscription<dynamic  > ? _userInputSubscription;
+  StreamSubscription<dynamic> ? _userInputSubscription;
+  StreamSubscription<VirtualDeviceEvent> ? _vdEventSubscription; 
   Timer ? _authTimer;
 
   
   /// Eventos
   void _onPlayerUpdateInfo(UpdateInfoPlayerEvent event){
-    _authTimer?.cancel();
-    
-    emit( 
-      state
-        ?.copyWith( player: event.player , connectionStatus: .connected)
-        ?? PlayerState(player: event.player, connectionStatus: .connected)
-      );
-
-    onPlayerAuth(state!.player.id, this); // callback
-    _createVirtualDevice();
+    if(state == null){
+      _authTimer?.cancel();
+      
+      onPlayerAuth(event.player.id, this);
+      emit(PlayerState(player: event.player , connectionStatus: .connected));
+      _webSocketChannel.sink.add(SuccessCheckEvent(id: event.id).encode());
+      
+      _createVirtualDevice();
+    }else{
+      emit(state!.copyWith(player: event.player , connectionStatus: .connected));
+      _webSocketChannel.sink.add(SuccessCheckEvent(id: event.id).encode());
+    }
   }
   
   void _onPlayerDisconnectEvent(DisconnectPlayerEvent event){
@@ -74,8 +76,11 @@ class PlayerCubit extends Cubit<PlayerState?>{
     }
     
     if(_virtualDevice == null){
-      /// TODO : SEND PROBLEM TO FRONTED
-      return;
+      try{
+        _createVirtualDevice();
+      }catch(_){
+        
+      }
     }
 
     final vdb = _virtualDevice!.getDefaultVDBfor(event.btn);
@@ -96,20 +101,7 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _authTimer = Timer( const Duration(seconds: 8), close );
   }
 
-  Future<void> _createVirtualDevice() async {
-    try{
-      _virtualDevice = VirtualDevice.platformDevice();
-      await _virtualDevice!.start(playerNumber);
-    }catch(e){
-      if(e is VirtualDeviceException){
-        print("Error incialicing VD: ${e.message}");
-      }else{
-        print("Error incialicing VD: $e");
-      }
-      _virtualDevice = null;
-    }
-  }
-
+  /// Inicializando subscripciones
   void _initHeartbeat(){
     _heartbeat = Heartbeat(
       _serverEventStream,
@@ -130,7 +122,7 @@ class PlayerCubit extends Cubit<PlayerState?>{
       (data){
         if(PlayerEvent.isPlayerEvent(data)){
           final playerEvent = PlayerEvent.decode(data);
-          
+            
           switch(playerEvent){
             case final UpdateInfoPlayerEvent event:
               _onPlayerUpdateInfo(event);
@@ -147,6 +139,22 @@ class PlayerCubit extends Cubit<PlayerState?>{
     );
   }
 
+  void _initVDEventSubscription(VirtualDevice vd){
+    _vdEventSubscription?.cancel();
+    _vdEventSubscription = vd.eventStream.listen(
+      (vde){
+        switch(vde){
+          
+          case VibrationVDEvent():
+            _webSocketChannel.sink.add(VibrateServerEvent(
+              code: vde.id, 
+              value: vde.value
+            ).encode());    
+        }
+      }
+    );
+  }
+
 
   @override
   void onChange(Change<PlayerState?> change) {
@@ -156,17 +164,40 @@ class PlayerCubit extends Cubit<PlayerState?>{
     super.onChange(change);
   }
 
+
   @override
   Future<void> close() {
     _authTimer?.cancel();
     _userInputSubscription?.cancel();
-    
+    _vdEventSubscription?.cancel();
+
     _heartbeat?.stopHeartbeat();
     _virtualDevice?.close();
     
-    _webSocketChannel.sink.close(status.goingAway);
+    _webSocketChannel.sink.close();
     return super.close();
   }
 
 
+  Future<void> _createVirtualDevice() async {
+    try{
+      _virtualDevice = VirtualDevice.platformDevice();
+      if(_virtualDevice == null){
+        throw UnimplementedError('No devices for the parameters, '
+          'on _createVirtualDevice on PlayerCubit');
+      }
+      await _virtualDevice!.start(playerNumber);
+      _initVDEventSubscription(_virtualDevice!);
+    
+    }catch(e){
+    
+      if(e is VirtualDeviceException){
+        print("Error incialicing VD: ${e.message}");
+      }else{
+        print("Error incialicing VD: $e");
+      }
+    
+      _virtualDevice = null;
+    }
+  }
 }

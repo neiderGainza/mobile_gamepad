@@ -1,18 +1,29 @@
 import 'package:core/core.dart';
+import 'package:game_controller/domain/enums/player_info_sync_state.dart';
 
 abstract class ConnectionRepository {
-  Stream<ServerEvent> get serverEventStream; 
-
+  // connection Status
   Stream<PlayerConnectionStatus> get connectionStatusStream;
   PlayerConnectionStatus get connectionStatus;
 
+  // ping
   Stream<Duration?> get pingStream;
   Duration ? get ping;
 
+  // playerInfoSyncState
+  Stream<PlayerInfoSyncState> get playerInfoSyncStateStream;
+  PlayerInfoSyncState get playerInfoSyncState; 
 
   void connect(String serverAddress, int port);
 
   void disconnect();
 
   void send(ButtonPlayerEvent pbe);
+
+  /// los intentos de sincronizacion son automaticos
+  /// pero esto los fuerza (util en caso de fallo de 
+  /// sincronizacion automatica).
+  ///  
+  /// la data del player sera obtenida del [PlayerLocalStorage]
+  void syncPlayerData();
 }

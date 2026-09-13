@@ -1,0 +1,10 @@
+/// Taketn from linux/input.h library
+const int FF_HAPTIC =	0x4f;
+const int FF_RUMBLE	= 0x50;
+const int FF_PERIODIC	= 0x51;
+const int FF_CONSTANT	= 0x52;
+const int FF_SPRING	 = 0x53;
+const int FF_FRICTION	= 0x54;
+const int FF_DAMPER	= 0x55;
+const int FF_INERTIA	= 0x56;
+const int FF_RAMP		= 0x57;

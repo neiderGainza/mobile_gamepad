@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'dart:ffi' as ffi;
+
 import 'package:core/core.dart';
+import 'package:ffi/ffi.dart' as ffi_allocator;
 import 'package:isolate_channel/isolate_channel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:virtual_device/src/models/virtual_device_button.dart';
 import 'package:virtual_device/src/models/virtual_device_event.dart';
 import 'package:virtual_device/src/models/virtual_device_input.dart';
+import 'package:virtual_device/src/uinput/uinput_rumble_const.dart';
 import '../exception/virtual_device_exception.dart';
 import 'uinput_bridge.dart';
 import '../virtual_device.dart';
@@ -44,25 +49,54 @@ class UinputXbox implements VirtualDevice {
   };
 
   int _fd = -1;
+  int _fdPoll = -1;
+
   IsolateConnection ? _vdeIsolate;
   final BehaviorSubject<VirtualDeviceEvent> _vdeSubject = BehaviorSubject();
   
   @override
-  Stream<VirtualDeviceEvent> get eventStream => _vdeSubject.stream;
+  Stream<VirtualDeviceEvent> get eventStream 
+    => _vdeSubject.stream;
+
+    @override
+  List<VirtualDeviceButton> get availableButtons 
+    => UinputXbox._xboxButtons.values.toList();
+
+  @override
+  VirtualDeviceButton ? getDefaultVDBfor(PlayerButton btn) 
+    => UinputXbox._xboxButtons[btn];
 
   @override
   Future<void> start(int controllerNumberName) async {
     try{
-      _openAndAvilitateEvents();
-      _registerAllButtonsAndAxis();
+      close();
+
+      _fd     = open_device();
+      _fdPoll = open_poll_file();
       
-      // await _initIsolate();
+      if(_fd < 0 || _fdPoll < 0){
+        throw Exception("Error opening devices");
+      }
+
+      if(  ioctl_ui_set_evbit(_fd, EV_ABS) < 0 // axis 
+        || ioctl_ui_set_evbit(_fd, EV_KEY) < 0 // botones
+        || ioctl_ui_set_evbit(_fd, EV_FF ) < 0 // vibracion
+
+        || _registerAllButtonsAndAxis() < 0 // 
+        || _registerVibration() < 0
+      ) { 
+        throw Exception('Error registering events');
+      }
       
       if(create_device(_fd, controllerNumberName, 1118, 654) < 0){
         throw Exception('Error creating controller');
       }
+      
+      if( (await _initIsolate()) < 0) {
+        throw Exception('Error maneging Isolate');
+      }
     }catch(e){
-      /// Si el error sucedio luego del openAndAvilateEvent
+      print("Exception : $e");
       if(_fd >= 0) close_device(_fd); 
       throw InitVirtualDeviceException(e.toString());
     }
@@ -70,9 +104,19 @@ class UinputXbox implements VirtualDevice {
 
   @override
   void close(){
-    _vdeIsolate?.close();
-    close_device(_fd);
+    _vdeSubject.drain();
+
+    if(_fdPoll != -1){
+      write_poll_file(_fdPoll, POLL_CLOSE);
+      close_poll_file(_fdPoll);
+    }
+    if(_fd != -1) close_device(_fd);
+
     _fd = -1;
+    _fdPoll = -1;
+
+    _vdeIsolate?.close();
+    _vdeIsolate = null;
   }
   
   @override
@@ -101,43 +145,26 @@ class UinputXbox implements VirtualDevice {
   }
 
 
-  @override
-  List<VirtualDeviceButton> get availableButtons 
-    => UinputXbox._xboxButtons.values.toList();
-
-  @override
-  VirtualDeviceButton ? getDefaultVDBfor(PlayerButton btn) 
-    => UinputXbox._xboxButtons[btn];
-
-
-  /// open y habilita eventos abs, key (fd tiene valor o exception)
-  void _openAndAvilitateEvents(){
-    _fd = open_device();
-    if (_fd < 0) throw Exception('Could not open /dev/uinput');
-    if (ioctl_ui_set_evbit(_fd, EV_ABS) < 0 ||
-        ioctl_ui_set_evbit(_fd, EV_KEY) < 0 ) {
-      throw Exception('Could not enable uinput events');
-    }
-  }
 
   /// fd tiene que tener valor antes de invocar
   /// recorre los botones y axis existentes y los registra
-  void _registerAllButtonsAndAxis(){
+  int _registerAllButtonsAndAxis(){
 
     for(final btn in UinputXbox._xboxButtons.values){  
       switch(btn){
         case VirtualDeviceAxisButton():
-          _registerAxis(btn);
+          if(_registerAxis(btn) < 0) return -1;
         case VirtualDeviceSinglePressButton():
-          ioctl_ui_set_keybit(_fd, btn.code);
+          if(ioctl_ui_set_keybit(_fd, btn.code) < 0) return -1;
       }
     }
+    return 0;
   }
 
 
-  void _registerAxis(VirtualDeviceAxisButton btn){
+  int _registerAxis(VirtualDeviceAxisButton btn){
     for(final entry in btn.codeByAxis.entries){
-      ioctl_ui_set_absbit(
+      if(ioctl_ui_set_absbit(
         _fd,
         entry.value,
         btn.minAllowValue,
@@ -145,48 +172,86 @@ class UinputXbox implements VirtualDevice {
         btn.buzz,
         btn.flat,
         0,
-      );
+      ) < 0){ return -1; }
     }
+    return 0;
   }
 
 
-  Future<void> _initIsolate() async {
-    IsolateMethodChannel ? methodChannel;
-    
+  int _registerVibration(){
+    if(  
+      
+      ioctl_ui_set_ffbit(_fd, FF_RUMBLE) < 0
+      || false
+
+    ){ return -1; }
+    return 0 ;
+  }
+
+
+  Future<int> _initIsolate() async {
+
     _vdeIsolate = await spawnIsolate(
       (sendPort){
-        final connection = setupIsolate(sendPort);
-
-        methodChannel = IsolateMethodChannel('method_channel',connection);
-        final eventChannel  = IsolateEventChannel('event_channel' , connection);
-
-        methodChannel?.setMethodCallHandler((call){
-          switch(call.method){
-            case 'listen_to_events':
-              // int type = -1, code = -1 , value = -1;
-              // while(read_input_event(_fd, type, code, value) != -1){
-              //   /// Process event
-              // }
-              // /// free memorys
-            default: 
-              return call.notImplemented();
-          }
-        });
+        final connection   = setupIsolate(sendPort);
+        final eventChannel = IsolateEventChannel('event_channel', connection);
 
         eventChannel.setStreamHandler(
-          IsolateStreamHandler.inline(
-            onListen: (arguments, sink){
-              if(arguments is VirtualDeviceEvent){
-                _vdeSubject.add(arguments);
-              }
-            }
-          )
+          IsolateStreamHandler.inline( onListen: _isolateTask )
         );
-
       },
     );
 
-    methodChannel?.invokeMethod('listen_to_events');
+    final eventChannel = IsolateEventChannel('event_channel', _vdeIsolate!);
+    eventChannel.receiveBroadcastStream((_fd, _fdPoll)).listen((event){
+      if(event is VirtualDeviceEvent){
+        _vdeSubject.add(event);
+      }
+
+      print("Event from Isolate: $event");
+    });
+    
+    return 0;
   }
 
+
+  static void _isolateTask(dynamic arguments, IsolateEventSink sink){
+    final (fd, fdPoll)   = arguments as (int, int);
+    
+    final type   = ffi_allocator.calloc<ffi.Int>();
+    final code   = ffi_allocator.calloc<ffi.Int>();
+    final value  = ffi_allocator.calloc<ffi.Int>();
+    final comand = ffi_allocator.calloc<ffi.Int>();
+
+    try {
+      while(true){
+        final result = read_input_or_poll(
+          fd, fdPoll, type, code, value, comand);
+
+        sink.success(result);
+        
+        if(result < 0) break;// an error
+
+        if(result == 0){
+          switch(type.value){
+            case EV_FF:
+              sink.success( VibrationVDEvent(id: code.value, value: value.value));
+          }
+        }else if(result == 1){
+          switch(comand.value){
+            case POLL_CLOSE:
+              sink.endOfStream();
+              return;
+          }
+        }
+      }
+
+    } catch(e){
+      sink.success(e.toString());
+    } finally {
+      ffi_allocator.calloc.free(type);
+      ffi_allocator.calloc.free(code);
+      ffi_allocator.calloc.free(value);
+    }
+  }
 }

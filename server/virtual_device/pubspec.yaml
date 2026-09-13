@@ -13,6 +13,7 @@ dependencies:
   core:
     path: ../../core/
 
+  ffi: ^2.2.0
   hooks: ^2.2.0
   isolate_channel: ^0.6.1
   native_toolchain_c: ^0.19.4

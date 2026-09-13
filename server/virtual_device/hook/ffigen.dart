@@ -7,7 +7,11 @@ void main() {
   if(Platform.isLinux){
     final functions = {
       'open_device',
+      'open_poll_file',
+      'close_poll_file',
+      'write_poll_file',
       'read_input_event',
+      'read_input_or_poll',
       'ioctl_ui_set_evbit',
       'ioctl_ui_set_keybit',
       'ioctl_ui_set_absbit',
@@ -40,7 +44,8 @@ void main() {
                 name.startsWith('EV_') ||
                 name.startsWith('ABS_') ||
                 name.startsWith('UI_') ||
-                name.startsWith('BUS_');
+                name.startsWith('BUS_') ||
+                name.startsWith('POLL_');
           }
         ),
       ],

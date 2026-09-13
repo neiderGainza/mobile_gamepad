@@ -5,11 +5,7 @@ import 'package:core/src/models/player/player_connection_status.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 
-abstract interface class HeartbeatInterface {
-  void stopHeartbeat();
-}
-
-class Heartbeat implements HeartbeatInterface{
+class Heartbeat{
   final Duration pingInterval;
   final int maxPingFailed;
   
@@ -51,7 +47,6 @@ class Heartbeat implements HeartbeatInterface{
     _startPingTimer();
   }
 
-  @override
   void stopHeartbeat({bool callCallback = false}) {
     _channelSubscription?.cancel();
     _pingTimer?.cancel();
@@ -90,11 +85,11 @@ class Heartbeat implements HeartbeatInterface{
     _channelSubscription = _channelStream.listen(
       (data){
         if(PingEvent.isPing(data)){
-          final pp = PongEvent(PingEvent.decode(data).identifier);
+          final pp = PongEvent(PingEvent.decode(data).id);
           _channelSink.add(pp.encode());
         }else if(PongEvent.isPong(data)){
           final pp = PongEvent.decode(data);
-          _handlePong(pp.identifier);
+          _handlePong(pp.id);
         }
         
         connectionStatus = .connected;
@@ -117,5 +112,6 @@ class Heartbeat implements HeartbeatInterface{
       });
     }
   }
-
 }
+
+

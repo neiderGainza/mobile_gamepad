@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/data/repositories/player_settings_repository_impl.dart';
 import 'package:game_controller/presentation/providers/connection_player_provider.dart';
 import 'package:game_controller/presentation/utils/dialog_collection.dart';
+import 'package:game_controller/presentation/widgets/player_info_sync_indicator.dart';
 
 
 class UserNameTile extends ConsumerWidget {
@@ -12,14 +13,16 @@ class UserNameTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final player = ref.watch(connectionPlayerProvider);
+    final player     = ref.watch(connectionPlayerProvider);
     final playerName = player.whenData((p) => p.name);
     
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-    
+          const PlayerInfoSyncIndicator(),
+          const SizedBox(width: 8,),
+
           Expanded(
             child: FittedBox(
               fit: .scaleDown,
@@ -41,6 +44,7 @@ class UserNameTile extends ConsumerWidget {
       ),
     );
   }
+
 
   Future<void> editName(
     BuildContext context, 

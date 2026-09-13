@@ -10,6 +10,12 @@ import 'dart:ffi' as ffi;
 @ffi.Native<ffi.Int Function(ffi.Int)>()
 external int close_device(int fd);
 
+/// @brief Escribe el comando de cierre y cierra el descriptor del poll.
+/// @param fd Descriptor devuelto por open_poll_file
+/// @return 0 en éxito, -1 en error
+@ffi.Native<ffi.Int Function(ffi.Int)>()
+external int close_poll_file(int fd);
+
 /// @brief Asigna el nombre al dispositivo y lo registra en el sistema
 /// @param fd Descriptor de archivo
 /// @param identifier Identificador para formar "Player [identifier]
@@ -89,6 +95,11 @@ external int move_axis(int fd, int axis, int value);
 @ffi.Native<ffi.Int Function()>()
 external int open_device();
 
+/// @brief Crea el descriptor usado para despertar el poll.
+/// @return descriptor del poll o -1 en caso de error
+@ffi.Native<ffi.Int Function()>()
+external int open_poll_file();
+
 /// @brief Envía el evento de presionar/liberar botón
 /// (la accion se ejecuta en el proximo sync)
 /// @param fd Descriptor de archivo
@@ -118,9 +129,42 @@ external int read_input_event(
   ffi.Pointer<ffi.Int> value,
 );
 
+/// @brief Espera un evento uinput o un comando del poll.
+/// @param fd Descriptor uinput
+/// @param type Tipo del evento uinput
+/// @param code Código del evento uinput
+/// @param value Valor del evento uinput
+/// @param command Comando leído, o 0 si se leyó un evento uinput
+/// @return 0 para evento uinput, 1 para comando, -1 en caso de error
+@ffi.Native<
+  ffi.Int Function(
+    ffi.Int,
+    ffi.Int,
+    ffi.Pointer<ffi.Int>,
+    ffi.Pointer<ffi.Int>,
+    ffi.Pointer<ffi.Int>,
+    ffi.Pointer<ffi.Int>,
+  )
+>()
+external int read_input_or_poll(
+  int uinput_fd,
+  int poll_fd,
+  ffi.Pointer<ffi.Int> type,
+  ffi.Pointer<ffi.Int> code,
+  ffi.Pointer<ffi.Int> value,
+  ffi.Pointer<ffi.Int> command,
+);
+
 /// @brief Sincroniza los movimientos
 @ffi.Native<ffi.Int Function(ffi.Int)>()
 external int sync_device(int fd);
+
+/// @brief Escribe un comando en el descriptor del poll.
+/// @param fd Descriptor devuelto por open_poll_file
+/// @param command Comando definido por el llamador
+/// @return 0 en éxito, -1 en error
+@ffi.Native<ffi.Int Function(ffi.Int, ffi.Int)>()
+external int write_poll_file(int fd, int command);
 
 const int ABS_BRAKE = 10;
 
@@ -487,3 +531,9 @@ const int EV_SND = 18;
 const int EV_SW = 5;
 
 const int EV_SYN = 0;
+
+const int POLL_CLOSE = 1;
+
+const int POLL_RESUME = 3;
+
+const int POLL_STOP = 2;

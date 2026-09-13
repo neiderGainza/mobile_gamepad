@@ -14,8 +14,15 @@ export 'src/models/event/server_event.dart';
 // player event
 export 'src/models/event/player_event.dart';
 
+// check event
+export 'src/models/event/check_event.dart';
+
 // server_config_service
 export 'src/utils/server_config_service.dart';
 
-// webSocketChannelMixin
+// identifiable interface
+export 'src/models/event/_event.dart' show IdentiafiableEvent, Event;
+
+// network
 export 'src/network/heartbeat.dart';
+export 'src/network/check_pool.dart';

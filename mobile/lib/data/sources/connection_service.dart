@@ -18,8 +18,8 @@ final connectionServiveProvider = Provider((ref){
 
 
 // -------------------------Interface ------------------------------
-abstract class ConnectionService {
-  Stream<ServerEvent> get serverEventStream;
+abstract class ConnectionService{
+  Stream<Event> get eventStream;
 
   Stream<PlayerConnectionStatus> get connectionStatusStream;
   PlayerConnectionStatus get connectionStatus;
@@ -39,17 +39,20 @@ abstract class ConnectionService {
 // ---------------------- Implementation -------------------------
 class ConnectionServiceImpl extends ConnectionService{
   WebSocketChannel ? _channel;
-  StreamSubscription ? _serverEventSubscription;
-  Heartbeat ? _heartbeat;
-
+  Heartbeat ? _heartbeat; // compisition instead inherent
+  CheckPool ? _checkPool; // compisition instead inherent
+  
   /// Broadcast del [_channel.stream]
   Stream<dynamic> ? _channelBroadcastStream;
+  StreamSubscription ? _serverEventSubscription;
 
-  final BehaviorSubject<ServerEvent> _serverSubject = BehaviorSubject();
+  final BehaviorSubject<Event> _serverSubject = BehaviorSubject();
   final BehaviorSubject<Duration?>   _pingSubject = .seeded(null);
   final BehaviorSubject<PlayerConnectionStatus> _connectionSubject 
     = .seeded(.disconnected);
 
+
+  // --------------------- conectionStatus ----------------------
   @override
   PlayerConnectionStatus get connectionStatus 
     => _connectionSubject.value;
@@ -57,18 +60,20 @@ class ConnectionServiceImpl extends ConnectionService{
   @override
   Stream<PlayerConnectionStatus> get connectionStatusStream 
     => _connectionSubject.stream;
-  
+
+  // --------------------- serverEventStream ----------------------
   @override
-  Stream<ServerEvent> get serverEventStream 
+  Stream<Event> get eventStream 
     => _serverSubject.stream;
 
+  // ----------------------- ping ----------------------------------
   @override
   Stream<Duration?> get pingStream => _pingSubject.stream;
 
   @override
   Duration? get ping => _pingSubject.value;
 
-
+  // ----------------------- methods --------------------------------
   @override
   Future<void> connect(String serverAddress, int serverPort) async {
     try{
@@ -88,13 +93,13 @@ class ConnectionServiceImpl extends ConnectionService{
 
       _startSubscribeToServerEvent();
       _initHeartbeat();
+      _initCheckPool();
     }catch(e){
       debugPrint("Error connection on ConnectionService: $e");
       rethrow;
     }
   }
 
-  
   @override
   void send(PlayerEvent event) {
     _channel?.sink.add(event.encode());
@@ -117,6 +122,10 @@ class ConnectionServiceImpl extends ConnectionService{
     // dejo de mandar pings
     _heartbeat?.stopHeartbeat();
     _heartbeat = null;
+    
+    // detengo la espera por checks checkPool
+    _checkPool?.stop();
+    _checkPool = null;
 
     // cierro el channel completamente
     _channel?.sink.close(status.normalClosure);
@@ -127,18 +136,19 @@ class ConnectionServiceImpl extends ConnectionService{
     _channelBroadcastStream = null;
   }
 
-  /// Server Event subscription
+
+  /// ---------------------------- Helpers --------------------------------
   void _startSubscribeToServerEvent(){
     _serverEventSubscription?.cancel();
     _serverEventSubscription = _channelBroadcastStream?.listen(
       (data){
-        if(ServerEvent.isServerEvent(data)){
-          final serverEvent = ServerEvent.decode(data);
-          debugPrint('Server Event: $serverEvent');
-          _serverSubject.add(serverEvent);     
-        }else{
-          // debugPrint('Rare Event: $data');
+        try{
+          final event = Event.decode(data);
+          _serverSubject.add(event);
+        }catch(e){
+          debugPrint("Problems with event reception: $e");
         }
+        
       }
     );
   }
@@ -156,5 +166,13 @@ class ConnectionServiceImpl extends ConnectionService{
       onConnectionStatusChanged: _connectionSubject.add,
       onHeartbeatStop: disconnect, 
     );
+  }
+
+  void _initCheckPool(){
+    if(_checkPool != null) throw Exception('initCheckPool with a session open');
+    if(_channel == null || _channelBroadcastStream == null) {
+      throw Exception('initCheckPool without _channel');
+    }
+    _checkPool = CheckPool(_channelBroadcastStream!, _channel!.sink);
   }
 }

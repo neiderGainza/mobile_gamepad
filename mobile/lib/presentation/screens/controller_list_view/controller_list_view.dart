@@ -18,7 +18,6 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> {
     super.initState();
   }
   
-  
   @override
   Widget build(BuildContext context) {
     final controllers = ref.watch(controllersProvider);

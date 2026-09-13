@@ -12,6 +12,10 @@
 
 #include <linux/input-event-codes.h>
 
+#define POLL_CLOSE 1
+#define POLL_STOP 2
+#define POLL_RESUME 3
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,6 +24,21 @@ extern "C" {
 /// @return file descriptor (fd) o -1 en caso de error
 int open_device();
 
+/// @brief Crea el descriptor usado para despertar el poll.
+/// @return descriptor del poll o -1 en caso de error
+int open_poll_file();
+
+/// @brief Escribe el comando de cierre y cierra el descriptor del poll.
+/// @param fd Descriptor devuelto por open_poll_file
+/// @return 0 en éxito, -1 en error
+int close_poll_file(int fd);
+
+/// @brief Escribe un comando en el descriptor del poll.
+/// @param fd Descriptor devuelto por open_poll_file
+/// @param command Comando definido por el llamador
+/// @return 0 en éxito, -1 en error
+int write_poll_file(int fd, int command);
+
 /// @brief Lee un evento generado por el dispositivo virtual.
 /// @param fd Descriptor de archivo obtenido con open_device
 /// @param type Tipo del evento (EV_UINPUT, EV_FF, etc.)
@@ -27,6 +46,22 @@ int open_device();
 /// @param value Valor del evento
 /// @return 0 si se leyó un evento, -1 si ocurrió un error
 int read_input_event(int fd, int *type, int *code, int *value);
+
+/// @brief Espera un evento uinput o un comando del poll.
+/// @param fd Descriptor uinput
+/// @param type Tipo del evento uinput
+/// @param code Código del evento uinput
+/// @param value Valor del evento uinput
+/// @param command Comando leído, o 0 si se leyó un evento uinput
+/// @return 0 para evento uinput, 1 para comando, -1 en caso de error
+int read_input_or_poll(
+  int uinput_fd,
+  int poll_fd,
+  int *type,
+  int *code,
+  int *value,
+  int *command
+);
 
 /// @brief calls ioctl(fd, UI_SET_EVBIT, ev)
 /// @param fd file descriptor
@@ -83,8 +118,6 @@ int create_device(int fd, int identifier, int vendor, int product);
 /// @param fd Descriptor de archivo
 /// @return 0 en éxito
 int close_device(int fd);
-
-
 
 /// @brief Envía el evento de presionar/liberar botón 
 /// (la accion se ejecuta en el proximo sync)

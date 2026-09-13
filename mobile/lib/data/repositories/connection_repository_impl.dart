@@ -2,16 +2,21 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/data/sources/connection_service.dart';
 import 'package:game_controller/data/sources/player_local_storage_service.dart';
+import 'package:game_controller/data/sources/vibration_service.dart';
+import 'package:game_controller/domain/enums/player_info_sync_state.dart';
 import 'package:game_controller/domain/repository/connection_repository.dart';
+import 'package:rxdart/rxdart.dart';
 
 
 final connectionRepositoryProvider = Provider<ConnectionRepository>((ref){
   final connectionRepository = ConnectionRepositoryImpl(
     connectionService : ref.read(connectionServiveProvider),
     playerLocalStorage: ref.read(playerLocalStorageProvider).requireValue,
+    vibrationService  : ref.read(vibrationServiceProvider)
   );
 
   ref.onDispose(connectionRepository.disconnect);
@@ -19,17 +24,25 @@ final connectionRepositoryProvider = Provider<ConnectionRepository>((ref){
 });
 
 
+
 class ConnectionRepositoryImpl extends ConnectionRepository {
   ConnectionRepositoryImpl({
     required this.connectionService,
     required this.playerLocalStorage,
+    required this.vibrationService
   });
 
   final ConnectionService connectionService;
   final PlayerLocalStorageService playerLocalStorage;
-  
-  StreamSubscription ? _playerSubscription;
+  final VibrationService vibrationService;
 
+  StreamSubscription ? _localPlayerSubscription;
+  StreamSubscription ? _serverEventSubscription;
+
+  final BehaviorSubject<PlayerInfoSyncState> _playerInfoSyncStateSubject
+   = .seeded(.none); 
+
+  // --------------------- conectionStatus ---------------------
   @override
   Stream<PlayerConnectionStatus> get connectionStatusStream 
     => connectionService.connectionStatusStream;
@@ -38,26 +51,38 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   PlayerConnectionStatus get connectionStatus 
     => connectionService.connectionStatus;
 
-  @override
-  Stream<ServerEvent> get serverEventStream 
-    => connectionService.serverEventStream;
-
+  /// -------------------- ping ---------------------------------
   @override
   Stream<Duration?> get pingStream => connectionService.pingStream;
 
   @override
   Duration? get ping => connectionService.ping;
 
-  
+  ///---------------------- playerInfoSyncState ------------------
+  /// en el futuro esto va a cambiar de playerInfo a cualquier info
+  /// simple syncState, y se va a referir al estado de sincronizacion
+  /// de la informacion
+  @override
+  Stream<PlayerInfoSyncState> get playerInfoSyncStateStream 
+    => _playerInfoSyncStateSubject.stream;
 
+  @override
+  PlayerInfoSyncState get playerInfoSyncState
+    => _playerInfoSyncStateSubject.value;
+
+
+  /// -----------------------methods-------------------------------
   @override
   void connect(String serverAddress, int port) async {
     try{
       await connectionService.connect(serverAddress, port);
-      _subscribeToPlayerStream(); 
+      
+      _subscribeToLocalPlayerStream(); 
+      _subscribeToServerEvent();
 
       connectionService.send(UpdateInfoPlayerEvent(
-        player: await playerLocalStorage.player
+        player: await playerLocalStorage.player,
+        id    : 0
       ));
 
     }catch(e){
@@ -69,58 +94,57 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
 
   @override
   void disconnect() async {
-    _playerSubscription?.cancel();
+    _localPlayerSubscription?.cancel();
+    _serverEventSubscription?.cancel();
+    
     connectionService.disconnect();
   }
 
   @override
   void send(ButtonPlayerEvent pbe) => connectionService.send(pbe);
   
+  @override
+  void syncPlayerData() async {
+    final player = await playerLocalStorage.player;
 
-  /// Helpers
-  void _subscribeToPlayerStream(){
-    _playerSubscription?.cancel();
-    _playerSubscription = playerLocalStorage.playerStream.listen(
-      (player) => connectionService.send(UpdateInfoPlayerEvent(player: player))
-    );
+    connectionService.send(UpdateInfoPlayerEvent(player: player, id: 200));
+
+    // connectionService.sendAndCheckResult(
+    //   (id) => UpdateInfoPlayerEvent(player: player, id: id),
+    //   onCheckTimeOver: () => _playerInfoSyncStateSubject.add(.failed), 
+      
+    //   onEventRecived: (identifiableEvent){
+    //     if(identifiableEvent is SuccessCheckEvent){
+    //       _playerInfoSyncStateSubject.add(.success);
+    //     }else if(identifiableEvent is ErrorCheckEvent){
+    //       _playerInfoSyncStateSubject.add(.failed);
+    //     }
+    //   },
+    // );
   }
 
 
-  Future<T> awaitForServerEvent<T>({
-    required T? Function(ServerEvent event) completeWith,
-    Duration timeout = const Duration(seconds: 8),
-  }) async {
-    final completer = Completer<T>();
-    late final StreamSubscription<ServerEvent> subscription;
-
-    subscription = serverEventStream.listen(
-      (event) {
-        try {
-          final completeVal = completeWith(event);
-          if (completeVal != null && !completer.isCompleted) {
-            completer.complete(completeVal);
-          }
-        } catch (e, st) {
-          if (!completer.isCompleted) {
-            completer.completeError(e, st);
-          }
-        }
-      },
-      onError: (Object error, StackTrace st) {
-        if (!completer.isCompleted) {
-          completer.completeError(error, st);
-        }
-      },
+  /// ------------------------- Helpers --------------------------
+  void _subscribeToLocalPlayerStream(){
+    _localPlayerSubscription?.cancel();
+    _localPlayerSubscription = playerLocalStorage.playerStream.listen(
+      (player) {
+        _playerInfoSyncStateSubject.add(.progres);       
+        
+        syncPlayerData();
+      }
     );
+  }
 
-    try {
-      return await completer.future.timeout(
-        timeout,
-        onTimeout: () => throw TimeoutException('AwaitingServerEvent timed out after $timeout'),
-      );
-    } finally {
-      
-      await subscription.cancel();
-    }
+  void _subscribeToServerEvent(){
+    _serverEventSubscription?.cancel();
+    _serverEventSubscription = connectionService.eventStream.listen(
+      (event){
+        switch(event){
+          case VibrateServerEvent():
+            vibrationService.process(event);
+        }
+      }
+    );
   }
 }

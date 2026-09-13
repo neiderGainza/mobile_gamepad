@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:core/core.dart';
-import 'package:core/src/models/event/event.dart';
-import 'package:core/src/models/event/event_code.dart';
+import 'package:core/src/models/event/_event.dart';
+import 'package:core/src/models/event/_event_code.dart';
 
 
 /// eventos generados por el player
@@ -86,15 +86,25 @@ class ButtonPlayerEvent extends PlayerEvent {
 }
 
 
-class UpdateInfoPlayerEvent extends PlayerEvent {
+class UpdateInfoPlayerEvent extends PlayerEvent implements IdentiafiableEvent{
+  /// this can grow 
   final Player player;
+  final int id; // int8
 
-  const UpdateInfoPlayerEvent({required this.player});
+  const UpdateInfoPlayerEvent({
+    required this.player,
+    required this.id
+  });
 
-  factory UpdateInfoPlayerEvent.decode(Uint8List data) {    
-    final String playerSource = utf8.decode(data);
-    
+  factory UpdateInfoPlayerEvent.decode(Uint8List data) {  
+
+    final String playerSource = utf8.decode(data.sublist(1))
+      .replaceAll('\uFEFF', '')
+      .replaceAll('\x00', '')
+      .trim();
+      
     return UpdateInfoPlayerEvent( 
+      id: data[0],
       player: Player.fromJson(jsonDecode(playerSource)),
     );
   }
@@ -102,12 +112,14 @@ class UpdateInfoPlayerEvent extends PlayerEvent {
   @override
   Uint8List encode() {
     final playerSource = utf8.encode(jsonEncode(player.toJson()));
-    final result = Uint8List(2 + playerSource.length);
-    
-    result[0] = eventCode.code; // eventCode
-    result[1] = 1; // subEventCode
+    final result = Uint8List(3 + playerSource.length);
+    final bd = ByteData.sublistView(result);
 
-    result.setRange(2, 2 + playerSource.length, playerSource);
+    bd.setInt8(0, eventCode.code); // eventCode
+    bd.setInt8(1, 1);   // subEventCode
+    bd.setInt8(2, id); // id
+
+    result.setRange(3, result.length, playerSource);
     return result;
   }
 }

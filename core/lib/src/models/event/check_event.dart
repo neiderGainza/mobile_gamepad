@@ -1,0 +1,97 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:core/src/models/event/_event.dart';
+import 'package:core/src/models/event/_event_code.dart';
+
+
+
+
+sealed class CheckEvent implements IdentiafiableEvent {
+  final int id; // int8
+
+  const CheckEvent({ required this.id });
+
+  @override
+  EventCode get eventCode => .check;
+
+  static bool isCheckEvent(dynamic source){
+    if(source is Uint8List){
+      return source[0] == EventCode.check.code;
+    } 
+    return false;
+  }
+
+  factory CheckEvent.decode(dynamic source){
+    if(!isCheckEvent(source)){
+       throw FormatException('Invalid input for CheckEvent.decode');
+    }
+
+    final data = source as Uint8List;
+    
+    return switch(data[1]){
+      1 => ErrorCheckEvent.decode(data.sublist(2)),
+      2 => SuccessCheckEvent.decode(data.sublist(2)),
+
+      _ => throw FormatException('Unknown CheckEvent code: ${data[1]}'),
+     
+    };
+  }
+}
+
+
+class ErrorCheckEvent extends CheckEvent{
+  final String ? error;
+  
+  const ErrorCheckEvent({
+    required super.id,
+    this.error
+  });
+
+  @override
+  Uint8List encode() {
+    final encodedError = utf8.encode(error ?? '');
+    final result = Uint8List(3 + encodedError.length);
+
+    result[0] = eventCode.code;
+    result[1] = 0; // subEventCode
+    result[2] = id;
+    result.setRange(3, result.length, encodedError);
+
+    return result;
+  }
+
+  factory ErrorCheckEvent.decode(Uint8List data){
+    return ErrorCheckEvent(
+      id: data[0],
+      error: utf8.decode(data.sublist(1))
+    );
+  }
+}
+
+
+class SuccessCheckEvent extends CheckEvent{
+  const SuccessCheckEvent({
+    required super.id
+  });
+
+  @override
+  Uint8List encode() => Uint8List.fromList([
+    eventCode.code, 1, id
+  ]);
+
+  factory SuccessCheckEvent.decode(Uint8List data){
+    return SuccessCheckEvent(
+      id: data[0]
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,17 +1,17 @@
 import 'dart:typed_data';
 
-import 'package:core/src/models/event/event.dart';
-import 'package:core/src/models/event/event_code.dart';
+import 'package:core/src/models/event/_event.dart';
+import 'package:core/src/models/event/_event_code.dart';
 
-class PingEvent implements Event {
+class PingEvent implements IdentiafiableEvent{
   @override
   final EventCode eventCode = EventCode.ping;
-  final int identifier;
+  final int id;
 
-  const PingEvent(this.identifier);
+  const PingEvent(this.id);
 
   @override
-  Uint8List encode() => Uint8List.fromList([eventCode.code, identifier]);
+  Uint8List encode() => Uint8List.fromList([eventCode.code, id]);
 
   static bool isPing(dynamic source) {
     return source is List<int> &&
@@ -27,15 +27,16 @@ class PingEvent implements Event {
   }
 }
 
-class PongEvent implements Event {
+// caso especial de checkEvent
+class PongEvent implements IdentiafiableEvent{
   @override
   final EventCode eventCode = EventCode.pong;
-  final int identifier;
+  final int id;
 
-  const PongEvent(this.identifier);
+  const PongEvent(this.id);
 
   @override
-  Uint8List encode() => Uint8List.fromList([eventCode.code, identifier]);
+  Uint8List encode() => Uint8List.fromList([eventCode.code, id]);
 
   static bool isPong(dynamic source) {
     return source is List<int> &&
