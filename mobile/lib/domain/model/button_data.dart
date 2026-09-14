@@ -16,9 +16,9 @@ class ButtonData with _$ButtonData{
   final int ? colorValue;
 
   final int elevation;
-  final double ? borderWidth;
+  final double borderWidth;
   final String label;
-  final int ? borderRadius;
+  final double borderRadius;
 
   const ButtonData({
     required this.label,
@@ -26,22 +26,22 @@ class ButtonData with _$ButtonData{
     this.backgroundColorValue,
     this.borderColorValue,
     this.colorValue,
-    this.borderWidth,
-    this.borderRadius,
+    this.borderWidth = 1,
+    this.borderRadius = 10,
     this.elevation = 0,
   });
 
-  Color ? get backgroundColor => backgroundColorValue != null 
+  Color get backgroundColor => backgroundColorValue != null 
     ? Color(backgroundColorValue!) 
-    : null;
+    : Colors.brown;
 
-  Color ? get borderColor => borderColorValue != null 
+  Color get borderColor => borderColorValue != null 
     ? Color(borderColorValue!)
-    : null;
+    : Colors.deepOrange;
 
-  Color ? get color => colorValue != null 
+  Color get color => colorValue != null 
     ? Color(colorValue!)
-    : null;
+    : Colors.deepOrangeAccent;
 
 
   static ButtonData fromJson(Map json) => _$ButtonDataFromJson(

@@ -28,8 +28,7 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
   @override
   Widget build(BuildContext context) {
     final buttonData = widget.button.buttonData;
-    final cs = Theme.of(context).colorScheme;
-
+    
     return LayoutBuilder(
       builder: (context, contrains) {
         return Joystick(
@@ -72,9 +71,9 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
 
           label: buttonData.label,
           stickSize: contrains.maxHeight / 2.5,
-          fontColor: buttonData.color ?? cs.onPrimary,
-          stickColor: buttonData.backgroundColor ?? cs.primary,
-          borderColor: buttonData.backgroundColor ?? cs.primary,
+          fontColor: buttonData.color,
+          stickColor: buttonData.backgroundColor,
+          borderColor: buttonData.borderColor,
           dragPadColor: Colors.transparent,
         );
       },

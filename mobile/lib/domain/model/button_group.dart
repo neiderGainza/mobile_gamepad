@@ -11,11 +11,14 @@ part 'button_group.g.dart';
 class ButtonGroup with _$ButtonGroup{
   final UnmodifiableListView<Button> buttons;
   final double screenRelativeSize;
+  final double internalMargin;
 
   ButtonGroup({
     required List<Button> buttons,
-    double screenRelativeSize = 0.13 
+    double screenRelativeSize = 0.23,
+    double internalMargin     = 0.01,
   }): buttons = UnmodifiableListView(buttons)
+    , internalMargin     = internalMargin.clamp(0, 1)
     , screenRelativeSize = screenRelativeSize.clamp(0.05, 1);
 
   ButtonGroup.singleButtonGroup({

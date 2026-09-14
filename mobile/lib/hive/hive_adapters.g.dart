@@ -263,19 +263,22 @@ class ButtonGroupAdapter extends TypeAdapter<ButtonGroup> {
     return ButtonGroup(
       buttons: (fields[6] as List).cast<Button>(),
       screenRelativeSize: fields[7] == null
-          ? 0.13
+          ? 0.23
           : (fields[7] as num).toDouble(),
+      internalMargin: fields[8] == null ? 0.01 : (fields[8] as num).toDouble(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ButtonGroup obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(6)
       ..write(obj.buttons)
       ..writeByte(7)
-      ..write(obj.screenRelativeSize);
+      ..write(obj.screenRelativeSize)
+      ..writeByte(8)
+      ..write(obj.internalMargin);
   }
 
   @override
@@ -305,8 +308,8 @@ class ButtonDataAdapter extends TypeAdapter<ButtonData> {
       backgroundColorValue: (fields[1] as num?)?.toInt(),
       borderColorValue: (fields[2] as num?)?.toInt(),
       colorValue: (fields[3] as num?)?.toInt(),
-      borderWidth: (fields[5] as num?)?.toDouble(),
-      borderRadius: (fields[7] as num?)?.toInt(),
+      borderWidth: fields[5] == null ? 1 : (fields[5] as num).toDouble(),
+      borderRadius: fields[7] == null ? 10 : (fields[7] as num).toDouble(),
       elevation: fields[4] == null ? 0 : (fields[4] as num).toInt(),
     );
   }

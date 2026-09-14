@@ -1,7 +1,9 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
 import 'package:game_controller/presentation/utils/inherited_value.dart';
+
 
 class EditMenu extends ConsumerWidget{
   const EditMenu({
@@ -60,10 +62,24 @@ class EditMenu extends ConsumerWidget{
               crossAxisAlignment: .start,
               children: [
                 EditingMenuTitle(),
+
+                GroupPropertiesTitle(),
                 Divider(height: 16,),
                 EditSizeTile(),
                 Divider(height: 16,),
+                EditMarginTile(),
+                Divider(height: 16,),
                 EditPositionTile(),
+                SizedBox(height: 8,),
+
+                ButtonPropertiesTitle(),
+                EditButtonShapeTile(),
+                EditButtonBorderRadiusTile(),
+                EditButtonBorderWithTile(),
+                EditButtonBackgroundColorTile(),
+                EditButtonBorderColorTile(),
+                EditButtonColorTile(),
+                SizedBox(height: 16,),
               ],
             ),
 
@@ -89,9 +105,13 @@ class EditingMenuTitle extends ConsumerWidget {
       child: Row(
         children: [
           Expanded(
-            child: Text("Editing Menu", style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onTertiaryContainer
-            ),),
+            child: FittedBox(
+              alignment: .centerStart,
+              fit: .scaleDown,
+              child: Text("Editing Menu", style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onTertiaryContainer
+              ),),
+            ),
           ),
 
           IconButton(onPressed: (){
@@ -124,7 +144,11 @@ class EditSizeTile extends ConsumerWidget {
     if(groupSize == null) return SizedBox.shrink();
 
     return ListTile(
-      title: Text("Size:"),
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Size:")),
       trailing: LessStringPlus(
         plus: (){
           updateValue(controllerId, 0.01, ref);
@@ -174,7 +198,11 @@ class EditPositionTile extends ConsumerWidget {
     return Column(
       children: [
         ListTile(
-          title: Text("Pos x:"),
+          visualDensity: .compact,
+          title: FittedBox(
+            fit: .scaleDown,
+            alignment: .centerStart,
+            child: Text("Pos x:")),
           trailing: LessStringPlus(
             plus: (){
               updateValue(controllerId,0.01, ref);
@@ -187,7 +215,12 @@ class EditPositionTile extends ConsumerWidget {
         ),
         const SizedBox(height: 8,),
         ListTile(
-          title: Text("Pos y:"),
+          visualDensity: .compact,
+          title: FittedBox(
+            fit: .scaleDown,
+            alignment: .centerStart,
+            child: Text("Pos y:")),
+          
           trailing: LessStringPlus(
             plus: (){
               updateValue(controllerId, 0.01, ref, false);
@@ -218,6 +251,559 @@ class EditPositionTile extends ConsumerWidget {
     );
   }
 
+}
+
+
+class EditMarginTile extends ConsumerWidget {
+  const EditMarginTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final groupMargin = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedGroupIndex == null 
+          ? null
+          : cs.selectedGroup?.internalMargin
+      ));
+
+    if(groupMargin == null) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Margin:")),
+      trailing: LessStringPlus(
+        plus: (){
+          updateValue(controllerId, 0.01, ref);
+        }, 
+        less: (){
+          updateValue(controllerId, -0.01, ref);
+        }, 
+        label: groupMargin.toStringAsFixed(2)
+      ),
+    );
+  }
+
+  void updateValue(String? controllerId, double change, WidgetRef ref){
+    final selectedGroup = ref.read(controllerEditProvider(controllerId))
+      .selectedGroup;
+    
+    if(selectedGroup == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedGroup(
+        selectedGroup.copyWith( 
+          internalMargin: selectedGroup.internalMargin + change)
+    );
+  }
+}
+
+
+class GroupPropertiesTitle extends ConsumerWidget {
+  const GroupPropertiesTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controllerId = InheritedValue.of<String?>(context);
+    final _  = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (c) => c.selectedGroup
+      ));
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: FittedBox(
+              alignment: .centerStart,
+              fit: .scaleDown,
+              child: Text("Group properties: ", style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onTertiaryContainer
+              ),),
+            ),
+          ),
+
+          // IconButton(onPressed: (){
+          //   ref.read(controllerEditProvider(controllerId).notifier)
+          //     .removeSelecteds();
+          // }, icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.onTertiaryContainer,))
+        ],
+      ),
+    );
+  }
+}
+
+
+class ButtonPropertiesTitle extends ConsumerWidget {
+  const ButtonPropertiesTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controllerId = InheritedValue.of<String?>(context);
+    final selectedBtn  = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (c) => c.selectedBtn
+      ));
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: FittedBox(
+              alignment: .centerStart,
+              fit: .scaleDown,
+              child: Text(
+                "Button properties: (${selectedBtn?.buttonCode.toString().split('.')[1]})", 
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onTertiaryContainer
+                ),),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class EditButtonElevationTile extends ConsumerWidget {
+  const EditButtonElevationTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final btnElevation = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.elevation
+      ));
+
+    if(btnElevation == null) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Elevation:")),
+      trailing: LessStringPlus(
+        plus: (){
+          updateValue(controllerId, 1, ref);
+        }, 
+        less: (){
+          updateValue(controllerId, -1, ref);
+        }, 
+        label: btnElevation.toString()
+      ),
+    );
+  }
+
+  void updateValue(String? controllerId, int change, WidgetRef ref){
+    final selectedBtn = ref.read(controllerEditProvider(controllerId))
+      .selectedBtn;
+    
+    if(selectedBtn == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedButton(
+        selectedBtn.copyWith( 
+          buttonData: selectedBtn.buttonData.copyWith(
+            elevation: selectedBtn.buttonData.elevation + change
+          )
+        )
+    );
+  }
+}
+
+
+class EditButtonBorderWithTile extends ConsumerWidget {
+  const EditButtonBorderWithTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final property = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.borderWidth
+      ));
+
+    if(property == null) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Border\nWidth:")),
+      trailing: LessStringPlus(
+        plus: (){
+          updateValue(controllerId, 0.1, ref);
+        }, 
+        less: (){
+          updateValue(controllerId, -0.1, ref);
+        }, 
+        label: property.toStringAsFixed(1)
+      ),
+    );
+  }
+
+  void updateValue(String? controllerId, double change, WidgetRef ref){
+    final selectedBtn = ref.read(controllerEditProvider(controllerId))
+      .selectedBtn;
+    
+    if(selectedBtn == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedButton(
+        selectedBtn.copyWith( 
+          buttonData: selectedBtn.buttonData.copyWith(
+            borderWidth: selectedBtn.buttonData.borderWidth + change
+          )
+        )
+    );
+  }
+}
+
+
+class EditButtonShapeTile extends ConsumerWidget {
+  const EditButtonShapeTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final property = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.shape
+      ));
+
+    if(property == null) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Shape:")),
+      trailing: Container(
+        clipBehavior: .hardEdge,
+        padding: .only(left: 8),
+        decoration: BoxDecoration(
+          border: .all(width: 1, color: Theme.of(context).colorScheme.onTertiaryContainer),
+          borderRadius: .circular(10)
+        ),
+        child: DropdownButton<BoxShape>(
+          value: property,
+          items: [
+            for(final shape in BoxShape.values)
+            DropdownMenuItem(value: shape,child: Text(shape.toString()))
+          ], 
+          onChanged: (newShape){
+            if(newShape != null){
+              updateValue(controllerId, newShape, ref);
+            }
+          },
+            
+          borderRadius: .circular(10),
+          underline: SizedBox.shrink(),
+        )
+      ),
+      
+      
+    );
+  }
+
+  void updateValue(String? controllerId, BoxShape change, WidgetRef ref){
+    final selectedBtn = ref.read(controllerEditProvider(controllerId))
+      .selectedBtn;
+    
+    if(selectedBtn == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedButton(
+        selectedBtn.copyWith( 
+          buttonData: selectedBtn.buttonData.copyWith(
+            shape: change
+          )
+        )
+    );
+  }
+}
+
+
+class EditButtonBorderRadiusTile extends ConsumerWidget {
+  const EditButtonBorderRadiusTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final radius = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.borderRadius
+      ));
+    
+    final shape = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.shape
+      ));
+    
+    if(radius == null || shape == null || shape == .circle) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Border\nRadius:")),
+      trailing: LessStringPlus(
+        plus: (){
+          updateValue(controllerId, 1, ref);
+        }, 
+        less: (){
+          updateValue(controllerId, -1, ref);
+        }, 
+        label: radius.toStringAsFixed(0)
+      ),
+    );
+  }
+
+  void updateValue(String? controllerId, double change, WidgetRef ref){
+    final selectedBtn = ref.read(controllerEditProvider(controllerId))
+      .selectedBtn;
+    
+    if(selectedBtn == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedButton(
+        selectedBtn.copyWith( 
+          buttonData: selectedBtn.buttonData.copyWith(
+            borderRadius: selectedBtn.buttonData.borderRadius + change
+          )
+        )
+    );
+  }
+}
+
+
+class EditButtonBackgroundColorTile extends ConsumerWidget {
+  const EditButtonBackgroundColorTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final btnBackgroundColor = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.backgroundColor
+      ));
+
+    if(btnBackgroundColor == null) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Background Color:")
+      ),
+      trailing: ColorIndicator(
+        color: btnBackgroundColor,
+        borderColor: Theme.of(context).colorScheme.onTertiaryContainer,
+        hasBorder: true,
+        width: 60,
+        height: 40,
+        borderRadius: 10,
+        onSelectFocus: false,
+        onSelect: () async {
+          final newColor = await showColorPickerDialog(
+            context, 
+            btnBackgroundColor,
+
+          );
+          updateValue(controllerId, newColor, ref);
+        },
+      ),
+    );
+
+  }
+
+  void updateValue(String? controllerId, Color color, WidgetRef ref){
+    final selectedBtn = ref.read(controllerEditProvider(controllerId))
+      .selectedBtn;
+    
+    if(selectedBtn == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedButton(
+        selectedBtn.copyWith( 
+          buttonData: selectedBtn.buttonData.copyWith(
+            backgroundColorValue: color.toARGB32()
+          )
+        )
+    );
+  }
+}
+
+
+class EditButtonBorderColorTile extends ConsumerWidget {
+  const EditButtonBorderColorTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final color = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.borderColor
+      ));
+
+    if(color == null) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Border Color:")
+      ),
+      trailing: ColorIndicator(
+        color: color,
+        borderColor: Theme.of(context).colorScheme.onTertiaryContainer,
+        hasBorder: true,
+        width: 60,
+        height: 40,
+        borderRadius: 10,
+        onSelectFocus: false,
+        onSelect: () async {
+          final newColor = await showColorPickerDialog(
+            context, 
+            color,
+          );
+          updateValue(controllerId, newColor, ref);
+        },
+      ),
+    );
+
+  }
+
+  void updateValue(String? controllerId, Color color, WidgetRef ref){
+    final selectedBtn = ref.read(controllerEditProvider(controllerId))
+      .selectedBtn;
+    
+    if(selectedBtn == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedButton(
+        selectedBtn.copyWith( 
+          buttonData: selectedBtn.buttonData.copyWith(
+            borderColorValue: color.toARGB32()
+          )
+        )
+    );
+  }
+}
+
+
+class EditButtonColorTile extends ConsumerWidget {
+  const EditButtonColorTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final color = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonData.color
+      ));
+
+    if(color == null) return SizedBox.shrink();
+
+    return ListTile(
+      visualDensity: .compact,
+      title: FittedBox(
+        fit: .scaleDown,
+        alignment: .centerStart,
+        child: Text("Font Color:")
+      ),
+      trailing: ColorIndicator(
+        color: color,
+        borderColor: Theme.of(context).colorScheme.onTertiaryContainer,
+        hasBorder: true,
+        width: 60,
+        height: 40,
+        borderRadius: 10,
+        onSelectFocus: false,
+        onSelect: () async {
+          final newColor = await showColorPickerDialog(
+            context, 
+            color,
+          );
+          updateValue(controllerId, newColor, ref);
+        },
+      ),
+    );
+
+  }
+
+  void updateValue(String? controllerId, Color color, WidgetRef ref){
+    final selectedBtn = ref.read(controllerEditProvider(controllerId))
+      .selectedBtn;
+    
+    if(selectedBtn == null){
+      return;
+    }
+
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedButton(
+        selectedBtn.copyWith( 
+          buttonData: selectedBtn.buttonData.copyWith(
+            colorValue: color.toARGB32()
+          )
+        )
+    );
+  }
 }
 
 
@@ -265,8 +851,6 @@ class LessStringPlus extends StatelessWidget{
     );
   }
 }
-
-
 
 
 

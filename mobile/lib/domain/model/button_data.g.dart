@@ -12,8 +12,8 @@ ButtonData _$ButtonDataFromJson(Map<String, dynamic> json) => ButtonData(
   backgroundColorValue: (json['backgroundColorValue'] as num?)?.toInt(),
   borderColorValue: (json['borderColorValue'] as num?)?.toInt(),
   colorValue: (json['colorValue'] as num?)?.toInt(),
-  borderWidth: (json['borderWidth'] as num?)?.toDouble(),
-  borderRadius: (json['borderRadius'] as num?)?.toInt(),
+  borderWidth: (json['borderWidth'] as num?)?.toDouble() ?? 1,
+  borderRadius: (json['borderRadius'] as num?)?.toDouble() ?? 10,
   elevation: (json['elevation'] as num?)?.toInt() ?? 0,
 );
 

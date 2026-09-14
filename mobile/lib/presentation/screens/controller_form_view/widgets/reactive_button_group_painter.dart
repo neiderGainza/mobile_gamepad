@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
@@ -25,50 +26,54 @@ class ReactiveButtonGroupPainter extends ConsumerWidget{
           ? c.controller.buttonGroups[btnGroupIndex].buttonGroup
           : null
     ));
-    
-    if(buttonGroup == null) return SizedBox.shrink();
 
+    final isSelected = ref.watch(controllerEditProvider(controllerId)
+      .select( (c) => c.selectedGroupIndex == btnGroupIndex));
+
+    if(buttonGroup == null) return SizedBox.shrink();
     final size = MediaQuery.of(context).size;
 
-    return ButtonGroupPainter(
-      buttonGroup: buttonGroup,
-      btnBuilder: (button, btnIndex)=>GestureDetector(
-        
-        child: AbsorbPointer(child: button,),
- 
-        onTap: () {
-          ref.read(controllerEditProvider(controllerId).notifier)
-            .selectGroupAndButton( btnGroupIndex, btnIndex);
-        },
 
-        onLongPressStart: (details){
-          ref.read(controllerEditProvider(controllerId).notifier)
-            .selectGroupAndButton( btnGroupIndex, btnIndex );
-        },
+    return DottedBorder(
+      
+      options: RoundedRectDottedBorderOptions(
+        radius: .circular(10),
+        color : isSelected == true
+          ? Theme.of(context).colorScheme.onSurface
+          : Colors.transparent,
+      ),
 
-        // onScaleUpdate: (details){
-        //   ref.read(controllerEditProvider.notifier).editSelectedButtonGroup(
-        //     buttonGroup.copyWith(
-        //       screenRelativeSize: (buttonGroup.screenRelativeSize * details.scale)
-        //       .clamp(0.03, 1)
-        //     )
-        //   );
-        // },
-
-        onLongPressMoveUpdate: (details){
-
-          final double dx = (
-            (details.globalPosition.dx / size.width) 
-          ).clamp(0, 1);
-          final double dy = (
-            (details.globalPosition.dy / size.height)
-          ).clamp(0, 1);
-          
-          ref.read(controllerEditProvider(controllerId).notifier)
-            .editSelectedPosition( Offset(dx, dy) );
-        },
- 
-      )
+      child: ButtonGroupPainter(
+        buttonGroup: buttonGroup,
+        btnBuilder: (button, btnIndex)=>GestureDetector(
+      
+          child: AbsorbPointer(child: button,),
+       
+          onTap: () {
+            ref.read(controllerEditProvider(controllerId).notifier)
+              .selectGroupAndButton( btnGroupIndex, btnIndex);
+          },
+      
+          onLongPressStart: (details){
+            ref.read(controllerEditProvider(controllerId).notifier)
+              .selectGroupAndButton( btnGroupIndex, btnIndex );
+          },
+      
+          onLongPressMoveUpdate: (details){
+      
+            final double dx = (
+              (details.globalPosition.dx / size.width) 
+            ).clamp(0, 1);
+            final double dy = (
+              (details.globalPosition.dy / size.height)
+            ).clamp(0, 1);
+            
+            ref.read(controllerEditProvider(controllerId).notifier)
+              .editSelectedPosition( Offset(dx, dy) );
+          },
+       
+        )
+      ),
     );
   }
 

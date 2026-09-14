@@ -18,7 +18,6 @@ class SinglePressButtonPainter extends ConsumerWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     final connectionRepo = ref.watch(connectionRepositoryProvider);
     final buttonData = button.buttonData;
-    final cs = Theme.of(context).colorScheme;
 
 
     return Material(
@@ -28,8 +27,8 @@ class SinglePressButtonPainter extends ConsumerWidget{
       shape: button.buttonData.shape == .circle
         ? CircleBorder()
         : RoundedRectangleBorder(
-          borderRadius: .circular(button.buttonData.borderRadius?.toDouble()??0.0)
-        ),
+            borderRadius: .circular( button.buttonData.borderRadius),
+          ),
 
       child: InkWell(
         onTapDown: (details) {
@@ -58,10 +57,14 @@ class SinglePressButtonPainter extends ConsumerWidget{
           margin: .all(8),
           decoration: BoxDecoration(
             shape: buttonData.shape,
-            color: buttonData.backgroundColor ?? cs.primary,   
-            borderRadius: buttonData.borderRadius == null 
-              ? null
-              : .circular(buttonData.borderRadius!.toDouble()) 
+            color: buttonData.backgroundColor,   
+            borderRadius: buttonData.shape == .circle 
+              ? null 
+              : .circular(buttonData.borderRadius),
+            border: .all(
+              width: buttonData.borderWidth,
+              color: buttonData.borderColor
+            )
           ),
           child: FractionallySizedBox(
             widthFactor: 0.6,
@@ -72,7 +75,7 @@ class SinglePressButtonPainter extends ConsumerWidget{
                 buttonData.label,
                 style: GoogleFonts.nunito(
                   fontWeight: .bold,
-                  color: buttonData.color ?? cs.onPrimary
+                  color: buttonData.color
                 ) ,
                 textAlign: .center,
               )

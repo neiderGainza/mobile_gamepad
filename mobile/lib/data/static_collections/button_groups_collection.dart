@@ -14,14 +14,13 @@ class ButtonGroupsCollection {
     .singleButtonGroup(button: DefaultBtnCollection.rt),
     .singleButtonGroup(button: DefaultBtnCollection.rb),
     
-    .singleButtonGroup(button: DefaultBtnCollection.menu , screenRelativeSize: 0.1),
-    .singleButtonGroup(button: DefaultBtnCollection.play , screenRelativeSize: 0.1),
+    .singleButtonGroup(button: DefaultBtnCollection.menu , screenRelativeSize: 0.2),
+    .singleButtonGroup(button: DefaultBtnCollection.play , screenRelativeSize: 0.2),
   ];
   
-
   static List<ButtonGroup> joystickGroup = [
-    .singleButtonGroup(button: DefaultBtnCollection.leftJoystick  , screenRelativeSize: 0.3),
-    .singleButtonGroup(button: DefaultBtnCollection.rightJoystick , screenRelativeSize: 0.3),    
+    .singleButtonGroup(button: DefaultBtnCollection.leftJoystick  , screenRelativeSize: 0.5),
+    .singleButtonGroup(button: DefaultBtnCollection.rightJoystick , screenRelativeSize: 0.5),    
   ];
 
   static List<ButtonGroup> multipleButtons  = [
@@ -30,7 +29,13 @@ class ButtonGroupsCollection {
       DefaultBtnCollection.btnB,
       DefaultBtnCollection.btnA,
       DefaultBtnCollection.btnX,
-    ], screenRelativeSize: 0.1),
+    ], screenRelativeSize: 0.5, internalMargin: 0.05),
+    
+    ButtonGroup(buttons: [
+      DefaultBtnCollection.btnY,
+      DefaultBtnCollection.btnA,
+      DefaultBtnCollection.btnX,
+    ], screenRelativeSize: 0.5, internalMargin: 0.05),
     
   ];
 }
