@@ -25,5 +25,5 @@ abstract class ConnectionRepository {
   /// sincronizacion automatica).
   ///  
   /// la data del player sera obtenida del [PlayerLocalStorage]
-  void syncPlayerData();
+  Future<void> syncPlayerData();
 }

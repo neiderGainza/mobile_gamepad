@@ -24,7 +24,6 @@ final connectionRepositoryProvider = Provider<ConnectionRepository>((ref){
 });
 
 
-
 class ConnectionRepositoryImpl extends ConnectionRepository {
   ConnectionRepositoryImpl({
     required this.connectionService,
@@ -39,8 +38,10 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   StreamSubscription ? _localPlayerSubscription;
   StreamSubscription ? _serverEventSubscription;
 
+  DateTime ? _lastPlayerInfoUpdate;
   final BehaviorSubject<PlayerInfoSyncState> _playerInfoSyncStateSubject
-   = .seeded(.none); 
+    = .seeded(.none); 
+  
 
   // --------------------- conectionStatus ---------------------
   @override
@@ -51,7 +52,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   PlayerConnectionStatus get connectionStatus 
     => connectionService.connectionStatus;
 
-  /// -------------------- ping ---------------------------------
+  /// ------------------------- ping ---------------------------------
   @override
   Stream<Duration?> get pingStream => connectionService.pingStream;
 
@@ -59,9 +60,6 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   Duration? get ping => connectionService.ping;
 
   ///---------------------- playerInfoSyncState ------------------
-  /// en el futuro esto va a cambiar de playerInfo a cualquier info
-  /// simple syncState, y se va a referir al estado de sincronizacion
-  /// de la informacion
   @override
   Stream<PlayerInfoSyncState> get playerInfoSyncStateStream 
     => _playerInfoSyncStateSubject.stream;
@@ -80,10 +78,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
       _subscribeToLocalPlayerStream(); 
       _subscribeToServerEvent();
 
-      connectionService.send(UpdateInfoPlayerEvent(
-        player: await playerLocalStorage.player,
-        id    : 0
-      ));
+      syncPlayerData();
 
     }catch(e){
       debugPrint("Error connection on ConnectionRepo: $e");
@@ -91,6 +86,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
       rethrow;
     }
   }
+
 
   @override
   void disconnect() async {
@@ -100,27 +96,42 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     connectionService.disconnect();
   }
 
+
   @override
   void send(ButtonPlayerEvent pbe) => connectionService.send(pbe);
+
   
   @override
-  void syncPlayerData() async {
+  Future<void> syncPlayerData() async {
+    _playerInfoSyncStateSubject.add(.progres);
     final player = await playerLocalStorage.player;
 
-    connectionService.send(UpdateInfoPlayerEvent(player: player, id: 200));
-
-    // connectionService.sendAndCheckResult(
-    //   (id) => UpdateInfoPlayerEvent(player: player, id: id),
-    //   onCheckTimeOver: () => _playerInfoSyncStateSubject.add(.failed), 
+    connectionService.sendAndCheckResult(
+      (id) => UpdateInfoPlayerEvent(player: player, id: id),
       
-    //   onEventRecived: (identifiableEvent){
-    //     if(identifiableEvent is SuccessCheckEvent){
-    //       _playerInfoSyncStateSubject.add(.success);
-    //     }else if(identifiableEvent is ErrorCheckEvent){
-    //       _playerInfoSyncStateSubject.add(.failed);
-    //     }
-    //   },
-    // );
+      onCheckTimeOver: (time){
+        if(_lastPlayerInfoUpdate == null || 
+          _lastPlayerInfoUpdate!.isBefore(time)
+        ){
+          _playerInfoSyncStateSubject.add(.failed); 
+          _lastPlayerInfoUpdate = time;
+        }
+      },
+
+      onEventRecived: (event, time){
+        if(_lastPlayerInfoUpdate == null || 
+          _lastPlayerInfoUpdate!.isBefore(time)
+        ){
+          switch(event){
+            case SuccessCheckEvent():
+              _playerInfoSyncStateSubject.add(.success);
+            case ErrorCheckEvent():
+              _playerInfoSyncStateSubject.add(.failed);
+          }  
+          _lastPlayerInfoUpdate = time;
+        }
+      },
+    );
   }
 
 
@@ -143,6 +154,9 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
         switch(event){
           case VibrationVDEvent():
             vibrationService.process(event);
+          case PlayerInfoRequestServerEvent():
+            syncPlayerData();
+          
         }
       }
     );

@@ -17,10 +17,11 @@ sealed class CheckEvent implements IdentiafiableEvent {
 
   factory CheckEvent.decode(dynamic source){
     final data = source as Uint8List;
+    // if(data[0] != EventCode.check.code) throw FormatException('Wrong eventType');
     
     return switch(data[1]){
-      1 => ErrorCheckEvent.decode(data.sublist(2)),
-      2 => SuccessCheckEvent.decode(data.sublist(2)),
+      0 => ErrorCheckEvent.decode(data.sublist(2)),
+      1 => SuccessCheckEvent.decode(data.sublist(2)),
 
       _ => throw FormatException('Unknown CheckEvent code: ${data[1]}'),
      
@@ -66,7 +67,9 @@ class SuccessCheckEvent extends CheckEvent{
 
   @override
   Uint8List encode() => Uint8List.fromList([
-    eventCode.code, 1, id
+    eventCode.code, // eventCode
+    1, // eventSubCode
+    id 
   ]);
 
   factory SuccessCheckEvent.decode(Uint8List data){

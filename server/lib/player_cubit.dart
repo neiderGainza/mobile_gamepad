@@ -18,9 +18,9 @@ class PlayerCubit extends Cubit<PlayerState?>{
   // subscritpions
   StreamSubscription<VirtualDeviceEvent> ? _vdEventSubscription; 
   StreamSubscription<dynamic> ? _userInputSubscription;
-  Timer ? _authTimer;
-
-  // subjects
+  
+  // necesario para inicalizar _hearbeat y checkpool
+  // se alimenta de _userInputSubscription (subcripcion a _webSocketChannel)
   final BehaviorSubject<Event> _eventSubject = BehaviorSubject();
 
 
@@ -35,8 +35,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _initUserInputSubscription();
     _initHeartbeat();
     _initCheckPool();
-
-    _authTimer = Timer( const Duration(seconds: 8), close );
   }
   
   final WebSocketChannel   _webSocketChannel;
@@ -55,15 +53,13 @@ class PlayerCubit extends Cubit<PlayerState?>{
   /// Eventos
   void _onPlayerUpdateInfo(UpdateInfoPlayerEvent event){
     if(state == null){
-      _authTimer?.cancel();
-      
       onPlayerAuth(event.player.id, this);
       emit(PlayerState(player: event.player , connectionStatus: .connected));
       _webSocketChannel.sink.add(SuccessCheckEvent(id: event.id).encode());
       
       _createVirtualDevice();
     }else{
-      emit(state!.copyWith(player: event.player , connectionStatus: .connected));
+      emit(state!.copyWith(player: event.player, connectionStatus: .connected));
       _webSocketChannel.sink.add(SuccessCheckEvent(id: event.id).encode());
     }
   }
@@ -97,6 +93,30 @@ class PlayerCubit extends Cubit<PlayerState?>{
   }
 
 
+  /// Create virtual device
+  Future<void> _createVirtualDevice() async {
+    /// TODO : do not fail in silence
+    try{
+      _virtualDevice = VirtualDevice.platformDevice();
+      if(_virtualDevice == null){
+        throw UnimplementedError('No devices for the parameters, '
+          'on _createVirtualDevice on PlayerCubit');
+      }
+      await _virtualDevice!.start(playerNumber);
+      _initVDEventSubscription(_virtualDevice!);
+    
+    }catch(e){
+    
+      if(e is VirtualDeviceException){
+        print("Error incialicing VD: ${e.message}");
+      }else{
+        print("Error incialicing VD: $e");
+      }
+    
+      _virtualDevice = null;
+    }
+  }
+
   
   /// Subscriptions
   /// Inicializando subscripciones
@@ -126,8 +146,13 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _userInputSubscription?.cancel();
     _userInputSubscription = _webSocketChannel.stream.listen(
       (data){
+        
         try{
           final event = Event.decode(data);
+          
+          if(event is! PingEvent && event is! PongEvent){
+            print(event);
+          }
 
           switch(event){
             case final UpdateInfoPlayerEvent event:
@@ -165,43 +190,23 @@ class PlayerCubit extends Cubit<PlayerState?>{
     super.onChange(change);
   }
 
-
   @override
   Future<void> close() {
-    _authTimer?.cancel();
     _userInputSubscription?.cancel();
+    _userInputSubscription = null;
     _vdEventSubscription?.cancel();
+    _vdEventSubscription = null;
 
     _heartbeat?.stop();
+    _heartbeat = null;
     _checkPool?.stop();
+    _checkPool = null;
     _virtualDevice?.close();
-    
+    _virtualDevice = null;
+
     _eventSubject.close();
     _webSocketChannel.sink.close();
     return super.close();
   }
 
-
-  /// Create virtual device
-  Future<void> _createVirtualDevice() async {
-    try{
-      _virtualDevice = VirtualDevice.platformDevice();
-      if(_virtualDevice == null){
-        throw UnimplementedError('No devices for the parameters, '
-          'on _createVirtualDevice on PlayerCubit');
-      }
-      await _virtualDevice!.start(playerNumber);
-      _initVDEventSubscription(_virtualDevice!);
-    
-    }catch(e){
-    
-      if(e is VirtualDeviceException){
-        print("Error incialicing VD: ${e.message}");
-      }else{
-        print("Error incialicing VD: $e");
-      }
-    
-      _virtualDevice = null;
-    }
-  }
 }

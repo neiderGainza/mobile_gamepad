@@ -17,6 +17,9 @@ export 'src/models/event/player_event.dart';
 // check event
 export 'src/models/event/check_event.dart';
 
+// ping event
+export 'src/models/event/ping_pong_event.dart';
+
 // virtual device event
 export 'src/models/event/virtual_device_event.dart';
 

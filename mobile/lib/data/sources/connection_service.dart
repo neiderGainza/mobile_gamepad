@@ -16,7 +16,7 @@ final connectionServiveProvider = Provider((ref){
 
 
 // -------------------------Interface ------------------------------
-abstract class ConnectionService{
+abstract interface class ConnectionService{
   Stream<Event> get eventStream;
 
   Stream<PlayerConnectionStatus> get connectionStatusStream;
@@ -31,6 +31,25 @@ abstract class ConnectionService{
   void send(PlayerEvent event);
 
   void disconnect();
+
+  /// @brief Generates and sends an [IdentifiableEvent]
+  /// sets the callbacks for expecting an [IdentifiableEvent] in response
+  /// 
+  /// @params eventCallback gives you access to an internal Id to build your event
+  /// ([IdentiafiableEvent] provide a get id property)
+  /// 
+  /// if the [CheckEvent] does not arrive before [checkTime] is over 
+  /// [onCheckTimeOver] will be called and futures CheckEvents will 
+  /// be ignored
+  void sendAndCheckResult(
+    IdentiafiableEvent Function(int id) eventCallback, {
+    /// [event] is the response event
+    /// [time] is the DateTime when your event was sent 
+    required Function(IdentiafiableEvent event, DateTime time) onEventRecived, 
+    /// [time] is the DateTime when your event was sent 
+    required Function(DateTime eventOutTime) onCheckTimeOver, 
+    Duration checkTime = const Duration(seconds: 5)
+  });
 }
 
 
@@ -100,6 +119,19 @@ class ConnectionServiceImpl extends ConnectionService{
     _channel?.sink.add(event.encode());
   }
 
+  @override
+  void sendAndCheckResult( IdentiafiableEvent Function(int id) eventCallback, {
+      required Function(IdentiafiableEvent event, DateTime time) onEventRecived, 
+      required Function(DateTime eventOutTime) onCheckTimeOver, 
+      Duration checkTime = const Duration(seconds: 5)
+  }) {
+    _checkPool?.sendAndCheckResult(
+      eventCallback, 
+      onEventRecived: onEventRecived, 
+      onCheckTimeOver: onCheckTimeOver
+    );
+  }
+
   @override 
   void disconnect() {
     // dejo de recibir
@@ -161,6 +193,6 @@ class ConnectionServiceImpl extends ConnectionService{
     if(_checkPool != null) throw Exception('initCheckPool with a session open');
     if(_channel == null ) throw Exception('initCheckPool without _channel');
     
-    _checkPool = CheckPool(eventStream, _channel!.sink);
+    _checkPool = CheckPool(_serverSubject.stream, _channel!.sink);
   }
 }

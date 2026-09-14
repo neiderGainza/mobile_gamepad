@@ -3,10 +3,9 @@ import 'dart:typed_data';
 import 'package:core/src/models/event/_event.dart';
 import 'package:core/src/models/event/_event_code.dart';
 
-class PingEvent implements IdentiafiableEvent{
+class PingEvent implements Event{
   @override
   final EventCode eventCode = EventCode.ping;
-  @override
   final int id;
 
   const PingEvent(this.id);
@@ -20,10 +19,9 @@ class PingEvent implements IdentiafiableEvent{
 }
 
 // caso especial de checkEvent
-class PongEvent implements IdentiafiableEvent{
+class PongEvent implements Event{
   @override
   final EventCode eventCode = EventCode.pong;
-  @override
   final int id;
 
   const PongEvent(this.id);
