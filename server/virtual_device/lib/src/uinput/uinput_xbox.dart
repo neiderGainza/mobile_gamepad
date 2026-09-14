@@ -6,7 +6,6 @@ import 'package:ffi/ffi.dart' as ffi_allocator;
 import 'package:isolate_channel/isolate_channel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:virtual_device/src/models/virtual_device_button.dart';
-import 'package:virtual_device/src/models/virtual_device_event.dart';
 import 'package:virtual_device/src/models/virtual_device_input.dart';
 import 'package:virtual_device/src/uinput/uinput_rumble_const.dart';
 import '../exception/virtual_device_exception.dart';

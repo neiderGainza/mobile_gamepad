@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:virtual_device/src/models/virtual_device_button.dart';
-import 'package:virtual_device/src/models/virtual_device_event.dart';
 import 'package:virtual_device/src/models/virtual_device_input.dart';
 import 'package:virtual_device/src/uinput/uinput_xbox.dart';
 

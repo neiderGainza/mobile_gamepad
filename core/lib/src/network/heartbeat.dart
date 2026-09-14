@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:core/core.dart';
 import 'package:core/src/models/event/ping_pong_event.dart';
-import 'package:core/src/models/player/player_connection_status.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 
@@ -9,7 +8,7 @@ class Heartbeat{
   final Duration pingInterval;
   final int maxPingFailed;
   
-  final Stream<dynamic> _channelStream;
+  final Stream<Event> _channelStream;
   final WebSocketSink _channelSink;
 
   final Function(Duration ? ping) onPingChanged;
@@ -24,16 +23,18 @@ class Heartbeat{
     required this.onHeartbeatStop,
     required this.onConnectionStatusChanged
   }){
-    startHeartbeat();
+    start();
   }
 
 
-  StreamSubscription ? _channelSubscription;
-  
+  // timers
+  StreamSubscription ? _eventSubscription;
+
   Timer ? _pingTimer;  
   int _pingCounter = 0;
   final Map<int, DateTime> _pingPool = {};
-  
+
+
   PlayerConnectionStatus ? _connectionStatus;
   set connectionStatus(PlayerConnectionStatus status){
     if(status != _connectionStatus){
@@ -42,13 +43,13 @@ class Heartbeat{
     }
   }
 
-  void startHeartbeat() {
+  void start() {
     _subscribeToChannel();
     _startPingTimer();
   }
 
-  void stopHeartbeat({bool callCallback = false}) {
-    _channelSubscription?.cancel();
+  void stop({bool callCallback = false}) {
+    _eventSubscription?.cancel();
     _pingTimer?.cancel();
     _pingPool.clear();      
     
@@ -69,7 +70,7 @@ class Heartbeat{
         }
 
         if(_pingPool.length >= maxPingFailed){
-          stopHeartbeat(callCallback: true);
+          stop(callCallback: true);
           return;
         }
 
@@ -81,21 +82,20 @@ class Heartbeat{
   }
 
   void _subscribeToChannel(){
-    _channelSubscription?.cancel();
-    _channelSubscription = _channelStream.listen(
-      (data){
-        if(PingEvent.isPing(data)){
-          final pp = PongEvent(PingEvent.decode(data).id);
-          _channelSink.add(pp.encode());
-        }else if(PongEvent.isPong(data)){
-          final pp = PongEvent.decode(data);
-          _handlePong(pp.id);
+    _eventSubscription?.cancel();
+    _eventSubscription = _channelStream.listen(
+      (event){
+        switch(event){
+          case PingEvent():
+            _channelSink.add(PongEvent(event.id).encode());
+          case PongEvent():
+            _handlePong(event.id);
         }
-        
+
         connectionStatus = .connected;
       },
       onDone:(){
-        stopHeartbeat(callCallback: true);
+        stop(callCallback: true);
       }
     );
   }

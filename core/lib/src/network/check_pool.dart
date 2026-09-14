@@ -1,56 +1,60 @@
 import 'dart:async';
 
 import 'package:core/core.dart';
-import 'package:core/src/models/event/_event.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 // Mixin vs anidamiento
 class CheckPool {
-  final Stream<dynamic> _channelStream;
+  final Stream<Event> _eventStream;
   final WebSocketSink _channelSink;
 
-  StreamSubscription ? _channelStreamSubscription;
+  StreamSubscription ? _eventSubscription;
 
-  CheckPool(this._channelStream, this._channelSink);
+  CheckPool(this._eventStream, this._channelSink);
 
   void start() {
     _initChannelSubscription();
   }
 
-  /// TODO : what do we have to do when a new event is resolved and 
-  /// an old one is wainting for event
+
+  /// 
+  /// Complicated Case : cuando llega una peticion de tipo A
+  /// se eliminan todas las peticiones de tipo A anteriores en
+  /// tiempo 
+  /// 
   void sendAndCheckResult(
     IdentiafiableEvent Function(int id) eventCallback, {
-    Function(IdentiafiableEvent event)? onEventRecived, 
-    Function()? onCheckTimeOver, 
+    /// [event] is the response event
+    /// [time] is the DateTime when your event was sent 
+    required Function(IdentiafiableEvent event, DateTime time) onEventRecived, 
+    /// [time] is the DateTime when your event was sent 
+    required Function(DateTime eventOutTime) onCheckTimeOver, 
     Duration checkTime = const Duration(seconds: 5)
   }) {
     final id    = _syncEventIdCount;
     final event = eventCallback(id);
     
+    // enviar el mensaje
     _channelSink.add(event.encode());
 
-    final eventTimer = Timer(checkTime, (){
-      if(_eventWaitingForCheckPool.containsKey(id)){
-        final onCheckTimeOver = _eventWaitingForCheckPool[id]!.onCheckTimeOver;
-        _eventWaitingForCheckPool.remove(id);
-        onCheckTimeOver?.call();    
-      }
-    }); 
+    // poner el removeTimer
+    final eventTimer = _setRemoveTimer(checkTime, event);
 
-    _eventWaitingForCheckPool[id] = (
-      onEventRecived  : onEventRecived as Function(IdentiafiableEvent),
-      onCheckTimeOver : onCheckTimeOver,
-      timer           : eventTimer,
-      dateTime        : DateTime.now()
+    // guardar el evento y el tiempo en el que fue enviado
+    _eventPool[id] = (
+      onEventRecived: onEventRecived,
+      onCheckTimeOver: onCheckTimeOver,
+      time: DateTime.now(),
+      timer: eventTimer
     );
   }
 
 
   void stop() {
-    _channelStreamSubscription?.cancel();
-    _eventWaitingForCheckPool.clear();
+    _eventSubscription?.cancel();
+    _eventPool.clear();
   }
+
 
   /// Id (int8 up to 256 events awaiting for confirmation)
   int _syncEventIdCountVal = 0;
@@ -59,36 +63,50 @@ class CheckPool {
     return _syncEventIdCountVal;
   }
 
-  final Map<int, ({
-    Function(IdentiafiableEvent event)? onEventRecived,
-    Function()? onCheckTimeOver,
-    Timer timer,
-    DateTime dateTime, 
-  })> _eventWaitingForCheckPool = {};
 
+  final Map<int , ({
+    Function(IdentiafiableEvent event, DateTime time) onEventRecived,
+    Function(DateTime time) onCheckTimeOver,
+    Timer timer,
+    DateTime time,
+  })> _eventPool = {};
 
 
   void _initChannelSubscription(){
-    _channelStreamSubscription?.cancel();
-    _channelStreamSubscription = _channelStream.listen(
-      (data){
-        try{
-          final event = Event.decode(data);
-          if(event is IdentiafiableEvent && 
-             _eventWaitingForCheckPool.containsKey(event.id)
-          ){
-            _eventWaitingForCheckPool[event.id]?.timer.cancel();
-            final eventWaitingForCheck = _eventWaitingForCheckPool[event.id];
-            
-            if(eventWaitingForCheck != null){
-              eventWaitingForCheck.onEventRecived?.call(event);
-            }
+    _eventSubscription?.cancel();
+    _eventSubscription = _eventStream.listen(
+      (event){
+        if( event is IdentiafiableEvent){
+          final id = event.id;
 
-            _eventWaitingForCheckPool.remove(event.id);
+          if(_eventPool.containsKey(id)){
+            final waitEvent = _eventPool[id];
+            waitEvent?.timer.cancel();
+            _eventPool.remove(id);
+
+            if(waitEvent != null){
+              waitEvent.onEventRecived.call(event,waitEvent.time);
+            }
           }
-        }catch(_){}
+        }
       }
     );
+  }
+
+  Timer _setRemoveTimer(Duration checkTime, IdentiafiableEvent event){
+    return Timer(checkTime, (){
+      final id = event.id;
+
+      if(_eventPool.containsKey(id)){
+        final waitEvent = _eventPool[id];
+        _eventPool.remove(id);
+
+        if(waitEvent != null){
+          waitEvent.onCheckTimeOver.call(waitEvent.time);
+          waitEvent.timer.cancel();    
+        }
+      }
+    }); 
   }
 }
 
@@ -105,19 +123,18 @@ abstract mixin class CheckPoolMixin{
   /// @params eventCallback gives you access to an internal Id to build your event
   /// ([IdentiafiableEvent] provide a get id property)
   /// 
-  /// depending on the result of the server proccess it will responde
-  /// with SuccessCheckEvent or ErrorCheckEvent , the function 
-  /// [onSuccessCheckEvent] and [onErrorCheckEvent] will be called
-  /// 
   /// if the [CheckEvent] does not arrive before [checkTime] is over 
   /// [onCheckTimeOver] will be called and futures CheckEvents will 
   /// be ignored
   void sendAndCheckResult(
     IdentiafiableEvent Function(int id) eventCallback, {
-    Function(IdentiafiableEvent event)? onEventRecived, 
-    Function()? onCheckTimeOver, 
+    /// [event] is the response event
+    /// [time] is the DateTime when your event was sent 
+    required Function(IdentiafiableEvent event, DateTime time) onEventRecived, 
+    /// [time] is the DateTime when your event was sent 
+    required Function(DateTime eventOutTime) onCheckTimeOver, 
     Duration checkTime = const Duration(seconds: 5)
-  }){
+  }) {
     _checkPool?.sendAndCheckResult(
       eventCallback,
       onEventRecived: onEventRecived,

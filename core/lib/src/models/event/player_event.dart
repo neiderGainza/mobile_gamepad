@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:core/core.dart';
-import 'package:core/src/models/event/_event.dart';
 import 'package:core/src/models/event/_event_code.dart';
 
 
@@ -12,18 +11,7 @@ sealed class PlayerEvent implements Event{
   @override
   EventCode get eventCode => EventCode.playerEvent;
 
-  static bool isPlayerEvent(dynamic source){
-    if(source is Uint8List){
-      return source[0] == EventCode.playerEvent.code;
-    }
-    return false;
-  }
-
   factory PlayerEvent.decode(dynamic source) {
-    if(!isPlayerEvent(source)){
-      throw FormatException('Invalid input for PlayerEvent.decode');
-    }
-
     final data = source as Uint8List;
     final eventSubCode = data[1];
     

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:core/core.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:virtual_device/virtual_device.dart';
 
 
@@ -10,28 +11,38 @@ import 'package:virtual_device/virtual_device.dart';
 /// emitir los eventos del sever hacia el player
 /// Puente entre virtualDevice y player
 class PlayerCubit extends Cubit<PlayerState?>{
-  ///
+  Heartbeat     ? _heartbeat;
+  VirtualDevice ? _virtualDevice;
+  CheckPool     ? _checkPool; // unused still
+  
+  // subscritpions
+  StreamSubscription<VirtualDeviceEvent> ? _vdEventSubscription; 
+  StreamSubscription<dynamic> ? _userInputSubscription;
+  Timer ? _authTimer;
+
+  // subjects
+  final BehaviorSubject<Event> _eventSubject = BehaviorSubject();
+
+
+  /// Constructor
   PlayerCubit(this._webSocketChannel, {
     required this.playerNumber,
     required this.onPlayerAuth,
     required this.onPlayerDisconnect,
     required this.onPlayerStateUpdated,
-  }): _serverEventStream = _webSocketChannel.stream.asBroadcastStream() 
-    , super(null) {
+  }): super(null) {
 
     _initUserInputSubscription();
-    _startAuthTimer();
     _initHeartbeat();
+    _initCheckPool();
+
+    _authTimer = Timer( const Duration(seconds: 8), close );
   }
   
   final WebSocketChannel   _webSocketChannel;
-  Heartbeat ? _heartbeat;
-  VirtualDevice ? _virtualDevice;
-  final int playerNumber;
 
-  /// broadcast del [_webSockectChannel.stream]
-  final Stream<dynamic> _serverEventStream;
-  
+  /// Player number for naming the controller (ejem: Player 1)
+  final int playerNumber;
 
   /// Callback
   final void Function(String playerId, PlayerCubit cubit) onPlayerAuth;
@@ -40,12 +51,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
   /// Callback
   final void Function(PlayerState state) onPlayerStateUpdated;
   
-
-  // subscritpions
-  StreamSubscription<dynamic> ? _userInputSubscription;
-  StreamSubscription<VirtualDeviceEvent> ? _vdEventSubscription; 
-  Timer ? _authTimer;
-
   
   /// Eventos
   void _onPlayerUpdateInfo(UpdateInfoPlayerEvent event){
@@ -71,40 +76,33 @@ class PlayerCubit extends Cubit<PlayerState?>{
 
   void _onPlayerBtnEvent(ButtonPlayerEvent event){
     if(state == null){
-      _handleEventBeforeInfoSync();
+      _requestInfoSync();
       return;
     }
     
     if(_virtualDevice == null){
-      try{
-        _createVirtualDevice();
-      }catch(_){
-        
-      }
+      // TODO : what happends when VD==null
     }
 
-    final vdb = _virtualDevice!.getDefaultVDBfor(event.btn);
+    final vdb = _virtualDevice?.getDefaultVDBfor(event.btn);
     if(vdb != null){
-      _virtualDevice!.proccessEvent([
+      _virtualDevice?.proccessEvent([
         VirtualDeviceInput(button: vdb, axis:event.axis, value: event.value)
       ]);
     }
   }
 
-  void _handleEventBeforeInfoSync(){
+  void _requestInfoSync(){
     _webSocketChannel.sink.add(PlayerInfoRequestServerEvent().encode());
   }
 
 
+  
   /// Subscriptions
-  void _startAuthTimer(){
-    _authTimer = Timer( const Duration(seconds: 8), close );
-  }
-
   /// Inicializando subscripciones
   void _initHeartbeat(){
     _heartbeat = Heartbeat(
-      _serverEventStream,
+      _eventSubject.stream,
       _webSocketChannel.sink, 
 
       onPingChanged : 
@@ -117,13 +115,21 @@ class PlayerCubit extends Cubit<PlayerState?>{
     );
   }
 
+  void _initCheckPool(){
+    _checkPool = CheckPool(
+      _eventSubject.stream, 
+      _webSocketChannel.sink
+    );
+  }
+
   void _initUserInputSubscription(){
-    _userInputSubscription = _serverEventStream.listen(
+    _userInputSubscription?.cancel();
+    _userInputSubscription = _webSocketChannel.stream.listen(
       (data){
-        if(PlayerEvent.isPlayerEvent(data)){
-          final playerEvent = PlayerEvent.decode(data);
-            
-          switch(playerEvent){
+        try{
+          final event = Event.decode(data);
+
+          switch(event){
             case final UpdateInfoPlayerEvent event:
               _onPlayerUpdateInfo(event);
             case final DisconnectPlayerEvent event:
@@ -131,7 +137,9 @@ class PlayerCubit extends Cubit<PlayerState?>{
             case final ButtonPlayerEvent event:
               _onPlayerBtnEvent(event);
           }
-        }
+
+          _eventSubject.add(event);
+        }catch(_){}
       },
       onDone: (){
         _onPlayerDisconnectEvent(DisconnectPlayerEvent());
@@ -143,14 +151,7 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _vdEventSubscription?.cancel();
     _vdEventSubscription = vd.eventStream.listen(
       (vde){
-        switch(vde){
-          
-          case VibrationVDEvent():
-            _webSocketChannel.sink.add(VibrateServerEvent(
-              code: vde.id, 
-              value: vde.value
-            ).encode());    
-        }
+        _webSocketChannel.sink.add(vde.encode());
       }
     );
   }
@@ -171,14 +172,17 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _userInputSubscription?.cancel();
     _vdEventSubscription?.cancel();
 
-    _heartbeat?.stopHeartbeat();
+    _heartbeat?.stop();
+    _checkPool?.stop();
     _virtualDevice?.close();
     
+    _eventSubject.close();
     _webSocketChannel.sink.close();
     return super.close();
   }
 
 
+  /// Create virtual device
   Future<void> _createVirtualDevice() async {
     try{
       _virtualDevice = VirtualDevice.platformDevice();

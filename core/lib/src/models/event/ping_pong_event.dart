@@ -6,6 +6,7 @@ import 'package:core/src/models/event/_event_code.dart';
 class PingEvent implements IdentiafiableEvent{
   @override
   final EventCode eventCode = EventCode.ping;
+  @override
   final int id;
 
   const PingEvent(this.id);
@@ -13,16 +14,7 @@ class PingEvent implements IdentiafiableEvent{
   @override
   Uint8List encode() => Uint8List.fromList([eventCode.code, id]);
 
-  static bool isPing(dynamic source) {
-    return source is List<int> &&
-      source.length == 2 &&
-      source[0] == EventCode.ping.code;
-  }
-
   factory PingEvent.decode(List<int> source) {
-    if(!isPing(source)) {
-      throw ArgumentError('Formato inválido para PingEvent');
-    }
     return PingEvent(source[1]);
   }
 }
@@ -31,6 +23,7 @@ class PingEvent implements IdentiafiableEvent{
 class PongEvent implements IdentiafiableEvent{
   @override
   final EventCode eventCode = EventCode.pong;
+  @override
   final int id;
 
   const PongEvent(this.id);
@@ -38,16 +31,7 @@ class PongEvent implements IdentiafiableEvent{
   @override
   Uint8List encode() => Uint8List.fromList([eventCode.code, id]);
 
-  static bool isPong(dynamic source) {
-    return source is List<int> &&
-        source.length == 2 &&
-        source[0] == EventCode.pong.code;
-  }
-
   factory PongEvent.decode(List<int> source) {
-    if (!isPong(source)) {
-      throw ArgumentError('Formato inválido para PongEvent');
-    }
     return PongEvent(source[1]);
   }
 }

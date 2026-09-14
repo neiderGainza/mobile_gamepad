@@ -11,25 +11,12 @@ sealed class ServerEvent implements Event{
   EventCode get eventCode => EventCode.serverEvent;
 
 
-  static bool isServerEvent(dynamic source){
-    if(source is Uint8List){
-      return source[0] == EventCode.serverEvent.code;
-    }
-    return false;
-  }
-
-
   factory ServerEvent.decode(dynamic source){
-    if (!isServerEvent(source)) {
-      throw FormatException('Format input error on serverEvent.decode');
-    }
-
     final data = source as Uint8List;
     final subEventCode = data[1];
 
     return switch (subEventCode) {
       1 => PlayerInfoRequestServerEvent(),
-      2 => VibrateServerEvent.decode(data.sublist(2)),
 
       _ => throw FormatException('Unknown ServerEvent code: $subEventCode'),
     };
@@ -45,35 +32,3 @@ class PlayerInfoRequestServerEvent extends ServerEvent{
   ]);
 }
 
-
-class VibrateServerEvent extends ServerEvent{
-  final int code ; // id de vibracion (native u16)
-  final int value; // 0 stop , n repeticions (native s32)
-
-  const VibrateServerEvent({
-    required this.code,
-    required this.value
-  });
-
-  @override
-  Uint8List encode() {
-    final result = Uint8List(8);
-    final bd = ByteData.sublistView(result);
-    
-    bd.setInt8(0, eventCode.code); // EventCode
-    bd.setInt8(1, 2);              //subEventCode 
-    bd.setUint16(2, code);         // id
-    bd.setInt32(3, value);         // repeticions
-
-    return result;
-  }
-
-  factory VibrateServerEvent.decode(Uint8List data){
-    final bd = ByteData.sublistView(data);
-
-    return VibrateServerEvent(
-      code: bd.getUint16(0), 
-      value: bd.getInt32(1)
-    );
-  }
-}

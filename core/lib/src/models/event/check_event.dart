@@ -7,25 +7,15 @@ import 'package:core/src/models/event/_event_code.dart';
 
 
 sealed class CheckEvent implements IdentiafiableEvent {
-  final int id; // int8
+  @override
+  final int id;
 
   const CheckEvent({ required this.id });
 
   @override
   EventCode get eventCode => .check;
 
-  static bool isCheckEvent(dynamic source){
-    if(source is Uint8List){
-      return source[0] == EventCode.check.code;
-    } 
-    return false;
-  }
-
   factory CheckEvent.decode(dynamic source){
-    if(!isCheckEvent(source)){
-       throw FormatException('Invalid input for CheckEvent.decode');
-    }
-
     final data = source as Uint8List;
     
     return switch(data[1]){

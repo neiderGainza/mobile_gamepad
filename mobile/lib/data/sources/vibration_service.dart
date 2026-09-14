@@ -11,14 +11,14 @@ final vibrationServiceProvider = Provider<VibrationService>((ref){
 
 /// Crecera a medida q se necesite
 abstract class VibrationService {
-  void process(VibrateServerEvent vse);
+  void process(VibrationVDEvent vse);
 }
 
 
 class VibrationServiceImpl extends VibrationService{
 
   @override
-  void process(VibrateServerEvent vse) {
+  void process(VibrationVDEvent vse) {
     /// more complex future
     HapticFeedback.vibrate();
   }

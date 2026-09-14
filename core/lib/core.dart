@@ -17,6 +17,9 @@ export 'src/models/event/player_event.dart';
 // check event
 export 'src/models/event/check_event.dart';
 
+// virtual device event
+export 'src/models/event/virtual_device_event.dart';
+
 // server_config_service
 export 'src/utils/server_config_service.dart';
 

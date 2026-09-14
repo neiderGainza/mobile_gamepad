@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:core/core.dart';
 import 'package:core/src/models/event/_event_code.dart';
 import 'package:core/src/models/event/check_event.dart';
 import 'package:core/src/models/event/ping_pong_event.dart';
@@ -27,7 +28,8 @@ abstract interface class Event {
           case 2: return PongEvent.decode(source);
           case 3: return ServerEvent.decode(source);
           case 4: return PlayerEvent.decode(source);
-
+          case 5: return VirtualDeviceEvent.decode(source);
+          
           default: throw FormatException('No Event with EventCode ${source[0]}');
         }
       }

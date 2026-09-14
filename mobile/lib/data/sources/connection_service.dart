@@ -5,8 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:web_socket_channel/io.dart';
-
-import 'package:web_socket_channel/status.dart' as status;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 // ------------------------ Provider --------------------------
@@ -42,8 +40,6 @@ class ConnectionServiceImpl extends ConnectionService{
   Heartbeat ? _heartbeat; // compisition instead inherent
   CheckPool ? _checkPool; // compisition instead inherent
   
-  /// Broadcast del [_channel.stream]
-  Stream<dynamic> ? _channelBroadcastStream;
   StreamSubscription ? _serverEventSubscription;
 
   final BehaviorSubject<Event> _serverSubject = BehaviorSubject();
@@ -88,7 +84,6 @@ class ConnectionServiceImpl extends ConnectionService{
         },
       );
 
-      _channelBroadcastStream = _channel!.stream.asBroadcastStream();
       await _channel!.ready;
 
       _startSubscribeToServerEvent();
@@ -120,7 +115,7 @@ class ConnectionServiceImpl extends ConnectionService{
     _pingSubject.drain();
 
     // dejo de mandar pings
-    _heartbeat?.stopHeartbeat();
+    _heartbeat?.stop();
     _heartbeat = null;
     
     // detengo la espera por checks checkPool
@@ -128,19 +123,15 @@ class ConnectionServiceImpl extends ConnectionService{
     _checkPool = null;
 
     // cierro el channel completamente
-    _channel?.sink.close(status.normalClosure);
+    _channel?.sink.close();
     _channel = null;
-
-    /// acabo con el broadcast del _channel
-    _channelBroadcastStream?.drain();
-    _channelBroadcastStream = null;
   }
 
 
   /// ---------------------------- Helpers --------------------------------
   void _startSubscribeToServerEvent(){
     _serverEventSubscription?.cancel();
-    _serverEventSubscription = _channelBroadcastStream?.listen(
+    _serverEventSubscription = _channel?.stream.listen(
       (data){
         try{
           final event = Event.decode(data);
@@ -155,12 +146,10 @@ class ConnectionServiceImpl extends ConnectionService{
 
   void _initHeartbeat(){
     if(_heartbeat != null) throw Exception('initHearbit with a session open');
-    if(_channel == null || _channelBroadcastStream == null) {
-      throw Exception('initHearbit without _channel');
-    }
+    if(_channel == null) throw Exception('initHearbit without _channel');
 
     _heartbeat = Heartbeat(
-      _channelBroadcastStream!,     
+      eventStream,     
       _channel!.sink, 
       onPingChanged: _pingSubject.add, 
       onConnectionStatusChanged: _connectionSubject.add,
@@ -170,9 +159,8 @@ class ConnectionServiceImpl extends ConnectionService{
 
   void _initCheckPool(){
     if(_checkPool != null) throw Exception('initCheckPool with a session open');
-    if(_channel == null || _channelBroadcastStream == null) {
-      throw Exception('initCheckPool without _channel');
-    }
-    _checkPool = CheckPool(_channelBroadcastStream!, _channel!.sink);
+    if(_channel == null ) throw Exception('initCheckPool without _channel');
+    
+    _checkPool = CheckPool(eventStream, _channel!.sink);
   }
 }

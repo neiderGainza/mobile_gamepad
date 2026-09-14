@@ -141,7 +141,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     _serverEventSubscription = connectionService.eventStream.listen(
       (event){
         switch(event){
-          case VibrateServerEvent():
+          case VibrationVDEvent():
             vibrationService.process(event);
         }
       }
