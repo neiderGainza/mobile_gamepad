@@ -1,7 +1,11 @@
 import 'package:core/core.dart';
 import 'package:game_controller/domain/enums/player_info_sync_state.dart';
+import 'package:game_controller/domain/model/connection_message.dart';
 
 abstract class ConnectionRepository {
+  // canal de informacion
+  Stream<ConnectionMessage> get infoStream;
+
   // connection Status
   Stream<PlayerConnectionStatus> get connectionStatusStream;
   PlayerConnectionStatus get connectionStatus;
@@ -14,6 +18,8 @@ abstract class ConnectionRepository {
   Stream<PlayerInfoSyncState> get playerInfoSyncStateStream;
   PlayerInfoSyncState get playerInfoSyncState; 
 
+  
+  /// ---------------------- Methods -------------------------
   void connect(String serverAddress, int port);
 
   void disconnect();
@@ -26,4 +32,5 @@ abstract class ConnectionRepository {
   ///  
   /// la data del player sera obtenida del [PlayerLocalStorage]
   Future<void> syncPlayerData();
+
 }

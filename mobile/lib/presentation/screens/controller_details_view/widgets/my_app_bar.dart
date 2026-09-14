@@ -15,13 +15,18 @@ class MyAppBar extends StatelessWidget {
     
     return Container(
       padding: const .symmetric(vertical: 4, horizontal: 8),
+      constraints: BoxConstraints(
+        minHeight: 56,
+        minWidth: 120
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           bottomRight: .circular(20)
         ),
         color: Theme.of(context).colorScheme.primaryContainer
+      
       ),
-
+      
       child: Row(
         mainAxisSize: .min,
         children: [

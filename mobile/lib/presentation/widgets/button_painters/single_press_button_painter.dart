@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/data/repositories/connection_repository_impl.dart';
 import 'package:game_controller/domain/model/button.dart';
@@ -32,6 +33,7 @@ class SinglePressButtonPainter extends ConsumerWidget{
 
       child: InkWell(
         onTapDown: (details) {
+          HapticFeedback.vibrate();
           connectionRepo.send(ButtonPlayerEvent(
             btn: button.buttonCode, 
             axis: .depth, 

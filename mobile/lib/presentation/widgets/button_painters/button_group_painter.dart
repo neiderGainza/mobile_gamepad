@@ -1,8 +1,9 @@
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:game_controller/domain/model/button_group.dart';
-import 'package:game_controller/presentation/widgets/button_painter.dart';
+import 'package:game_controller/presentation/widgets/button_painters/button_painter.dart';
 
 class ButtonGroupPainter extends StatelessWidget {
   const ButtonGroupPainter({

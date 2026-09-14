@@ -4,7 +4,7 @@ import 'package:game_controller/domain/model/positioned_button_group.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
 import 'package:game_controller/presentation/screens/controller_form_view/menus/buttons_menu.dart';
 import 'package:game_controller/presentation/screens/controller_form_view/menus/controller_metada_form.dart';
-import 'package:game_controller/presentation/widgets/inherited_value.dart';
+import 'package:game_controller/presentation/utils/inherited_value.dart';
 import 'package:go_router/go_router.dart';
 
 class TopMenu extends ConsumerWidget {

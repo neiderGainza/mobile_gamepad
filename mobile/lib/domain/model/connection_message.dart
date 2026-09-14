@@ -1,0 +1,26 @@
+class ConnectionMessage {
+  final ConnectionMessageType type;
+  final String content;
+
+  ConnectionMessage({
+    required this.type,
+    required this.content
+  });
+
+  ConnectionMessage.message(String content) 
+    : this(type: .message, content : content);
+
+  ConnectionMessage.error(String content) 
+    : this(type: .error, content : content);
+  
+  ConnectionMessage.warning(String content) 
+    : this(type: .warning, content : content);
+  
+}
+
+
+enum ConnectionMessageType{
+  message,
+  error,
+  warning;
+}

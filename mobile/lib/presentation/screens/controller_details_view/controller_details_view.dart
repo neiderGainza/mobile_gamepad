@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/navigation/navigation.dart';
 import 'package:game_controller/presentation/providers/controller_details_provider.dart';
 import 'package:game_controller/presentation/screens/controller_details_view/widgets/my_app_bar.dart';
-import 'package:game_controller/presentation/widgets/button_group_painter.dart';
-import 'package:game_controller/presentation/widgets/inherited_value.dart';
+import 'package:game_controller/presentation/screens/controller_details_view/widgets/status_indicators.dart';
+import 'package:game_controller/presentation/utils/orientation_function_collection.dart';
+import 'package:game_controller/presentation/widgets/button_painters/button_group_painter.dart';
+import 'package:game_controller/presentation/utils/inherited_value.dart';
 
 
 class ControllerDetailsView extends ConsumerStatefulWidget{
@@ -19,29 +21,43 @@ class ControllerDetailsView extends ConsumerStatefulWidget{
   ConsumerState<ControllerDetailsView> createState() => _ControllerDetailsViewState();
 }
 
-class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> {
-  @override
-  void initState() {
+class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> with RouteAware{
+  late final RouteObserver _routeObserver;
+  
+  @override void initState() {
+    _routeObserver = ref.read(routeOvserverProvider);
     super.initState();
+  }
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      _routeObserver.subscribe(this, route);
+    }
   }
 
   @override
   void dispose() {
-    
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.portraitUp,
-    ]);
-    
+    _routeObserver.unsubscribe(this);
     super.dispose();
   }
+
+  @override
+  void didPopNext() {
+    OrientationFunctionCollection.setLandscape();
+    super.didPopNext();
+  }
+
+  @override
+  void didPush() {
+    OrientationFunctionCollection.setLandscape();
+    super.didPush();
+  }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +83,7 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> {
       
       child: Stack(
         children: [
-          Align( 
-            alignment: .topLeft, 
-            child: MyAppBar(controller: controller,),),
+
 
           for(final posGroup in controller.buttonGroups)
           Align(
@@ -78,8 +92,15 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> {
               2 * (posGroup.relativePosition.dy - 0.5)               
             ),
             child: ButtonGroupPainter(buttonGroup: posGroup.buttonGroup),
-          )
+          ),
 
+          Align( 
+            alignment: .topLeft, 
+            child: MyAppBar(controller: controller,),),
+        
+          Align( 
+            alignment: .topRight, 
+            child: StatusIndicators(),),
         ],
       ),
     );

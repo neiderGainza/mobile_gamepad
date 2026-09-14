@@ -8,6 +8,7 @@ import 'package:game_controller/data/sources/connection_service.dart';
 import 'package:game_controller/data/sources/player_local_storage_service.dart';
 import 'package:game_controller/data/sources/vibration_service.dart';
 import 'package:game_controller/domain/enums/player_info_sync_state.dart';
+import 'package:game_controller/domain/model/connection_message.dart';
 import 'package:game_controller/domain/repository/connection_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -41,8 +42,14 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   DateTime ? _lastPlayerInfoUpdate;
   final BehaviorSubject<PlayerInfoSyncState> _playerInfoSyncStateSubject
     = .seeded(.none); 
-  
 
+  final BehaviorSubject<ConnectionMessage> _messageSubject 
+    = BehaviorSubject();
+
+  // -------------------- Canal de informacion ---------------
+  @override
+  Stream<ConnectionMessage> get infoStream => _messageSubject.stream;
+  
   // --------------------- conectionStatus ---------------------
   @override
   Stream<PlayerConnectionStatus> get connectionStatusStream 
@@ -100,7 +107,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   @override
   void send(ButtonPlayerEvent pbe) => connectionService.send(pbe);
 
-  
+
   @override
   Future<void> syncPlayerData() async {
     _playerInfoSyncStateSubject.add(.progres);
@@ -147,6 +154,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     );
   }
 
+  /// Subscribe and map events to actions
   void _subscribeToServerEvent(){
     _serverEventSubscription?.cancel();
     _serverEventSubscription = connectionService.eventStream.listen(
@@ -156,7 +164,9 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
             vibrationService.process(event);
           case PlayerInfoRequestServerEvent():
             syncPlayerData();
-          
+          case FailInitVDEvent():
+            _messageSubject.add(.error(event.error));
+
         }
       }
     );

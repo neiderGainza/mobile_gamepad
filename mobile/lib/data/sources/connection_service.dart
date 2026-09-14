@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -181,7 +182,7 @@ class ConnectionServiceImpl extends ConnectionService{
     if(_channel == null) throw Exception('initHearbit without _channel');
 
     _heartbeat = Heartbeat(
-      eventStream,     
+      eventStream,
       _channel!.sink, 
       onPingChanged: _pingSubject.add, 
       onConnectionStatusChanged: _connectionSubject.add,
@@ -193,6 +194,9 @@ class ConnectionServiceImpl extends ConnectionService{
     if(_checkPool != null) throw Exception('initCheckPool with a session open');
     if(_channel == null ) throw Exception('initCheckPool without _channel');
     
-    _checkPool = CheckPool(_serverSubject.stream, _channel!.sink);
+    _checkPool = CheckPool(
+      _serverSubject.stream, 
+      _channel!.sink
+    );
   }
 }

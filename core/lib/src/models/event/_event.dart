@@ -2,10 +2,6 @@ import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:core/src/models/event/_event_code.dart';
-import 'package:core/src/models/event/check_event.dart';
-import 'package:core/src/models/event/ping_pong_event.dart';
-import 'package:core/src/models/event/player_event.dart';
-import 'package:core/src/models/event/server_event.dart';
 
 
 abstract interface class Event {
@@ -42,6 +38,15 @@ abstract interface class Event {
   
 }
 
+
+
+/// this interface is used for [CheckPool] to send 
+/// events and wait for and awnser containing the same id
+/// 
+/// Aunq muchos eventos puede q cumplan con la implementacion
+/// (ejem : PingEvent PongEvent) solo le doy la interfaz a los 
+/// eventos a los q quiero poder responder (de la respuesta
+/// de ping pong ya se encarga [Hearbeat] similar a [CheckPool]).
 abstract interface class IdentiafiableEvent implements Event{
   int get id;
 }

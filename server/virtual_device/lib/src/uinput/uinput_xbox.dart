@@ -95,7 +95,6 @@ class UinputXbox implements VirtualDevice {
         throw Exception('Error maneging Isolate');
       }
     }catch(e){
-      print("Exception : $e");
       if(_fd >= 0) close_device(_fd); 
       throw InitVirtualDeviceException(e.toString());
     }

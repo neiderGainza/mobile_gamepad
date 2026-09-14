@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_controller/data/static_collections/button_groups_collection.dart';
 import 'package:game_controller/domain/model/button_group.dart';
-import 'package:game_controller/presentation/widgets/button_group_painter.dart';
+import 'package:game_controller/presentation/widgets/button_painters/button_group_painter.dart';
 import 'package:go_router/go_router.dart';
 
 class ButtonMenu extends StatelessWidget {

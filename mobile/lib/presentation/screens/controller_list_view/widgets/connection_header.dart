@@ -2,38 +2,87 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/data/repositories/connection_repository_impl.dart';
-import 'package:game_controller/presentation/providers/conection_status_provider.dart';
-import 'package:game_controller/presentation/screens/controller_list_view/widgets/connection_tile.dart';
-import 'package:game_controller/presentation/screens/controller_list_view/widgets/user_name_tile.dart';
+import 'package:game_controller/data/repositories/player_settings_repository_impl.dart';
+import 'package:game_controller/presentation/providers/connection_status_provider.dart';
+import 'package:game_controller/presentation/providers/player_provider.dart';
 import 'package:game_controller/presentation/utils/dialog_collection.dart';
 import 'package:game_controller/presentation/utils/snackbar_collection.dart';
+import 'package:game_controller/presentation/widgets/connection_status_indicator.dart';
+import 'package:game_controller/presentation/widgets/ping_indicator.dart';
+import 'package:game_controller/presentation/widgets/player_info_sync_indicator.dart';
+import 'package:game_controller/presentation/widgets/player_name.dart';
 
 
-class ConnectionHeader extends StatelessWidget {
+class ConnectionHeader extends ConsumerWidget {
   const ConnectionHeader({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tt = Theme.of(context).textTheme;
+    final cs = Theme.of(context).colorScheme;
+
     return Container(
       padding: .all(8),
-      margin: .all(8),
+      margin : .all(8),
       decoration: BoxDecoration(
         borderRadius: .circular(12),
-        border: Border.all(
-          width: 2,
-          color: Theme.of(context).colorScheme.secondary
-        ),
-        color: Theme.of(context).colorScheme.surfaceContainer
+        border: Border.all( width: 2, color: cs.secondary ),
+        color: cs.surfaceContainer
       ),
 
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: .start,
         children: [
-          const ConnectionTile(),
-          const UserNameTile(),
+          
+          /// Connected -------- Ping 4 ms
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            
+            child: Row(
+              mainAxisAlignment: .spaceBetween,
+              mainAxisSize: .max,
+              children: [
+                ConnectionStatusIndicator(
+                  defaultStyle: tt.headlineMedium?.copyWith(color: cs.secondary),
+                  connectedStyle: tt.headlineMedium?.copyWith(color: Colors.green),
+                  disconnectedStyle: tt.headlineMedium?.copyWith(color: Colors.red),
+                  connectingStyle: tt.headlineMedium?.copyWith(color: Colors.orange),
+                ),
+            
+                PingIndicator(
+                  style: null,
+                )
+              ],
+            ),
+          ),         
+
+          /// Sync PlayerName: PlayerName ------- edit
+          Row(
+            mainAxisSize: .max,
+            children: [
+              IconButton(
+                onPressed: () => editName(context, ref), 
+                icon: Icon(Icons.edit_outlined)
+              ),
+
+              Flexible(
+                fit: .loose,
+                child: FittedBox(
+                  alignment: .centerStart,
+                  
+                  child: PlayerName(
+                    style: tt.bodyLarge,
+                  ),
+                ),
+              ),
+
+              const PlayerInfoSyncIndicator(),
+            ],
+          ),
+
 
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -45,7 +94,28 @@ class ConnectionHeader extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> editName(
+    BuildContext context, 
+    WidgetRef ref,
+  ) async {
+    final newUserName = await DialogCollection.simplePopUpForm(
+      context,
+      title: 'Edit Name Form',
+      initValue: ref.read(playerProvider).value?.name
+    );
+
+    if(newUserName != null){
+      try{
+        await ref.read(playerSettingsRepositoryProvider).updatePlayerName(
+          newUserName
+        );
+      }catch(e){ SnackbarCollection.errorSnackbar(context, e.toString());}
+    }
+  }
+
 }
+
 
 
 class ActionsTile extends ConsumerWidget {
@@ -148,7 +218,6 @@ class TypeAddressBtn extends ConsumerWidget {
     );
   }
 }
-
 
 
 class DisconnectionBtn extends ConsumerWidget {

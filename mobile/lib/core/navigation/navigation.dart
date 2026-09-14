@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/presentation/screens/controller_details_view/controller_details_view.dart';
 import 'package:game_controller/presentation/screens/controller_form_view/controller_form_view.dart';
@@ -5,8 +6,16 @@ import 'package:game_controller/presentation/screens/controller_list_view/contro
 import 'package:go_router/go_router.dart';
 
 
+final routeOvserverProvider = Provider<RouteObserver>((ref){
+  return RouteObserver<ModalRoute>();
+});
+
 final navigationProvider = Provider<GoRouter>((ref){
+  final routeOvserver = ref.read(routeOvserverProvider);
+  
   return GoRouter(
+    observers: [routeOvserver],
+
     routes: [
       GoRoute(
         path: '/',

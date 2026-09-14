@@ -13,7 +13,7 @@ import 'package:virtual_device/virtual_device.dart';
 class PlayerCubit extends Cubit<PlayerState?>{
   Heartbeat     ? _heartbeat;
   VirtualDevice ? _virtualDevice;
-  CheckPool     ? _checkPool; // unused still
+  CheckPool     ? _checkPool;  
   
   // subscritpions
   StreamSubscription<VirtualDeviceEvent> ? _vdEventSubscription; 
@@ -31,7 +31,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
     required this.onPlayerDisconnect,
     required this.onPlayerStateUpdated,
   }): super(null) {
-
     _initUserInputSubscription();
     _initHeartbeat();
     _initCheckPool();
@@ -95,24 +94,24 @@ class PlayerCubit extends Cubit<PlayerState?>{
 
   /// Create virtual device
   Future<void> _createVirtualDevice() async {
-    /// TODO : do not fail in silence
     try{
       _virtualDevice = VirtualDevice.platformDevice();
-      if(_virtualDevice == null){
-        throw UnimplementedError('No devices for the parameters, '
-          'on _createVirtualDevice on PlayerCubit');
-      }
       await _virtualDevice!.start(playerNumber);
       _initVDEventSubscription(_virtualDevice!);
     
     }catch(e){
-    
-      if(e is VirtualDeviceException){
-        print("Error incialicing VD: ${e.message}");
-      }else{
-        print("Error incialicing VD: $e");
+      
+      switch(e){
+        case VirtualDeviceException():
+          _webSocketChannel.sink.add(
+            FailInitVDEvent(error:e.message??'Fallo de inicialización').encode()
+          );
+        default:
+          _webSocketChannel.sink.add(const 
+            FailInitVDEvent(error:'Fallo inesperado de inicialización').encode()
+          );
       }
-    
+      
       _virtualDevice = null;
     }
   }

@@ -7,4 +7,6 @@ class SnackbarCollection {
   static void connectionFailedSnackbar(context) 
     => _showSnackBar(context, SnackBar(content: Text("Connection failed")));
 
+  static void errorSnackbar(context, String error)
+    => _showSnackBar(context, SnackBar(content: Text(error)));
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
-import 'package:game_controller/presentation/widgets/button_group_painter.dart';
-import 'package:game_controller/presentation/widgets/inherited_value.dart';
+import 'package:game_controller/presentation/widgets/button_painters/button_group_painter.dart';
+import 'package:game_controller/presentation/utils/inherited_value.dart';
 
 
 /// Responsible for reacting to:

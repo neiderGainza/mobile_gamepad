@@ -15,8 +15,13 @@ class PlayerInfoSyncIndicator extends ConsumerWidget{
     return syncPlayer.when(
       data: (data) => switch(data){
         .none    => SizedBox.shrink(),
-        .progres => CircularProgressIndicator(),
         .success => SizedBox.shrink(),
+        
+        .progres => SizedBox(
+          height: 16,
+          width: 16,
+          child: CircularProgressIndicator()),
+
         .failed  => IconButton(
           onPressed: (){
             ref.read(connectionRepositoryProvider).syncPlayerData();

@@ -21,7 +21,7 @@ class ServerCubit extends Cubit<ServerState>{
 
   /// Procesa nuevas conexiones websocket
   void handleNewPlayerConnection(WebSocketChannel channel){
-    final uuid = Uuid().v4();    
+    final uuid = const Uuid().v4();    
   
     PlayerCubit(
       channel,
