@@ -3,5 +3,5 @@ class LocalStorageKeys {
 
   static const playerKey = 'current_player';
   static String controllerIdsKey = 'controllerIds';
-
+  static String lastServerAddressKey = 'lastServerAddress';
 }

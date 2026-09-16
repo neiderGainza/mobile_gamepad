@@ -26,7 +26,8 @@ class DialogCollection {
     BuildContext context, 
     {
       String ? initValue,
-      String ? title
+      String ? title,
+      TextInputType keyboardType = .text
     }
   ){
     final formKey = GlobalKey<FormBuilderState>();
@@ -42,6 +43,7 @@ class DialogCollection {
           child: FormBuilderTextField(
             name: 'field' ,
             initialValue: initValue,
+            keyboardType: keyboardType,
             validator: (value) {
               if(value == null || value.isEmpty) return "Field requried";
               return null;

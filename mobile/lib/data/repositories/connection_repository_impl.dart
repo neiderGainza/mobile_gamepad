@@ -78,16 +78,32 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
 
   /// -----------------------methods-------------------------------
   @override
+  String? get lastServerAddress {
+    final result = playerLocalStorage.lastServerAddress;
+    if(result == null) return null;
+    return '${result.$1}:${result.$2}';
+  }
+  
+  @override
   void connect(String serverAddress, int port) async {
     try{
       await connectionService.connect(serverAddress, port);
       
+      // local Storage last connection
+      playerLocalStorage.upsertLastServerAddress(
+        serverAddress , port
+      );
+
       _subscribeToLocalPlayerStream(); 
       _subscribeToServerEvent();
 
       syncPlayerData();
     }catch(e){
       debugPrint("Error connection on ConnectionRepo: $e");
+      _messageSubject.add(.error(
+        "Error connecting to $serverAddress:$port\n"
+        "Please verify the address"
+      ));
       disconnect();
       rethrow;
     }

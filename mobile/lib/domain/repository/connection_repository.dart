@@ -33,4 +33,5 @@ abstract class ConnectionRepository {
   /// la data del player sera obtenida del [PlayerLocalStorage]
   Future<void> syncPlayerData();
 
+  String ? get lastServerAddress;
 }

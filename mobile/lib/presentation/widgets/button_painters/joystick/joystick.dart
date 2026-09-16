@@ -53,8 +53,7 @@ class Joystick extends StatefulWidget {
       this.onDragEnd,
       this.dragPadColor = Colors.purple,
       this.borderColor = Colors.purple,    
-      /// Frequency is by default 150 milliseconds.
-      this.timeFrequency = const Duration(milliseconds: 5),
+      this.timeFrequency = const Duration(milliseconds: 10),
 
       /// Size of the stick/ball is by default 100 pixel.
       this.stickSize = 100,

@@ -17,7 +17,7 @@ final controllerLocalStorageProvider = FutureProvider((ref) async {
 
 // ---------------------- Interface -------------------------
 abstract interface class ControllerLocalStorageService {
- 
+  // controller
   List<Controller> get controllers;
   
   Future<String> upsertController(Controller controller);
@@ -25,7 +25,6 @@ abstract interface class ControllerLocalStorageService {
   Future<void> removeController(String controllerId);
 
   Controller getControllerById(String controllerId);
-
 }
 
 
@@ -38,8 +37,6 @@ class ControllerLocalStorageServiceImpl implements ControllerLocalStorageService
 
   final Box localStorage;
 
-  /// Controllers CRUD
-  
   @override
   List<Controller> get controllers => [
     for(final controllerId in _controllerIds)

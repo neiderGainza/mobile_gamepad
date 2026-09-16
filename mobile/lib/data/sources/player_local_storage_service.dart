@@ -23,6 +23,11 @@ abstract interface class PlayerLocalStorageService {
   Future<Player> get player;
 
   Future<void> upsertPlayer(Player player);
+
+  // last serverConnected
+  (String,int) ? get lastServerAddress;
+
+  Future<void> upsertLastServerAddress(String server, int port);
 }
 
 // ------------------------ implementation -------------------------
@@ -31,6 +36,43 @@ class PlayerLocalStorageServiceImpl implements PlayerLocalStorageService{
   final DeviceInfoService _deviceInfoService;
 
   PlayerLocalStorageServiceImpl(this._box, this._deviceInfoService);
+
+  /// last server address
+  @override
+  (String, int)? get lastServerAddress{
+    try{
+      final address = _box
+        .get(LocalStorageKeys.lastServerAddressKey);
+
+      if(address == null) return null;
+      final parts = address.toString().split(':');
+
+      final serverAddress = parts[0];
+      final serverPort    = int.parse(parts[1]);
+
+      return (serverAddress, serverPort);
+    }catch(e){
+      debugPrint("GetLastServerAddress error : $e");
+      return null;
+    }
+  }
+
+  @override
+  Future<void> upsertLastServerAddress(String server, int port) async {
+    try{
+      await _box.put(
+        LocalStorageKeys.lastServerAddressKey,
+        '$server:$port'
+      );
+
+    }catch(e){
+      debugPrint("Error upserting lastServerAddress: $e");
+      rethrow;
+    }
+  }
+
+  
+  // Player
 
   @override
   Future<Player> get player async{
