@@ -86,14 +86,12 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
       _subscribeToServerEvent();
 
       syncPlayerData();
-
     }catch(e){
       debugPrint("Error connection on ConnectionRepo: $e");
       disconnect();
       rethrow;
     }
   }
-
 
   @override
   void disconnect() async {
@@ -103,16 +101,20 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     connectionService.disconnect();
   }
 
-
   @override
   void send(ButtonPlayerEvent pbe) => connectionService.send(pbe);
 
-
   @override
   Future<void> syncPlayerData() async {
-    _playerInfoSyncStateSubject.add(.progres);
-    final player = await playerLocalStorage.player;
+    if(connectionStatus == .disconnected){
+      _playerInfoSyncStateSubject.add(.failed);
+      return;
+    }
 
+    _playerInfoSyncStateSubject.add(.progres);
+
+    final player = await playerLocalStorage.player;
+    
     connectionService.sendAndCheckResult(
       (id) => UpdateInfoPlayerEvent(player: player, id: id),
       
@@ -147,8 +149,6 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
     _localPlayerSubscription?.cancel();
     _localPlayerSubscription = playerLocalStorage.playerStream.listen(
       (player) {
-        _playerInfoSyncStateSubject.add(.progres);       
-        
         syncPlayerData();
       }
     );

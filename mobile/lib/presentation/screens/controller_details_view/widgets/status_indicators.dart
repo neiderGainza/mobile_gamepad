@@ -10,10 +10,10 @@ class StatusIndicators extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const .symmetric(vertical: 4, horizontal: 8),
+      // padding: const .fromLTRB(0, 0, 8, 0),
       constraints: BoxConstraints(
         minHeight: 56,
-        minWidth: 80
+        minWidth: 60
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -23,10 +23,12 @@ class StatusIndicators extends StatelessWidget{
       ),
 
       child: SafeArea(
+        left: false,
         child: Row(
           mainAxisSize: .min,
           crossAxisAlignment: .center,
           children: [
+            const SizedBox(width: 20,),
             ConnectionStatusIndicator( showLabel: false,),
             const SizedBox(width: 8,),
             PingIndicator(),

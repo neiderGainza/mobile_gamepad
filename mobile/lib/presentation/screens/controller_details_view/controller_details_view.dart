@@ -64,7 +64,18 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
     final controllerDetails = ref.watch( 
       controllerDetailsProvider(widget.controllerId)
     );
-    
+
+    // TODO : que esto trabaje
+    // ref.listen(
+    //   connectionMessageProvider,
+    //   (lastMessage,newMessage){
+    //     final message = newMessage.value;
+    //     if(message == null) return;
+    //     SnackbarCollection.showConnectionMessage(context, message);
+    //   }
+    // );
+
+
     return Scaffold(
       body: controllerDetails.when(
         data: (state) => onData(context, state), 

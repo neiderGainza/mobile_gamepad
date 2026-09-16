@@ -19,7 +19,7 @@ enum PlayerButton {
   menu(12), 
   xbox(13);
 
-  final int code;
+  final int code; // up to 64 (int6)
   const PlayerButton(this.code);
 
   static PlayerButton fromCode(int code) {

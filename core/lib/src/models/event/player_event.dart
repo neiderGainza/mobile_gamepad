@@ -13,14 +13,15 @@ sealed class PlayerEvent implements Event{
 
   factory PlayerEvent.decode(dynamic source) {
     final data = source as Uint8List;
-    final eventSubCode = data[1];
-    
-    return switch (eventSubCode) {
-      0 => ButtonPlayerEvent.decode(data.sublist(2)),
-      1 => UpdateInfoPlayerEvent.decode(data.sublist(2)),
+    final (code, subCode) = Event.getInt4FromInt8(data[0]); 
+
+
+    return switch (subCode) {
+      0 => ButtonPlayerEvent.decode(data),
+      1 => UpdateInfoPlayerEvent.decode(data),
       2 => DisconnectPlayerEvent(),
       
-      _ => throw FormatException('Unknown PlayerEvent code: $eventSubCode'),
+      _ => throw FormatException('Unknown PlayerEvent code: $subCode'),
     };
   }
 }
@@ -29,18 +30,18 @@ sealed class PlayerEvent implements Event{
 class ButtonPlayerEvent extends PlayerEvent {
   final PlayerButton btn; 
   final ButtonAxis axis; 
-  final int _val; // int32
+  final int _val; // int8
 
   double get value {
-    if (_val < 0) return _val / 32768.0;
-    return _val / 32767.0;
+    if (_val < 0) return _val / 128.0;
+    return _val / 127.0;
   }
 
   ButtonPlayerEvent({
     required this.btn,
     required this.axis,
     required double value,
-  }) : _val = (value.clamp(-1.0, 1.0) * (value < 0 ? 32768 : 32767)).round();
+  }) : _val = (value.clamp(-1.0, 1.0) * (value < 0 ? 128 : 127)).round();
 
   ButtonPlayerEvent._(
     this.btn,
@@ -49,25 +50,42 @@ class ButtonPlayerEvent extends PlayerEvent {
   );
 
   factory ButtonPlayerEvent.decode(Uint8List data) {
-    final bd = ByteData.sublistView(data);
-
+    final (axis, btn) = getAxisAndBtnFromInt8(data[1]);
     return ButtonPlayerEvent._(
-      PlayerButton.fromCode(bd.getInt8(0)),
-      ButtonAxis.fromCode(bd.getInt8(1)),
-      bd.getInt16(2, Endian.big),
+      btn, axis, data[2],
     );
   }
 
   @override
   Uint8List encode() {
-    final result = Uint8List(6);
-    result[0] = eventCode.code;  // eventCode
-    result[1] = 0;  // subEventCode
-    result[2] = btn.code; 
-    result[3] = axis.code;
+    final result = Uint8List(3); 
+    result[0] = Event.getInt8FromInt4(eventCode.code, 0);
+    result[1] = getInt8FromAxisAndBtn(axis, btn);
+    result[2] = _val;
+    return result;
+  }
+    
+  static (ButtonAxis , PlayerButton) getAxisAndBtnFromInt8(int source){
+    int axisCode = 0, btnCode = 0;
 
-    final bd = ByteData.sublistView(result, 4);
-    bd.setInt16(0, _val, Endian.big);
+    for(int bit = 0; bit < 6; bit++){
+      btnCode = btnCode | (source & (1 << bit));
+    }
+    for(int bit = 6; bit < 8; bit ++){
+      axisCode = axisCode | (source & (1 << bit));
+    }
+
+    return (
+      ButtonAxis.fromCode(axisCode >> 6),
+      PlayerButton.fromCode(btnCode)
+    );
+  }
+
+  static int getInt8FromAxisAndBtn(ButtonAxis axis, PlayerButton btn){
+    int result = 0, axisCode = axis.code, btnCode = btn.code;
+
+    result = result | btnCode;
+    result = result | (axisCode << 6);
 
     return result;
   }
@@ -75,7 +93,6 @@ class ButtonPlayerEvent extends PlayerEvent {
 
 
 class UpdateInfoPlayerEvent extends PlayerEvent implements IdentiafiableEvent{
-  /// this can grow 
   final Player player;
   final int id; // int8
 
@@ -86,13 +103,13 @@ class UpdateInfoPlayerEvent extends PlayerEvent implements IdentiafiableEvent{
 
   factory UpdateInfoPlayerEvent.decode(Uint8List data) {  
 
-    final String playerSource = utf8.decode(data.sublist(1))
+    final String playerSource = utf8.decode(data.sublist(2))
       .replaceAll('\uFEFF', '')
       .replaceAll('\x00', '')
       .trim();
       
     return UpdateInfoPlayerEvent( 
-      id: data[0],
+      id: data[1],
       player: Player.fromJson(jsonDecode(playerSource)),
     );
   }
@@ -100,14 +117,13 @@ class UpdateInfoPlayerEvent extends PlayerEvent implements IdentiafiableEvent{
   @override
   Uint8List encode() {
     final playerSource = utf8.encode(jsonEncode(player.toJson()));
-    final result = Uint8List(3 + playerSource.length);
+    final result = Uint8List(2 + playerSource.length);
     final bd = ByteData.sublistView(result);
 
-    bd.setInt8(0, eventCode.code); // eventCode
-    bd.setInt8(1, 1);   // subEventCode
-    bd.setInt8(2, id); // id
+    bd.setInt8(0, Event.getInt8FromInt4(eventCode.code, 1));
+    bd.setInt8(1, id); // id
 
-    result.setRange(3, result.length, playerSource);
+    result.setRange(2, result.length, playerSource);
     return result;
   }
 }
@@ -115,7 +131,9 @@ class UpdateInfoPlayerEvent extends PlayerEvent implements IdentiafiableEvent{
 
 class DisconnectPlayerEvent extends PlayerEvent {
   @override
-  Uint8List encode() => Uint8List.fromList([eventCode.code, 2]);
+  Uint8List encode() => Uint8List.fromList([
+    Event.getInt8FromInt4(eventCode.code, 2)
+  ]);
 }
 
 

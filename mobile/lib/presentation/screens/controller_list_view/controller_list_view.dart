@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
+import 'package:game_controller/domain/model/connection_message.dart';
+import 'package:game_controller/presentation/providers/connection_message_provider.dart';
 import 'package:game_controller/presentation/providers/controllers_provider.dart';
 import 'package:game_controller/presentation/screens/controller_list_view/widgets/connection_header.dart';
 import 'package:game_controller/presentation/screens/controller_list_view/widgets/controller_card.dart';
 import 'package:game_controller/presentation/utils/orientation_function_collection.dart';
+import 'package:game_controller/presentation/utils/snackbar_collection.dart';
 import 'package:go_router/go_router.dart';
 
 class ControllerListView extends ConsumerStatefulWidget {
@@ -53,7 +56,17 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> with Ro
   @override
   Widget build(BuildContext context) {
     final controllers = ref.watch(controllersProvider);
-    
+   
+    ref.listen(
+      connectionMessageProvider,
+      (lastMessage,newMessage){
+        final message = newMessage.value;
+        if(message == null) return;
+        SnackbarCollection.showConnectionMessage(context, message);
+      }
+    );
+
+
     return Scaffold(
       body: CustomScrollView(
 

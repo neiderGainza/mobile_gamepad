@@ -69,14 +69,15 @@ class PlayerCubit extends Cubit<PlayerState?>{
     close();
   }
 
-  void _onPlayerBtnEvent(ButtonPlayerEvent event){
+  void _onPlayerBtnEvent(ButtonPlayerEvent event) async {
     if(state == null){
       _requestInfoSync();
       return;
     }
     
     if(_virtualDevice == null){
-      // TODO : what happends when VD==null
+      await _createVirtualDevice();
+      return;
     }
 
     final vdb = _virtualDevice?.getDefaultVDBfor(event.btn);
@@ -149,10 +150,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
         try{
           final event = Event.decode(data);
           
-          if(event is! PingEvent && event is! PongEvent){
-            print(event);
-          }
-
           switch(event){
             case final UpdateInfoPlayerEvent event:
               _onPlayerUpdateInfo(event);

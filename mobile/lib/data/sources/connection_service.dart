@@ -97,7 +97,7 @@ class ConnectionServiceImpl extends ConnectionService{
       _connectionSubject.add(.connecting);
       
       _channel = IOWebSocketChannel.connect(
-        'ws://$serverAddress:$serverPort/v1/player_client',
+        'ws://$serverAddress:$serverPort/v1/mobile_client',
         connectTimeout: Duration(seconds: 5),
         headers: {
           'x-api-key': dotenv.get('SERVER_API_KEY'),

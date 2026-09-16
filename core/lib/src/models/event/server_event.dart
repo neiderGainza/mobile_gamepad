@@ -13,12 +13,12 @@ sealed class ServerEvent implements Event{
 
   factory ServerEvent.decode(dynamic source){
     final data = source as Uint8List;
-    final subEventCode = data[1];
+    final (code, subCode) = Event.getInt4FromInt8(data[0]); 
 
-    return switch (subEventCode) {
+    return switch (subCode) {
       1 => PlayerInfoRequestServerEvent(),
 
-      _ => throw FormatException('Unknown ServerEvent code: $subEventCode'),
+      _ => throw FormatException('Unknown ServerEvent code: $subCode'),
     };
   } 
 }
@@ -27,8 +27,7 @@ sealed class ServerEvent implements Event{
 class PlayerInfoRequestServerEvent extends ServerEvent{
   @override
   Uint8List encode() => Uint8List.fromList([
-    eventCode.code, // eventCode
-    1 // subEventCode
+    Event.getInt8FromInt4(eventCode.code, 1)
   ]);
 }
 

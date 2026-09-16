@@ -68,10 +68,10 @@ class ConnectionHeader extends ConsumerWidget {
                 icon: Icon(Icons.edit_outlined)
               ),
 
-              Flexible(
-                fit: .loose,
+              Expanded(
                 child: FittedBox(
                   alignment: .centerStart,
+                  fit: .scaleDown,
                   
                   child: PlayerName(
                     style: tt.bodyLarge,
@@ -80,6 +80,7 @@ class ConnectionHeader extends ConsumerWidget {
               ),
 
               const PlayerInfoSyncIndicator(),
+              const SizedBox(width: 8,)
             ],
           ),
 

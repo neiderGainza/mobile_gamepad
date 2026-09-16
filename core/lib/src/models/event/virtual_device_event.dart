@@ -13,13 +13,13 @@ sealed class VirtualDeviceEvent implements Event{
 
   factory VirtualDeviceEvent.decode(dynamic source){
     final data = source as Uint8List;
-    final subEventCode = data[1];
+    final (code, subCode) = Event.getInt4FromInt8(data[0]); 
 
-    return switch(subEventCode){
-      1 => VibrationVDEvent.decode(data.sublist(2)),
-      2 => FailInitVDEvent.decode(data.sublist(2)),
+    return switch(subCode){
+      1 => VibrationVDEvent.decode(data),
+      2 => FailInitVDEvent.decode(data),
       
-      _ => throw FormatException('Unknown VirtualDeviceEvent code: $subEventCode'),
+      _ => throw FormatException('Unknown VirtualDeviceEvent code: $subCode'),
     };
   }
 }
@@ -37,8 +37,7 @@ class VibrationVDEvent extends VirtualDeviceEvent{
   @override
   Uint8List encode() {
     return Uint8List.fromList([
-      eventCode.code, //eventCode
-      1, // subEventCode
+      Event.getInt8FromInt4(eventCode.code, 1),
       id,  
       value
     ]); 
@@ -46,8 +45,8 @@ class VibrationVDEvent extends VirtualDeviceEvent{
 
   factory VibrationVDEvent.decode(Uint8List data){
     return VibrationVDEvent(
-      id: data[0], 
-      value: data[1]
+      id: data[1], 
+      value: data[2]
     );
   }
 }
@@ -63,18 +62,17 @@ class FailInitVDEvent extends VirtualDeviceEvent{
   @override
   Uint8List encode() {
     final encodedError = utf8.encode(error);
-    final result = Uint8List(2 + encodedError.length);
+    final result = Uint8List(1 + encodedError.length);
 
-    result[0] = eventCode.code;
-    result[1] = 2; // subEventCode
-    result.setRange(2, result.length, encodedError);
+    result[0] = Event.getInt8FromInt4(eventCode.code, 1);
+    result.setRange(1, result.length, encodedError);
 
     return result;
   }
 
   factory FailInitVDEvent.decode(Uint8List data){
     return FailInitVDEvent(
-      error: utf8.decode(data)
+      error: utf8.decode(data.sublist(1))
     );
   }
 }

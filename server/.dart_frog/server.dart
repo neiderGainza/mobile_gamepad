@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 
 
-import '../routes/v1/player_client.dart' as v1_player_client;
+import '../routes/v1/mobile_client.dart' as v1_mobile_client;
 
 import '../routes/_middleware.dart' as middleware;
 
@@ -31,7 +31,7 @@ Handler buildRootHandler() {
 Handler buildV1Handler() {
   final pipeline = const Pipeline();
   final router = Router()
-    ..all('/player_client', (context) => v1_player_client.onRequest(context,));
+    ..all('/mobile_client', (context) => v1_mobile_client.onRequest(context,));
   return pipeline.addHandler(router);
 }
 

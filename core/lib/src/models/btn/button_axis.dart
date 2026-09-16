@@ -3,7 +3,7 @@ enum ButtonAxis {
   horizontal(1),
   vertical(2);
 
-  final int code;
+  final int code; // up to 4 (0 , 1 ,  2 , 3)
   const ButtonAxis(this.code);
 
 
@@ -13,5 +13,6 @@ enum ButtonAxis {
     }
     throw ArgumentError('Código axis inválido: $code');
   }
+
 
 }

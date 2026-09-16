@@ -17,13 +17,13 @@ sealed class CheckEvent implements IdentiafiableEvent {
 
   factory CheckEvent.decode(dynamic source){
     final data = source as Uint8List;
-    // if(data[0] != EventCode.check.code) throw FormatException('Wrong eventType');
-    
-    return switch(data[1]){
-      0 => ErrorCheckEvent.decode(data.sublist(2)),
-      1 => SuccessCheckEvent.decode(data.sublist(2)),
+    final (code, subCode) = Event.getInt4FromInt8(data[0]); 
 
-      _ => throw FormatException('Unknown CheckEvent code: ${data[1]}'),
+    return switch(subCode){
+      0 => ErrorCheckEvent.decode(data),
+      1 => SuccessCheckEvent.decode(data),
+
+      _ => throw FormatException('Unknown CheckEvent code: $subCode'),
      
     };
   }
@@ -41,20 +41,19 @@ class ErrorCheckEvent extends CheckEvent{
   @override
   Uint8List encode() {
     final encodedError = utf8.encode(error ?? '');
-    final result = Uint8List(3 + encodedError.length);
+    final result = Uint8List(2 + encodedError.length);
 
-    result[0] = eventCode.code;
-    result[1] = 0; // subEventCode
-    result[2] = id;
-    result.setRange(3, result.length, encodedError);
+    result[0] = Event.getInt8FromInt4(eventCode.code , 0);
+    result[1] = id;
+    result.setRange(2, result.length, encodedError);
 
     return result;
   }
 
   factory ErrorCheckEvent.decode(Uint8List data){
     return ErrorCheckEvent(
-      id: data[0],
-      error: utf8.decode(data.sublist(1))
+      id   : data[1],
+      error: utf8.decode(data.sublist(2))
     );
   }
 }
@@ -67,14 +66,13 @@ class SuccessCheckEvent extends CheckEvent{
 
   @override
   Uint8List encode() => Uint8List.fromList([
-    eventCode.code, // eventCode
-    1, // eventSubCode
+    Event.getInt8FromInt4(eventCode.code , 1),
     id 
   ]);
 
   factory SuccessCheckEvent.decode(Uint8List data){
     return SuccessCheckEvent(
-      id: data[0]
+      id: data[1]
     );
   }
 }

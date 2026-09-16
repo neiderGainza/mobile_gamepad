@@ -13,7 +13,7 @@ class DefaultBtnCollection{
   );
   static Button btnX = Button(
     buttonData: ButtonData(label: 'X'), 
-    buttonCode: .btnA,
+    buttonCode: .btnX,
   );
   static Button btnY = Button(
     buttonData: ButtonData(label: 'Y'), 
