@@ -77,6 +77,7 @@ class DefaultBtnCollection{
     buttonType: .joystick,
     buttonData: ButtonData(
       label: 'l', 
+      borderWidth: 4
     ), 
     buttonCode: .ls,
   );
@@ -84,9 +85,11 @@ class DefaultBtnCollection{
   static Button rightJoystick = Button(
     buttonType: .joystick,
     buttonData: ButtonData(
-      label: 'r', 
+      label: 'r',
+      borderWidth: 4 
     ), 
     buttonCode: .rs,
+
   );
 
 

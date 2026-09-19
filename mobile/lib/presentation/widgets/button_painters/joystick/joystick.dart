@@ -38,10 +38,10 @@ class Joystick extends StatefulWidget {
   final bool enableButtonControls;
 
   /// Specifies the button color
-  final Color stickColor;
-  final Color fontColor;
-  final Color borderColor;
-
+  final Color  stickColor;
+  final Color  fontColor;
+  final Color  borderColor;
+  final double borderWidth;
   final String label;
 
   const Joystick(
@@ -60,7 +60,8 @@ class Joystick extends StatefulWidget {
       this.enableButtonControls = false,
       required this.stickColor,
       required this.fontColor,
-      required this.label
+      required this.label,
+      this.borderWidth = 2
       });
 
   @override
@@ -103,7 +104,7 @@ class _JoystickState extends State<Joystick> {
               height: borderContainerSize,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(draggableContainerSize / 2),
-                  border: Border.all(color: widget.borderColor, width: 4)),
+                  border: Border.all(color: widget.borderColor, width: widget.borderWidth)),
           )),
       
         Stack(

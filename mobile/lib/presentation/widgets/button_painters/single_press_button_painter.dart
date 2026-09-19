@@ -75,7 +75,7 @@ class SinglePressButtonPainter extends ConsumerWidget{
                 buttonData.label,
                 style: GoogleFonts.nunito(
                   fontWeight: .bold,
-                  color: buttonData.color
+                  color: buttonData.color,
                 ) ,
                 textAlign: .center,
               )

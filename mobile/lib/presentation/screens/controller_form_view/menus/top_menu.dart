@@ -65,6 +65,7 @@ class TopMenu extends ConsumerWidget {
     return IconButton(
       onPressed: () async {
         final updatedAndSaved = await showDialog(
+          useSafeArea: false,
           context: context, 
           builder: (context) => ControllerMetadaForm(
             controllerId: controllerId,

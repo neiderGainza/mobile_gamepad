@@ -72,7 +72,7 @@ app.*.map.json
 
 # Testing and coverage
 coverage/
-builds/
+**/builds/
 htmlcov/
 .pytest_cache/
 .dart_tool/test/

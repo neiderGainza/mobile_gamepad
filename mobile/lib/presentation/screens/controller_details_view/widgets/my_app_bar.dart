@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/domain/model/controller.dart';
 import 'package:go_router/go_router.dart';
 
@@ -48,6 +49,7 @@ class MyAppBar extends StatelessWidget {
           ),
 
           const SizedBox(width: 8,),
+          if(!DefaultController.isDefault(controller))
           editButton(context)
         ],
       ),

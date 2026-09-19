@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
+import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/presentation/providers/connection_message_provider.dart';
 import 'package:game_controller/presentation/providers/controllers_provider.dart';
 import 'package:game_controller/presentation/screens/controller_list_view/widgets/connection_header.dart';
 import 'package:game_controller/presentation/screens/controller_list_view/widgets/controller_card.dart';
+import 'package:game_controller/presentation/screens/controller_list_view/widgets/three_dot_menu.dart';
 import 'package:game_controller/presentation/utils/orientation_function_collection.dart';
 import 'package:game_controller/presentation/utils/snackbar_collection.dart';
 import 'package:go_router/go_router.dart';
@@ -70,9 +72,18 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> with Ro
       body: CustomScrollView(
 
         slivers: [
-          SliverAppBar(title: Text("Mobile Game Controller"),),
+          SliverAppBar(
+            title: const Text("Mobile Game Controller"),
+            actions: [
+              const ThreeDotMenu()
+            ],
+          ),
 
           SliverToBoxAdapter( child: const ConnectionHeader(),),
+
+          SliverToBoxAdapter(
+            child: ControllerCard(controller: DefaultController.defaultController),
+          ),
 
           SliverList.builder(
             itemCount: controllers.length,

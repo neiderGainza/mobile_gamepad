@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
+import 'package:game_controller/data/static_collections/default_controller.dart';
+import 'package:game_controller/domain/model/controller.dart';
 import 'package:game_controller/presentation/providers/controller_details_provider.dart';
 import 'package:game_controller/presentation/screens/controller_details_view/widgets/my_app_bar.dart';
 import 'package:game_controller/presentation/screens/controller_details_view/widgets/status_indicators.dart';
@@ -61,6 +65,13 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
 
   @override
   Widget build(BuildContext context) {
+    if(DefaultController.isDefaultById(widget.controllerId)){
+      return onData(
+        context, 
+        DefaultController.getDefaultControllerById(widget.controllerId)
+      );
+    }
+
     final controllerDetails = ref.watch( 
       controllerDetailsProvider(widget.controllerId)
     );
@@ -78,7 +89,7 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
 
     return Scaffold(
       body: controllerDetails.when(
-        data: (state) => onData(context, state), 
+        data: (state) => onData(context, state.controller), 
         error: (_ ,_) => errorWidget(context), 
         loading: (  ) => loadingWidget(context)
       ),
@@ -86,9 +97,8 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
   } 
 
 
-  Widget onData(BuildContext context, ControllerDetailsState state){
-    final controller = state.controller;
-
+  Widget onData(BuildContext context, Controller controller){    
+    
     return InheritedValue<String>(
       value: widget.controllerId, 
       

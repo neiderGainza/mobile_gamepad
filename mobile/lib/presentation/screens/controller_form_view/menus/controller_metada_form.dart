@@ -24,16 +24,19 @@ class _ControllerMetadaFormState extends ConsumerState<ControllerMetadaForm> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Controller's name"),
-      
+      contentPadding: .symmetric(horizontal: 16, vertical: 8),
+      actionsPadding: .only(left: 16, right: 16, bottom: 6),
+      scrollable: true,
       content: FormBuilder(
         key: _formKey,
 
         child: Column(
           mainAxisSize: .min,
-
+          crossAxisAlignment: .start,
           children: [
-            
+            Text("Controller's name", style: Theme.of(context).textTheme.titleMedium,),
+            const SizedBox(height: 8,),
+
             FormBuilderTextField(
               name: "controllerName",
               initialValue: widget.initValue,

@@ -71,6 +71,7 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
 
           label: buttonData.label,
           stickSize: contrains.maxHeight / 2.5,
+          borderWidth: buttonData.borderWidth,          
           fontColor: buttonData.color,
           stickColor: buttonData.backgroundColor,
           borderColor: buttonData.borderColor,

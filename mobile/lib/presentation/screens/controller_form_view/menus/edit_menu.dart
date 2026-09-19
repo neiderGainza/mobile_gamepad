@@ -502,7 +502,13 @@ class EditButtonShapeTile extends ConsumerWidget {
         (cs) => cs.selectedBtn?.buttonData.shape
       ));
 
-    if(property == null) return SizedBox.shrink();
+    final btnType = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedBtn?.buttonType
+      ));
+
+
+    if(property == null || btnType == .joystick) return SizedBox.shrink();
 
     return ListTile(
       visualDensity: .compact,

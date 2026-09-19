@@ -12,6 +12,7 @@ part 'controller.g.dart';
 class Controller with _$Controller{
   final String ? id;
   final String ? name;
+  final String ? i10ln;
   final String ? description;
   final DateTime lastEdited;
 
@@ -21,6 +22,7 @@ class Controller with _$Controller{
   Controller({
     this.id,
     this.name,
+    this.i10ln,
     this.description,
     DateTime ? lastEdited,
     List<PositionedButtonGroup> buttonGroups = const []

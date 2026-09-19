@@ -73,6 +73,7 @@ class _ControllerFormViewState extends ConsumerState<ControllerFormView> with Ro
       value: widget.controllerId,
       
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
             GestureDetector(

@@ -102,7 +102,7 @@ class ConnectionHeader extends ConsumerWidget {
   ) async {
     final newUserName = await DialogCollection.simplePopUpForm(
       context,
-      title: 'Edit Name Form',
+      title: 'Edit UserName',
       initValue: ref.read(playerProvider).value?.name
     );
 

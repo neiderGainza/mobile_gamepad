@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/domain/model/controller.dart';
 import 'package:game_controller/presentation/providers/controllers_provider.dart';
 import 'package:game_controller/presentation/utils/dialog_collection.dart';
@@ -20,10 +21,13 @@ class ControllerCard extends StatelessWidget {
       onTap: () => context.push('/controller/${controller.id}'),
 
       child: Card(
+        color: Theme.of(context).colorScheme.secondaryContainer.withAlpha(100),
         margin: const .symmetric(vertical: 4, horizontal: 8),
         child: ListTile(
           title: Text(controller.name ?? "Unnamed Controller"),
-          subtitle: Text(timeago.format(controller.lastEdited)),
+          subtitle: DefaultController.isDefault(controller) 
+            ? Text('Defult Controller')
+            : Text(timeago.format(controller.lastEdited)),
           trailing: actions(context),
         ),
       ),
@@ -36,6 +40,7 @@ class ControllerCard extends StatelessWidget {
       mainAxisSize: .min,
     
       children: [
+        if(!DefaultController.isDefault(controller))
         deleteButton(context),
 
       ],
