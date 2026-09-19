@@ -10,38 +10,20 @@ PlayerState _$PlayerStateFromJson(Map<String, dynamic> json) => PlayerState(
   player: Player.fromJson(json['player'] as Map<String, dynamic>),
   connectionStatus:
       $enumDecodeNullable(
-        _$PlayerConnectionStatusEnumMap,
+        _$ConnectionStatusEnumMap,
         json['connectionStatus'],
       ) ??
       .disconnected,
-  ping: _$JsonConverterFromJson<int, Duration>(
-    json['ping'],
-    const DurationJsonConverter().fromJson,
-  ),
 );
 
 Map<String, dynamic> _$PlayerStateToJson(PlayerState instance) =>
     <String, dynamic>{
       'player': instance.player,
-      'connectionStatus':
-          _$PlayerConnectionStatusEnumMap[instance.connectionStatus]!,
-      'ping': _$JsonConverterToJson<int, Duration>(
-        instance.ping,
-        const DurationJsonConverter().toJson,
-      ),
+      'connectionStatus': _$ConnectionStatusEnumMap[instance.connectionStatus]!,
     };
 
-const _$PlayerConnectionStatusEnumMap = {
-  PlayerConnectionStatus.connected: 'connected',
-  PlayerConnectionStatus.disconnected: 'disconnected',
+const _$ConnectionStatusEnumMap = {
+  ConnectionStatus.connected: 0,
+  ConnectionStatus.connecting: 1,
+  ConnectionStatus.disconnected: 2,
 };
-
-Value? _$JsonConverterFromJson<Json, Value>(
-  Object? json,
-  Value? Function(Json json) fromJson,
-) => json == null ? null : fromJson(json as Json);
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) => value == null ? null : toJson(value);

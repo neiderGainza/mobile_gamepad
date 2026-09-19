@@ -11,10 +11,11 @@ part of 'player_state.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$PlayerState {
 
- Player get player; PlayerConnectionStatus get connectionStatus; Duration? get ping;
+ Player get player; ConnectionStatus get connectionStatus;
 /// Create a copy of PlayerState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +26,16 @@ $PlayerStateCopyWith<PlayerState> get copyWith => _$PlayerStateCopyWithImpl<Play
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlayerState&&(identical(other.player, player) || other.player == player)&&(identical(other.connectionStatus, connectionStatus) || other.connectionStatus == connectionStatus)&&(identical(other.ping, ping) || other.ping == ping));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlayerState&&(identical(other.player, player) || other.player == player)&&(identical(other.connectionStatus, connectionStatus) || other.connectionStatus == connectionStatus));
 }
 
-
+@JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,player,connectionStatus,ping);
+int get hashCode => Object.hash(runtimeType,player,connectionStatus);
 
 @override
 String toString() {
-  return 'PlayerState(player: $player, connectionStatus: $connectionStatus, ping: $ping)';
+  return 'PlayerState(player: $player, connectionStatus: $connectionStatus)';
 }
 
 
@@ -45,7 +46,7 @@ abstract mixin class $PlayerStateCopyWith<$Res>  {
   factory $PlayerStateCopyWith(PlayerState value, $Res Function(PlayerState) _then) = _$PlayerStateCopyWithImpl;
 @useResult
 $Res call({
- Player player, PlayerConnectionStatus connectionStatus, Duration? ping
+ Player player, ConnectionStatus connectionStatus
 });
 
 
@@ -62,12 +63,11 @@ class _$PlayerStateCopyWithImpl<$Res>
 
 /// Create a copy of PlayerState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? player = null,Object? connectionStatus = null,Object? ping = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? player = null,Object? connectionStatus = null,}) {
   return _then(PlayerState(
 player: null == player ? _self.player : player // ignore: cast_nullable_to_non_nullable
 as Player,connectionStatus: null == connectionStatus ? _self.connectionStatus : connectionStatus // ignore: cast_nullable_to_non_nullable
-as PlayerConnectionStatus,ping: freezed == ping ? _self.ping : ping // ignore: cast_nullable_to_non_nullable
-as Duration?,
+as ConnectionStatus,
   ));
 }
 

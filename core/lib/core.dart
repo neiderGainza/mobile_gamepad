@@ -2,7 +2,7 @@ library;
 
 export 'src/models/player/player.dart';
 export 'src/models/player/player_state.dart';
-export 'src/models/player/player_connection_status.dart';
+export 'src/models/player/connection_status.dart';
 
 // player button actions
 export 'src/models/btn/button_axis.dart';
@@ -23,6 +23,9 @@ export 'src/models/event/ping_pong_event.dart';
 // virtual device event
 export 'src/models/event/virtual_device_event.dart';
 
+// desktop event
+export 'src/models/event/desktop_event.dart';
+
 // server_config_service
 export 'src/utils/server_config_service.dart';
 
@@ -32,3 +35,4 @@ export 'src/models/event/_event.dart' show IdentiafiableEvent, Event;
 // network
 export 'src/network/heartbeat.dart';
 export 'src/network/check_pool.dart';
+export 'src/network/channel_event_listener.dart';

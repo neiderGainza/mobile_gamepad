@@ -12,7 +12,7 @@ class Heartbeat{
   final WebSocketSink _channelSink;
 
   final Function(Duration ? ping) onPingChanged;
-  final Function(PlayerConnectionStatus status) onConnectionStatusChanged;
+  final Function(ConnectionStatus status) onConnectionStatusChanged;
   final Function() onHeartbeatStop;
 
   Heartbeat(this._channelStream , this._channelSink, {
@@ -22,9 +22,7 @@ class Heartbeat{
     required this.onPingChanged,
     required this.onHeartbeatStop,
     required this.onConnectionStatusChanged
-  }){
-    start();
-  }
+  });
 
 
   // timers
@@ -35,8 +33,8 @@ class Heartbeat{
   final Map<int, DateTime> _pingPool = {};
 
 
-  PlayerConnectionStatus ? _connectionStatus;
-  set connectionStatus(PlayerConnectionStatus status){
+  ConnectionStatus ? _connectionStatus;
+  set connectionStatus(ConnectionStatus status){
     if(status != _connectionStatus){
       onConnectionStatusChanged(status);
       _connectionStatus = status;

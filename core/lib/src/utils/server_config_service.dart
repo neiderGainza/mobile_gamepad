@@ -7,20 +7,20 @@ class ServerConfigService {
   
   /// Obtiene 'address:port' guardado en el archivo de configuración.
   /// Retorna `null` si el archivo no existe o sucede un error.
-  static Future<String?> get serverAddress async {
+  static Future<int?> get serverPort async {
     try {
       final file = File(p.join(_configFolderPath, addressFileName));
       if (!await file.exists()) return null;
       
       final content = await file.readAsString();
-      return content.trim().isEmpty ? null : content.trim();
+      return content.trim().isEmpty ? null : int.parse(content);
     } catch (e) {
       return null;
     }
   }
 
   /// Crea o actualiza la configuración del servidor (`address:port`).
-  static Future<void> upsertServerConfig(String address, String port) async {
+  static Future<void> upsertServerPort(int port) async {
     try {
       final folderPath = _configFolderPath;
       
@@ -30,7 +30,7 @@ class ServerConfigService {
       }
 
       final file = File(p.join(folderPath, addressFileName));
-      await file.writeAsString('$address:$port');
+      await file.writeAsString(port.toString());
     } catch (e) {
       rethrow;
     }

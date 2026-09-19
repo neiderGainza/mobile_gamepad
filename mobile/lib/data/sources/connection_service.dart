@@ -20,8 +20,8 @@ final connectionServiveProvider = Provider((ref){
 abstract interface class ConnectionService{
   Stream<Event> get eventStream;
 
-  Stream<PlayerConnectionStatus> get connectionStatusStream;
-  PlayerConnectionStatus get connectionStatus;
+  Stream<ConnectionStatus> get connectionStatusStream;
+  ConnectionStatus get connectionStatus;
 
   Stream<Duration?> get pingStream;
   Duration? get ping;
@@ -54,6 +54,7 @@ abstract interface class ConnectionService{
 }
 
 
+
 // ---------------------- Implementation -------------------------
 class ConnectionServiceImpl extends ConnectionService{
   WebSocketChannel ? _channel;
@@ -64,17 +65,17 @@ class ConnectionServiceImpl extends ConnectionService{
 
   final BehaviorSubject<Event> _serverSubject = BehaviorSubject();
   final BehaviorSubject<Duration?>   _pingSubject = .seeded(null);
-  final BehaviorSubject<PlayerConnectionStatus> _connectionSubject 
+  final BehaviorSubject<ConnectionStatus> _connectionSubject 
     = .seeded(.disconnected);
 
 
   // --------------------- conectionStatus ----------------------
   @override
-  PlayerConnectionStatus get connectionStatus 
+  ConnectionStatus get connectionStatus 
     => _connectionSubject.value;
   
   @override
-  Stream<PlayerConnectionStatus> get connectionStatusStream 
+  Stream<ConnectionStatus> get connectionStatusStream 
     => _connectionSubject.stream;
 
   // --------------------- serverEventStream ----------------------
@@ -187,7 +188,7 @@ class ConnectionServiceImpl extends ConnectionService{
       onPingChanged: _pingSubject.add, 
       onConnectionStatusChanged: _connectionSubject.add,
       onHeartbeatStop: disconnect, 
-    );
+    )..start();
   }
 
   void _initCheckPool(){
@@ -197,6 +198,6 @@ class ConnectionServiceImpl extends ConnectionService{
     _checkPool = CheckPool(
       _serverSubject.stream, 
       _channel!.sink
-    );
+    )..start();
   }
 }

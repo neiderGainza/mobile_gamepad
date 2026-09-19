@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
-import 'package:dotenv/dotenv.dart';
+import '../server_api_key.dart';
 
-final envVars = DotEnv()..load(['../.env']);
 
 Handler middleware(Handler handler) {
   return handler
@@ -16,7 +15,9 @@ Handler _apiKeyAuth(Handler handler){
     final request    = context.request;
     final authHeader = request.headers['x-api-key'];
 
-    if (authHeader == null || authHeader != envVars['SERVER_API_KEY']) {      
+    if (authHeader == null || 
+      authHeader != SERVER_API_KEY
+    ) {      
       return Response.json(
         statusCode: HttpStatus.unauthorized,
         body: {'error': 'Acceso no autorizado: Header Authorization inválido'},

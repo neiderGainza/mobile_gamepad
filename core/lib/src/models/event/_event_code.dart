@@ -4,8 +4,9 @@ enum EventCode {
   pong(2),
   serverEvent(3),
   playerEvent(4),
-  virtualDevice(5);
-
+  virtualDevice(5),
+  desktopEvent(6);
+  
   final int code;
   const EventCode(this.code);
 }

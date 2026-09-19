@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'connection_message.dart';
+part of 'desktop_client_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,40 +12,40 @@ part of 'connection_message.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$ConnectionMessage {
+mixin _$DesktopClientState {
 
- ConnectionMessageType get type; String get content;
-/// Create a copy of ConnectionMessage
+ ConnectionStatus get connectionStatus;
+/// Create a copy of DesktopClientState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$ConnectionMessageCopyWith<ConnectionMessage> get copyWith => _$ConnectionMessageCopyWithImpl<ConnectionMessage>(this as ConnectionMessage, _$identity);
+$DesktopClientStateCopyWith<DesktopClientState> get copyWith => _$DesktopClientStateCopyWithImpl<DesktopClientState>(this as DesktopClientState, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ConnectionMessage&&(identical(other.type, type) || other.type == type)&&(identical(other.content, content) || other.content == content));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DesktopClientState&&(identical(other.connectionStatus, connectionStatus) || other.connectionStatus == connectionStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,type,content);
+int get hashCode => Object.hash(runtimeType,connectionStatus);
 
 @override
 String toString() {
-  return 'ConnectionMessage(type: $type, content: $content)';
+  return 'DesktopClientState(connectionStatus: $connectionStatus)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $ConnectionMessageCopyWith<$Res>  {
-  factory $ConnectionMessageCopyWith(ConnectionMessage value, $Res Function(ConnectionMessage) _then) = _$ConnectionMessageCopyWithImpl;
+abstract mixin class $DesktopClientStateCopyWith<$Res>  {
+  factory $DesktopClientStateCopyWith(DesktopClientState value, $Res Function(DesktopClientState) _then) = _$DesktopClientStateCopyWithImpl;
 @useResult
 $Res call({
- ConnectionMessageType type, String content
+ ConnectionStatus connectionStatus
 });
 
 
@@ -53,28 +53,27 @@ $Res call({
 
 }
 /// @nodoc
-class _$ConnectionMessageCopyWithImpl<$Res>
-    implements $ConnectionMessageCopyWith<$Res> {
-  _$ConnectionMessageCopyWithImpl(this._self, this._then);
+class _$DesktopClientStateCopyWithImpl<$Res>
+    implements $DesktopClientStateCopyWith<$Res> {
+  _$DesktopClientStateCopyWithImpl(this._self, this._then);
 
-  final ConnectionMessage _self;
-  final $Res Function(ConnectionMessage) _then;
+  final DesktopClientState _self;
+  final $Res Function(DesktopClientState) _then;
 
-/// Create a copy of ConnectionMessage
+/// Create a copy of DesktopClientState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? type = null,Object? content = null,}) {
-  return _then(ConnectionMessage(
-type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as ConnectionMessageType,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String,
+@pragma('vm:prefer-inline') @override $Res call({Object? connectionStatus = null,}) {
+  return _then(DesktopClientState(
+connectionStatus: null == connectionStatus ? _self.connectionStatus : connectionStatus // ignore: cast_nullable_to_non_nullable
+as ConnectionStatus,
   ));
 }
 
 }
 
 
-/// Adds pattern-matching-related methods to [ConnectionMessage].
-extension ConnectionMessagePatterns on ConnectionMessage {
+/// Adds pattern-matching-related methods to [DesktopClientState].
+extension DesktopClientStatePatterns on DesktopClientState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:

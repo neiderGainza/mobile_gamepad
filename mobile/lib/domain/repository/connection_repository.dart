@@ -7,8 +7,8 @@ abstract class ConnectionRepository {
   Stream<ConnectionMessage> get infoStream;
 
   // connection Status
-  Stream<PlayerConnectionStatus> get connectionStatusStream;
-  PlayerConnectionStatus get connectionStatus;
+  Stream<ConnectionStatus> get connectionStatusStream;
+  ConnectionStatus get connectionStatus;
 
   // ping
   Stream<Duration?> get pingStream;

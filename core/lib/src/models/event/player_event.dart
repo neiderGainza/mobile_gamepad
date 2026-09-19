@@ -30,7 +30,7 @@ sealed class PlayerEvent implements Event{
 class ButtonPlayerEvent extends PlayerEvent {
   final PlayerButton btn; 
   final ButtonAxis axis; 
-  final int _val; // int8
+  final int _val; // int8 -128<=_val<=127
 
   double get value {
     if (_val < 0) return _val / 128.0;
@@ -51,8 +51,9 @@ class ButtonPlayerEvent extends PlayerEvent {
 
   factory ButtonPlayerEvent.decode(Uint8List data) {
     final (axis, btn) = getAxisAndBtnFromInt8(data[1]);
+    final bd = ByteData.sublistView(data);
     return ButtonPlayerEvent._(
-      btn, axis, data[2],
+      btn, axis, bd.getInt8(2),
     );
   }
 
@@ -82,13 +83,9 @@ class ButtonPlayerEvent extends PlayerEvent {
   }
 
   static int getInt8FromAxisAndBtn(ButtonAxis axis, PlayerButton btn){
-    int result = 0, axisCode = axis.code, btnCode = btn.code;
-
-    result = result | btnCode;
-    result = result | (axisCode << 6);
-
-    return result;
+    return btn.code | (axis.code<<6);
   }
+
 }
 
 

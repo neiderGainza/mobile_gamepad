@@ -3,26 +3,24 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:core/core.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:virtual_device/virtual_device.dart';
 
 
-/// Encargado de recibir los eventos del player mutar el estado
+/// Encargado de recibir los eventos del player y
 /// emitir los eventos del sever hacia el player
+/// 
 /// Puente entre virtualDevice y player
+/// 
+/// Por q un cubit ? porq puedo interceptar con facilidad los cambios de estados
+/// con onchanged y puedo manejar el close con onClose
 class PlayerCubit extends Cubit<PlayerState?>{
-  Heartbeat     ? _heartbeat;
-  VirtualDevice ? _virtualDevice;
-  CheckPool     ? _checkPool;  
-  
-  // subscritpions
-  StreamSubscription<VirtualDeviceEvent> ? _vdEventSubscription; 
-  StreamSubscription<dynamic> ? _userInputSubscription;
-  
-  // necesario para inicalizar _hearbeat y checkpool
-  // se alimenta de _userInputSubscription (subcripcion a _webSocketChannel)
-  final BehaviorSubject<Event> _eventSubject = BehaviorSubject();
+  late final Heartbeat _heartbeat;
+  late final CheckPool _checkPool;  
+  late final ChannelEventListener _channelEventListener;
 
+  VirtualDevice ? _virtualDevice;
+  StreamSubscription<VirtualDeviceEvent> ? _vdEventSubscription; 
+  
 
   /// Constructor
   PlayerCubit(this._webSocketChannel, {
@@ -30,8 +28,9 @@ class PlayerCubit extends Cubit<PlayerState?>{
     required this.onPlayerAuth,
     required this.onPlayerDisconnect,
     required this.onPlayerStateUpdated,
+    required this.onPlayerPingUpdated,
   }): super(null) {
-    _initUserInputSubscription();
+    _initChannnelEventListener();
     _initHeartbeat();
     _initCheckPool();
   }
@@ -46,9 +45,11 @@ class PlayerCubit extends Cubit<PlayerState?>{
   /// Callback
   final void Function(String playerId) onPlayerDisconnect;
   /// Callback
+  final void Function(String playerId, Duration ? ping) onPlayerPingUpdated;
+  /// Callback
   final void Function(PlayerState state) onPlayerStateUpdated;
   
-  
+
   /// Eventos
   void _onPlayerUpdateInfo(UpdateInfoPlayerEvent event){
     if(state == null){
@@ -60,16 +61,15 @@ class PlayerCubit extends Cubit<PlayerState?>{
     }else{
       emit(state!.copyWith(player: event.player, connectionStatus: .connected));
       _webSocketChannel.sink.add(SuccessCheckEvent(id: event.id).encode());
-    }
+    }  
   }
   
   void _onPlayerDisconnectEvent(DisconnectPlayerEvent event){
-    emit(state?.copyWith(connectionStatus: .disconnected, ping: null));
-    onPlayerDisconnect(state!.player.id);
+    emit(state?.copyWith(connectionStatus: .disconnected));
     close();
   }
 
-  void _onPlayerBtnEvent(ButtonPlayerEvent event) async {
+  Future<void> _onPlayerBtnEvent(ButtonPlayerEvent event) async {
     if(state == null){
       _requestInfoSync();
       return;
@@ -101,12 +101,12 @@ class PlayerCubit extends Cubit<PlayerState?>{
       _initVDEventSubscription(_virtualDevice!);
     
     }catch(e){
-      
-      switch(e){
+      switch(e){ 
         case VirtualDeviceException():
           _webSocketChannel.sink.add(
             FailInitVDEvent(error:e.message??'Fallo de inicialización').encode()
           );
+          print("Error inicializing device : ${e.message}");
         default:
           _webSocketChannel.sink.add(const 
             FailInitVDEvent(error:'Fallo inesperado de inicialización').encode()
@@ -117,55 +117,46 @@ class PlayerCubit extends Cubit<PlayerState?>{
     }
   }
 
-  
+
   /// Subscriptions
-  /// Inicializando subscripciones
+  /// Inicializando subscripciones  
+  void _initChannnelEventListener(){
+    _channelEventListener = ChannelEventListener(
+      _webSocketChannel, 
+      handleEvent: (event){
+        switch(event){
+          case final UpdateInfoPlayerEvent event:
+            _onPlayerUpdateInfo(event);
+          case final DisconnectPlayerEvent event:
+            _onPlayerDisconnectEvent(event);
+          case final ButtonPlayerEvent event:
+            _onPlayerBtnEvent(event);
+        }
+      }
+    )..start();
+  }
+
   void _initHeartbeat(){
     _heartbeat = Heartbeat(
-      _eventSubject.stream,
+      _channelEventListener.eventStream, 
       _webSocketChannel.sink, 
-
-      onPingChanged : 
-        (newPing) => emit(state?.copyWith(ping: newPing)), 
       
+      onPingChanged: (newPing){
+          if(state != null) onPlayerPingUpdated(state!.player.id, newPing);
+        },
+
       onConnectionStatusChanged: 
         (newStatus) => emit(state?.copyWith(connectionStatus: newStatus)),
       
-      onHeartbeatStop: close, 
-    );
+      onHeartbeatStop: close
+    )..start();
   }
 
   void _initCheckPool(){
     _checkPool = CheckPool(
-      _eventSubject.stream, 
+      _channelEventListener.eventStream, 
       _webSocketChannel.sink
-    );
-  }
-
-  void _initUserInputSubscription(){
-    _userInputSubscription?.cancel();
-    _userInputSubscription = _webSocketChannel.stream.listen(
-      (data){
-        
-        try{
-          final event = Event.decode(data);
-          
-          switch(event){
-            case final UpdateInfoPlayerEvent event:
-              _onPlayerUpdateInfo(event);
-            case final DisconnectPlayerEvent event:
-              _onPlayerDisconnectEvent(event);
-            case final ButtonPlayerEvent event:
-              _onPlayerBtnEvent(event);
-          }
-
-          _eventSubject.add(event);
-        }catch(_){}
-      },
-      onDone: (){
-        _onPlayerDisconnectEvent(DisconnectPlayerEvent());
-      },
-    );
+    )..start();
   }
 
   void _initVDEventSubscription(VirtualDevice vd){
@@ -178,6 +169,7 @@ class PlayerCubit extends Cubit<PlayerState?>{
   }
 
 
+
   @override
   void onChange(Change<PlayerState?> change) {
     if(change.nextState != null){
@@ -188,20 +180,22 @@ class PlayerCubit extends Cubit<PlayerState?>{
 
   @override
   Future<void> close() {
-    _userInputSubscription?.cancel();
-    _userInputSubscription = null;
+    final playerId = state?.player.id;
+
+    // cancel local subscriptions
     _vdEventSubscription?.cancel();
     _vdEventSubscription = null;
 
-    _heartbeat?.stop();
-    _heartbeat = null;
-    _checkPool?.stop();
-    _checkPool = null;
+    // stop extensions
+    _heartbeat.stop();
+    _checkPool.stop();
     _virtualDevice?.close();
-    _virtualDevice = null;
 
-    _eventSubject.close();
+    // clsoe webSocket
     _webSocketChannel.sink.close();
+    // notificar a superiores
+    if(playerId != null) onPlayerDisconnect(playerId);
+
     return super.close();
   }
 

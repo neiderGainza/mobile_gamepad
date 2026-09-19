@@ -52,11 +52,11 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   
   // --------------------- conectionStatus ---------------------
   @override
-  Stream<PlayerConnectionStatus> get connectionStatusStream 
+  Stream<ConnectionStatus> get connectionStatusStream 
     => connectionService.connectionStatusStream;
 
   @override
-  PlayerConnectionStatus get connectionStatus 
+  ConnectionStatus get connectionStatus 
     => connectionService.connectionStatus;
 
   /// ------------------------- ping ---------------------------------

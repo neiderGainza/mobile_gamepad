@@ -206,7 +206,6 @@ class UinputXbox implements VirtualDevice {
         _vdeSubject.add(event);
       }
 
-      print("Event from Isolate: $event");
     });
     
     return 0;

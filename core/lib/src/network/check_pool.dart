@@ -32,9 +32,7 @@ class CheckPool implements CheckPoolInterface {
 
   StreamSubscription ? _eventSubscription;
 
-  CheckPool(this._eventStream, this._channelSink){
-    start();
-  }
+  CheckPool(this._eventStream, this._channelSink);
 
   void start() {
     _initChannelSubscription();

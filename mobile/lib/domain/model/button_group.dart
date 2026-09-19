@@ -23,7 +23,7 @@ class ButtonGroup with _$ButtonGroup{
 
   ButtonGroup.singleButtonGroup({
     required Button button,
-    double screenRelativeSize = 0.13
+    double screenRelativeSize = 0.23
   }) : this(buttons: [button], screenRelativeSize: screenRelativeSize);
 
 

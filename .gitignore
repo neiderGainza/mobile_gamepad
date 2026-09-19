@@ -11,6 +11,7 @@
 Thumbs.db
 .atom/
 .build/
+
 .buildlog/
 .history
 .svn/
@@ -35,6 +36,8 @@ migrate_working_dir/
 *.iws
 
 # Build and generated artifacts
+**/builds/
+**/packaging/
 **/build/
 **/dist/
 **/out/
@@ -69,6 +72,7 @@ app.*.map.json
 
 # Testing and coverage
 coverage/
+builds/
 htmlcov/
 .pytest_cache/
 .dart_tool/test/
@@ -117,3 +121,5 @@ cache/
 !*.example
 !**/.env.example
 !**/.env.sample
+
+server_api_key.dart

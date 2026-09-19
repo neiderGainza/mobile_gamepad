@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
-import 'package:game_controller/domain/model/connection_message.dart';
 import 'package:game_controller/presentation/providers/connection_message_provider.dart';
 import 'package:game_controller/presentation/providers/controllers_provider.dart';
 import 'package:game_controller/presentation/screens/controller_list_view/widgets/connection_header.dart';

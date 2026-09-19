@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:core/core.dart';
 import 'package:core/src/models/event/_event_code.dart';
+import 'package:core/src/models/event/desktop_event.dart';
 
 
 abstract interface class Event {
@@ -26,6 +27,7 @@ abstract interface class Event {
           case 3: return ServerEvent.decode(source);
           case 4: return PlayerEvent.decode(source);
           case 5: return VirtualDeviceEvent.decode(source);
+          case 6: return DesktopEvent.decode(source);
           
           default: throw FormatException('No Event with EventCode ${source[0]}');
         }
