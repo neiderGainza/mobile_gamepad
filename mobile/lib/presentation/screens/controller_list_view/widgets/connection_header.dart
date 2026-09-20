@@ -5,6 +5,7 @@ import 'package:game_controller/data/repositories/connection_repository_impl.dar
 import 'package:game_controller/data/repositories/player_settings_repository_impl.dart';
 import 'package:game_controller/presentation/providers/connection_status_provider.dart';
 import 'package:game_controller/presentation/providers/player_provider.dart';
+import 'package:game_controller/presentation/screens/controller_list_view/widgets/scan_address_btn.dart';
 import 'package:game_controller/presentation/utils/dialog_collection.dart';
 import 'package:game_controller/presentation/utils/snackbar_collection.dart';
 import 'package:game_controller/presentation/widgets/connection_status_indicator.dart';
@@ -159,26 +160,6 @@ class ActionsTile extends ConsumerWidget {
     );
 
         
-  }
-}
-
-
-class ScanAddressBtn extends StatelessWidget {
-  const ScanAddressBtn({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton.tonal(
-      onPressed : (){}, 
-      style: FilledButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: .circular(10)
-        )
-      ),
-      child     : Text("Scan QR") 
-    );
   }
 }
 

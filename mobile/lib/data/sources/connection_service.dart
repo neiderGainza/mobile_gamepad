@@ -105,7 +105,10 @@ class ConnectionServiceImpl extends ConnectionService{
         },
       );
 
-      await _channel!.ready;
+      await Future.wait([
+        _channel!.ready,
+        Future.delayed(Duration(seconds: 1))
+      ]);
 
       _startSubscribeToServerEvent();
       _initHeartbeat();

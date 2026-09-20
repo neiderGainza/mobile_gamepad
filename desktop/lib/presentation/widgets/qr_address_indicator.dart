@@ -24,11 +24,7 @@ class QrAddressIndicator extends ConsumerWidget{
       child: QrImageView(
         
         data: [
-          for(final address in addresses)
-          [
-            address.interface.interfaceName, 
-            '${address.interface.ip}:${address.port}'
-          ]
+          for(final address in addresses) address.encode()
         ].toString(),
 
         size: 200,

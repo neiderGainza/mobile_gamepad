@@ -1,6 +1,6 @@
 
 import 'package:desktop/data/repository/connection_repository.dart';
-import 'package:desktop/domain/models/server_address.dart';
+import 'package:core/src/models/network/server_address.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
 

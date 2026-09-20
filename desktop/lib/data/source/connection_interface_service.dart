@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:desktop/domain/models/server_interface.dart';
+import 'package:core/src/models/network/server_interface.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -95,7 +95,10 @@ class ConnectionInterfaceServiceImpl implements ConnectionInterfaceService{
 
 
   Future<List<ServerInterface>> _getServerInterfaces() async {
-    final rawInterfaces = await NetworkInterface.list();
+    final rawInterfaces = await NetworkInterface.list(
+      includeLoopback: false,
+      includeLinkLocal: false
+    );
     final List<ServerInterface> newInterfaces   = [];
 
     for(final rawInterface in rawInterfaces){
@@ -107,13 +110,18 @@ class ConnectionInterfaceServiceImpl implements ConnectionInterfaceService{
           ip: rawInterface.addresses.first.address
         );
       }
-      if(rawInterface.name.startsWith('enp')){
+      if(rawInterface.name.startsWith('enp') || rawInterface.name.startsWith('eth')){
         newInterface =ServerInterface(
           interfaceName: 'Cable', 
           ip: rawInterface.addresses.first.address
         );
       }
-      
+      if(rawInterface.name.startsWith('bnep')){
+        newInterface =ServerInterface(
+          interfaceName: 'Bluetooth', 
+          ip: rawInterface.addresses.first.address
+        );
+      }
       if(newInterface != null) newInterfaces.add(newInterface);
     }
 

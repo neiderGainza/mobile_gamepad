@@ -36,3 +36,5 @@ export 'src/models/event/_event.dart' show IdentiafiableEvent, Event;
 export 'src/network/heartbeat.dart';
 export 'src/network/check_pool.dart';
 export 'src/network/channel_event_listener.dart';
+export 'src/models/network/server_address.dart';
+export 'src/models/network/server_interface.dart';

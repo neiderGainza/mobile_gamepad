@@ -26,4 +26,5 @@ const _$ConnectionStatusEnumMap = {
   ConnectionStatus.connected: 0,
   ConnectionStatus.connecting: 1,
   ConnectionStatus.disconnected: 2,
+  ConnectionStatus.disconnecting: 3,
 };

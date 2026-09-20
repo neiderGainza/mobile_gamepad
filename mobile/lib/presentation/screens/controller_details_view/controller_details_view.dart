@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
@@ -66,10 +64,12 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
   @override
   Widget build(BuildContext context) {
     if(DefaultController.isDefaultById(widget.controllerId)){
-      return onData(
-        context, 
-        DefaultController.getDefaultControllerById(widget.controllerId)
-      );
+      return Scaffold(
+        body: onData(
+          context, 
+          DefaultController.getDefaultControllerById(widget.controllerId)
+        )
+      );  
     }
 
     final controllerDetails = ref.watch( 

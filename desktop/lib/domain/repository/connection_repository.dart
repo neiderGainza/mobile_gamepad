@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:desktop/domain/models/server_address.dart';
 
 abstract class ConnectionRepository {
   Stream<ConnectionStatus> get serverStatusStream;  

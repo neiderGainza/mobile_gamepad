@@ -114,7 +114,8 @@ class ConnectionServiceImpl extends ConnectionService{
   void disconnectFromServer(){
     /// add status to subjects
     _connectionStatusSubject.add(.disconnected);
-
+    _portSubject.add(null);
+    
     /// close extensions
     _heartbeat?.stop();
     _heartbeat = null;
