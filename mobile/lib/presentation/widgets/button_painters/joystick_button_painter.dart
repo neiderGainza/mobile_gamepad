@@ -32,42 +32,8 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
     return LayoutBuilder(
       builder: (context, contrains) {
         return Joystick(
-          dragCallback: (info) {  
-            
-            if((lastInfo.x - info.x).abs() > minChangeToSend){
-              ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-                btn: widget.button.buttonCode, 
-                axis: .horizontal, 
-                value: info.x
-              ));
-              lastInfo = j.DragInfo(info.x, lastInfo.y);
-            }
-
-            if((lastInfo.y - info.y).abs() > minChangeToSend){
-              ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-                btn: widget.button.buttonCode, 
-                axis: .vertical, 
-                value: info.y
-              ));
-              lastInfo = j.DragInfo(lastInfo.x, info.y);
-            }
-          },
-          onDragEnd: (){
-            
-            ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-              btn: widget.button.buttonCode, 
-              axis: .horizontal, 
-              value: 0
-            ));
-
-            ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-              btn: widget.button.buttonCode, 
-              axis: .vertical, 
-              value: 0
-            ));
-
-            lastInfo = j.DragInfo(0, 0);
-          },
+          dragCallback: onDrag,
+          onDragEnd: onDragEnded,
 
           label: buttonData.label,
           stickSize: contrains.maxHeight / 2.5,
@@ -79,5 +45,45 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
         );
       },
     );
+  }
+
+
+
+
+
+  void onDrag(j.DragInfo info){
+    if((lastInfo.x - info.x).abs() > minChangeToSend){
+      ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
+        btn: widget.button.buttonCode, 
+        axis: .horizontal, 
+        value: info.x
+      ));
+      lastInfo = j.DragInfo(info.x, lastInfo.y);
+    }
+
+    if((lastInfo.y - info.y).abs() > minChangeToSend){
+      ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
+        btn: widget.button.buttonCode, 
+        axis: .vertical, 
+        value: info.y
+      ));
+      lastInfo = j.DragInfo(lastInfo.x, info.y);
+    }
+  }
+
+  void onDragEnded(){
+    ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
+      btn: widget.button.buttonCode, 
+      axis: .horizontal, 
+      value: 0
+    ));
+
+    ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
+      btn: widget.button.buttonCode, 
+      axis: .vertical, 
+      value: 0
+    ));
+
+    lastInfo = j.DragInfo(0, 0);
   }
 }

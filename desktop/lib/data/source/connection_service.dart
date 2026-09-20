@@ -97,7 +97,7 @@ class ConnectionServiceImpl extends ConnectionService{
       _initHeartBeat();
       return true;
     }catch(e){
-      debugPrint("Error _connectToServerAddress: $e");
+      debugPrint("Error connection to server _connectToServerAddress: $e");
       return false;
     }
   }
@@ -106,7 +106,7 @@ class ConnectionServiceImpl extends ConnectionService{
   void stopServer() {
     _portSubject.add(null);
     _playersSubject.add([]);
-    _connectionStatusSubject.add(.connecting);
+    _connectionStatusSubject.add(.disconnecting);
     _webSocketChannel?.sink.add(StopServerDesktopEvent().encode());
   }
 

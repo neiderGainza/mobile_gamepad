@@ -9,7 +9,7 @@ void main() {
   runApp(const ProviderScope(child: DesktopGamePadClient()));
 
   doWhenWindowReady(() {
-    const initialSize = Size(600, 700);
+    const initialSize = Size(500, 700);
     appWindow.minSize   = initialSize;
     appWindow.size      = initialSize;
     appWindow.maxSize   = initialSize;

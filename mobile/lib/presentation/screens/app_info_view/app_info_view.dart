@@ -43,7 +43,7 @@ class AppInfoView extends StatelessWidget{
               child: AspectRatio(
                 aspectRatio: 1,
                 child: Image.asset(
-                  'assets/icon/icon.png',
+                  'assets/icons/icon_cut.png',
                   color: cc.onSecondaryContainer,
                   colorBlendMode: .srcIn,    
                 ),

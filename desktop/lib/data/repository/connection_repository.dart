@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:desktop/data/source/connection_interface_service.dart';
@@ -76,7 +77,20 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
       final lastPort = await ServerConfigService.serverPort;
 
       if(lastPort != null){
-        final _ = await connectionService.connectToServer(lastPort);
+        final isConnected = await connectionService.connectToServer(lastPort);
+
+        if(!isConnected){
+          await Process.start(
+            'gamepad_server-dev',
+            [],
+            mode: ProcessStartMode.detached,
+          );
+          
+          final lastPort = await ServerConfigService.serverPort;
+          if(lastPort != null){
+            await connectionService.connectToServer(lastPort);
+          }          
+        }
       }
 
     }catch(e){

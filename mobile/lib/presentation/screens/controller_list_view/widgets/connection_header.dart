@@ -188,7 +188,7 @@ class TypeAddressBtn extends ConsumerWidget {
               int.parse(parts[1])
             );
           }catch(e){
-            SnackbarCollection.connectionFailedSnackbar(context);
+            SnackbarCollection.errorSnackbar(context, "Conection Failed");
           }
         }
       }, 

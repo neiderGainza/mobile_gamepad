@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
 import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/domain/model/controller.dart';
+import 'package:game_controller/presentation/providers/connection_message_provider.dart';
 import 'package:game_controller/presentation/providers/controller_details_provider.dart';
 import 'package:game_controller/presentation/screens/controller_details_view/widgets/my_app_bar.dart';
 import 'package:game_controller/presentation/screens/controller_details_view/widgets/status_indicators.dart';
 import 'package:game_controller/presentation/utils/orientation_function_collection.dart';
+import 'package:game_controller/presentation/utils/snackbar_collection.dart';
 import 'package:game_controller/presentation/widgets/button_painters/button_group_painter.dart';
 import 'package:game_controller/presentation/utils/inherited_value.dart';
 
@@ -63,6 +65,19 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+      connectionMessageProvider,
+      (lastMessage,newMessage){
+        final message = newMessage.value;
+        if(message == null) return;
+        SnackbarCollection.showConnectionMessage(
+          context, 
+          message,
+          position: .top
+        );
+      }
+    );
+    
     if(DefaultController.isDefaultById(widget.controllerId)){
       return Scaffold(
         body: onData(
@@ -75,17 +90,6 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
     final controllerDetails = ref.watch( 
       controllerDetailsProvider(widget.controllerId)
     );
-
-    // TODO : que esto trabaje
-    // ref.listen(
-    //   connectionMessageProvider,
-    //   (lastMessage,newMessage){
-    //     final message = newMessage.value;
-    //     if(message == null) return;
-    //     SnackbarCollection.showConnectionMessage(context, message);
-    //   }
-    // );
-
 
     return Scaffold(
       body: controllerDetails.when(
