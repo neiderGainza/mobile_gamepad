@@ -61,17 +61,17 @@ class EditMenu extends ConsumerWidget{
             child: const Column(
               crossAxisAlignment: .start,
               children: [
+                // general title
                 EditingMenuTitle(),
 
+                //group edits
                 GroupPropertiesTitle(),
-                Divider(height: 16,),
                 EditSizeTile(),
-                Divider(height: 16,),
                 EditMarginTile(),
-                Divider(height: 16,),
                 EditPositionTile(),
-                SizedBox(height: 8,),
-
+                EditRotationTile(),
+                
+                // button edits
                 ButtonPropertiesTitle(),
                 EditButtonShapeTile(),
                 EditButtonBorderRadiusTile(),
@@ -143,20 +143,23 @@ class EditSizeTile extends ConsumerWidget {
 
     if(groupSize == null) return SizedBox.shrink();
 
-    return ListTile(
-      visualDensity: .compact,
-      title: FittedBox(
-        fit: .scaleDown,
-        alignment: .centerStart,
-        child: Text("Size:")),
-      trailing: LessStringPlus(
-        plus: (){
-          updateValue(controllerId, 0.01, ref);
-        }, 
-        less: (){
-          updateValue(controllerId, -0.01, ref);
-        }, 
-        label: groupSize.toStringAsFixed(2)
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        visualDensity: .compact,
+        title: FittedBox(
+          fit: .scaleDown,
+          alignment: .centerStart,
+          child: Text("Size:")),
+        trailing: LessStringPlus(
+          plus: (){
+            updateValue(controllerId, 0.01, ref);
+          }, 
+          less: (){
+            updateValue(controllerId, -0.01, ref);
+          }, 
+          label: groupSize.toStringAsFixed(2)
+        ),
       ),
     );
   }
@@ -231,6 +234,7 @@ class EditPositionTile extends ConsumerWidget {
             label: groupPosition.dy.toStringAsFixed(2)
           ),
         ),
+        const SizedBox(height: 8,)
       ],
     );
   }
@@ -254,6 +258,62 @@ class EditPositionTile extends ConsumerWidget {
 }
 
 
+class EditRotationTile extends ConsumerWidget {
+  const EditRotationTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref){
+    final controllerId = InheritedValue.of<String?>(context);
+    
+    final groupRotation = ref.watch(controllerEditProvider(controllerId)
+      .select(
+        (cs) => cs.selectedGroupIndex == null 
+          ? null
+          : cs.selectedGroup?.rotationDegreess
+      ));
+    
+    if(groupRotation == null) return SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        visualDensity: .compact,
+        title: FittedBox(
+          fit: .scaleDown,
+          alignment: .centerStart,
+          child: Text("Rotation:")),
+        trailing: LessStringPlus(
+          plus: (){
+            updateValue(controllerId, 15, ref);
+          }, 
+          less: (){
+            updateValue(controllerId, -15, ref);
+          }, 
+          label: groupRotation.toStringAsFixed(1)
+        ),
+      ),
+    );
+  }
+
+  void updateValue(String? controllerId, int change, WidgetRef ref){
+    final selectedGroup = ref.read(controllerEditProvider(controllerId))
+      .selectedGroup;
+    
+    if(selectedGroup == null){
+      return;
+    }
+    ref.read(controllerEditProvider(controllerId).notifier)
+      .editSelectedGroup(
+        selectedGroup.copyWith( 
+          rotationDegreess: selectedGroup.rotationDegreess! + change)
+    );
+  }
+}
+
+
+
 class EditMarginTile extends ConsumerWidget {
   const EditMarginTile({
     super.key,
@@ -272,20 +332,23 @@ class EditMarginTile extends ConsumerWidget {
 
     if(groupMargin == null) return SizedBox.shrink();
 
-    return ListTile(
-      visualDensity: .compact,
-      title: FittedBox(
-        fit: .scaleDown,
-        alignment: .centerStart,
-        child: Text("Margin:")),
-      trailing: LessStringPlus(
-        plus: (){
-          updateValue(controllerId, 0.01, ref);
-        }, 
-        less: (){
-          updateValue(controllerId, -0.01, ref);
-        }, 
-        label: groupMargin.toStringAsFixed(2)
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        visualDensity: .compact,
+        title: FittedBox(
+          fit: .scaleDown,
+          alignment: .centerStart,
+          child: Text("Margin:")),
+        trailing: LessStringPlus(
+          plus: (){
+            updateValue(controllerId, 0.01, ref);
+          }, 
+          less: (){
+            updateValue(controllerId, -0.01, ref);
+          }, 
+          label: groupMargin.toStringAsFixed(2)
+        ),
       ),
     );
   }

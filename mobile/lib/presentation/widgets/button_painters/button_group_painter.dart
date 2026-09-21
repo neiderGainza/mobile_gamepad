@@ -28,26 +28,29 @@ class ButtonGroupPainter extends StatelessWidget {
     final r  = getrFor(btnCount, R, buttonGroup.internalMargin);
     final builder  = btnBuilder ?? (child, btnIndex) => child;
 
-    return SizedBox(
-      width: 2 * R,
-      height: 2 * R,
+    return Transform.rotate(
+      angle: pi * ((buttonGroup.rotationDegreess??0) / 180),
+      child: SizedBox(
+        width: 2 * R,
+        height: 2 * R,
+        
+        child: Stack(
+          children: [
+            for (int i = 0; i < btnCount; i++)
+              Positioned(
+                left  : getXFor(btnCount, R, r, i) - r,
+                bottom: getYFor(btnCount, R, r, i) - r,
       
-      child: Stack(
-        children: [
-          for (int i = 0; i < btnCount; i++)
-            Positioned(
-              left  : getXFor(btnCount, R, r, i) - r,
-              bottom: getYFor(btnCount, R, r, i) - r,
-
-              child: builder(
-                ButtonPainter(
-                  button : buttonGroup.buttons[i],
-                  size   : 2 * r,
-                ),
-                i 
-              )
-            ),
-        ],
+                child: builder(
+                  ButtonPainter(
+                    button : buttonGroup.buttons[i],
+                    size   : 2 * r,
+                  ),
+                  i 
+                )
+              ),
+          ],
+        ),
       ),
     );
   }

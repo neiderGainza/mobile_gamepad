@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ButtonGroup {
 
- UnmodifiableListView<Button> get buttons; double get screenRelativeSize; double get internalMargin; double get rotationDegreess;
+ UnmodifiableListView<Button> get buttons; double get screenRelativeSize; double get internalMargin; int? get rotationDegreess;
 /// Create a copy of ButtonGroup
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $ButtonGroupCopyWith<$Res>  {
   factory $ButtonGroupCopyWith(ButtonGroup value, $Res Function(ButtonGroup) _then) = _$ButtonGroupCopyWithImpl;
 @useResult
 $Res call({
- List<Button> buttons, double screenRelativeSize, double internalMargin, double rotationDegreess
+ List<Button> buttons, double screenRelativeSize, double internalMargin, int? rotationDegreess
 });
 
 
@@ -62,13 +62,13 @@ class _$ButtonGroupCopyWithImpl<$Res>
 
 /// Create a copy of ButtonGroup
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? buttons = null,Object? screenRelativeSize = null,Object? internalMargin = null,Object? rotationDegreess = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? buttons = null,Object? screenRelativeSize = null,Object? internalMargin = null,Object? rotationDegreess = freezed,}) {
   return _then(ButtonGroup(
 buttons: null == buttons ? _self.buttons! : buttons // ignore: cast_nullable_to_non_nullable
 as List<Button>,screenRelativeSize: null == screenRelativeSize ? _self.screenRelativeSize : screenRelativeSize // ignore: cast_nullable_to_non_nullable
 as double,internalMargin: null == internalMargin ? _self.internalMargin : internalMargin // ignore: cast_nullable_to_non_nullable
-as double,rotationDegreess: null == rotationDegreess ? _self.rotationDegreess : rotationDegreess // ignore: cast_nullable_to_non_nullable
-as double,
+as double,rotationDegreess: freezed == rotationDegreess ? _self.rotationDegreess : rotationDegreess // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

@@ -271,7 +271,7 @@ class ButtonGroupAdapter extends TypeAdapter<ButtonGroup> {
       internalMargin: fields[15] == null
           ? 0.01
           : (fields[15] as num).toDouble(),
-      rotationDegreess: fields[18] == null ? 0 : (fields[18] as num).toDouble(),
+      rotationDegreess: (fields[18] as num?)?.toInt(),
     );
   }
 

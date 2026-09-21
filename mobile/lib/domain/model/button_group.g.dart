@@ -12,7 +12,7 @@ ButtonGroup _$ButtonGroupFromJson(Map<String, dynamic> json) => ButtonGroup(
       .toList(),
   screenRelativeSize: (json['screenRelativeSize'] as num?)?.toDouble() ?? 0.23,
   internalMargin: (json['internalMargin'] as num?)?.toDouble() ?? 0.01,
-  rotationDegreess: (json['rotationDegreess'] as num?)?.toDouble() ?? 0,
+  rotationDegreess: (json['rotationDegreess'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$ButtonGroupToJson(ButtonGroup instance) =>

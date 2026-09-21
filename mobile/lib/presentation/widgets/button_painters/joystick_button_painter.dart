@@ -12,6 +12,8 @@ import 'package:game_controller/presentation/widgets/button_painters/joystick/jo
 /// Idea Optimizacion: guardamos el ultimo envio
 /// y si la diferencia entre la nueva informacion y el envio
 /// es insignificante, desechamos el cambio (no lo enviamos)
+/// 
+/// el 0.8 del movieminto del joystick envia el total del movimiento
 class JoystickButtonPainter extends ConsumerStatefulWidget {
   const JoystickButtonPainter({super.key, required this.button});
 
@@ -23,14 +25,16 @@ class JoystickButtonPainter extends ConsumerStatefulWidget {
 
 class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
   j.DragInfo lastInfo = j.DragInfo(0, 0);
-  final double minChangeToSend = 0.03;
+  final double minChangeToSend = 0.05;
 
   @override
   Widget build(BuildContext context) {
     final buttonData = widget.button.buttonData;
     
     return Joystick(
-      dragCallback: onDrag,
+      size: double.infinity, // size is controlled on ButtonPainter
+
+      onDragUpdated: onDrag,
       onDragEnd: onDragEnded,
     
       label: buttonData.label,
@@ -39,11 +43,9 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
       stickColor: buttonData.backgroundColor,
       borderColor: buttonData.borderColor,
       dragPadColor: Colors.transparent,
+      
     );
   }
-
-
-
 
 
   void onDrag(j.DragInfo info){

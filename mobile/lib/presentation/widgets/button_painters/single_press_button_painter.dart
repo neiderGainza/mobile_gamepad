@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/data/repositories/connection_repository_impl.dart';
 import 'package:game_controller/domain/model/button.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 
 class SinglePressButtonPainter extends ConsumerStatefulWidget{
   const SinglePressButtonPainter({
@@ -78,7 +78,7 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
               fit: .fill,
               child: Text(
                 buttonData.label,
-                style: GoogleFonts.nunito(
+                style: TextStyle(
                   fontWeight: .bold,
                   color: buttonData.color,
                 ) ,

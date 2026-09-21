@@ -29,13 +29,13 @@ class ButtonGroupsCollection {
       DefaultBtnCollection.btnB,
       DefaultBtnCollection.btnA,
       DefaultBtnCollection.btnX,
-    ], screenRelativeSize: 0.5, internalMargin: 0.05),
+    ], screenRelativeSize: 0.5, internalMargin: 0.05, rotationDegreess: 0),
     
     ButtonGroup(buttons: [
       DefaultBtnCollection.btnY,
       DefaultBtnCollection.btnA,
       DefaultBtnCollection.btnX,
-    ], screenRelativeSize: 0.5, internalMargin: 0.05),
+    ], screenRelativeSize: 0.5, internalMargin: 0.05, rotationDegreess: 0),
     
   ];
 }

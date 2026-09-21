@@ -12,22 +12,26 @@ class ButtonGroup with _$ButtonGroup{
   final UnmodifiableListView<Button> buttons;
   final double screenRelativeSize;
   final double internalMargin;
-  final double rotationDegreess;
+  final int ? rotationDegreess;
 
   ButtonGroup({   
     required List<Button> buttons,
     double screenRelativeSize = 0.23,
     double internalMargin     = 0.01,
-    double rotationDegreess   = 0,
+    int  ? rotationDegreess,
   }): buttons = UnmodifiableListView(buttons)
     , internalMargin     = internalMargin.clamp(0, 1)
     , screenRelativeSize = screenRelativeSize.clamp(0.05, 1)
-    , rotationDegreess   = rotationDegreess.clamp(0, 360);
+    , rotationDegreess   = rotationDegreess?.clamp(0, 360);
 
   ButtonGroup.singleButtonGroup({
     required Button button,
     double screenRelativeSize = 0.23
-  }) : this(buttons: [button], screenRelativeSize: screenRelativeSize);
+  }) : this(
+      buttons: [button], 
+      screenRelativeSize: screenRelativeSize , 
+      rotationDegreess: null
+    );
 
 
   static ButtonGroup fromJson(Map json) => _$ButtonGroupFromJson(

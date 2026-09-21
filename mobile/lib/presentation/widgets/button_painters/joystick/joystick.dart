@@ -4,27 +4,21 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_joystick_customisable/flutter_joystick_customisable.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 
 /// Copy of JoystickWidget from [flutter_joystick_customisable] 
 /// to change some paramenters not allowed from the interface
 /// 
 class Joystick extends StatefulWidget {
-  /// Size of the stick/ball to occupy the screen with the rest of the controls
-  final double stickSize;
+  /// Size of the hole joystick
+  /// size on the circle in the middle is calculated
+  final double size;
 
   /// Frequency of calling [dragCallback] from the moment the stick is dragged.
   final Duration timeFrequency;
 
-  /// Widget that renders joystick base, by default [DragPad] will take care of this part and the size of this widget will be varied based on the stick/ball size.
-  final Widget? draggableContainer;
-
   /// Specifies the color of the [DragPad].
   final Color dragPadColor;
-
-  /// Controller allows to control joystick events outside the widget.
-  final StickController? stickController;
 
   /// Callback, which is called when the stick starts dragging.
   final Function? onDragStart;
@@ -33,10 +27,7 @@ class Joystick extends StatefulWidget {
   final Function? onDragEnd;
 
   /// Callback, which is called with [timeFrequency] when the stick is dragged.
-  final StickDragCallback dragCallback;
-
-  /// Enable the button controls at out side of the drag pad
-  final bool enableButtonControls;
+  final StickDragCallback onDragUpdated;
 
   /// Specifies the button color
   final Color  stickColor;
@@ -47,18 +38,15 @@ class Joystick extends StatefulWidget {
 
   const Joystick(
       {super.key,
-      this.draggableContainer,
-      required this.dragCallback,
-      this.stickController,
+      required this.onDragUpdated,
+      required this.size,
       this.onDragStart,
       this.onDragEnd,
       this.dragPadColor = Colors.purple,
       this.borderColor = Colors.purple,    
       this.timeFrequency = const Duration(milliseconds: 10),
-
+      
       /// Size of the stick/ball is by default 100 pixel.
-      this.stickSize = 80,
-      this.enableButtonControls = false,
       required this.stickColor,
       required this.fontColor,
       required this.label,
@@ -79,22 +67,9 @@ class _JoystickState extends State<Joystick> {
   /// traslacion de la posicion inicial del jpoystick
   Offset _updatePosition = Offset.zero;
 
-  @override
-  void initState() {
-    super.initState();
-    widget.stickController?.onStickDragStart =
-        (globalPosition) => _stickDragStart(globalPosition);
-    widget.stickController?.onStickDragUpdate =
-        (globalPosition) => _stickDragUpdate(globalPosition);
-    widget.stickController?.onStickDragEnd = () => _stickDragEnd();
-  }
 
   @override
   Widget build(BuildContext context) {
-    var draggableContainerSize = widget.stickSize * 2.5;
-    var borderContainerSize    = draggableContainerSize * 1.03;
-    
-
 
     return TweenAnimationBuilder(
       tween: Tween<Offset>(begin: _updatePosition, end: _updatePosition),
@@ -120,10 +95,10 @@ class _JoystickState extends State<Joystick> {
           children: [
             IgnorePointer(
               child: Container(
-                width: borderContainerSize,
-                height: borderContainerSize,
+                width: widget.size,
+                height: widget.size,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(draggableContainerSize / 2),
+                    shape: .circle,
                     border: Border.all(color: widget.borderColor, width: widget.borderWidth)),
             )),
         
@@ -132,15 +107,17 @@ class _JoystickState extends State<Joystick> {
             children: [
             Container(
               key: _baseKey,
-              child: widget.draggableContainer ??
-                  DragPad(size: draggableContainerSize, color: widget.dragPadColor),
+              child: DragPad(size: widget.size, color: widget.dragPadColor),
             ),
             GestureDetector(
-                child: StickBall(
-                  size: widget.stickSize,
-                  color: widget.stickColor,
-                  label: widget.label,
-                  fontColor: widget.fontColor,
+                child: FractionallySizedBox(
+                  widthFactor: 0.4,
+                  heightFactor: 0.4,
+                  child: StickBall(
+                    color: widget.stickColor,
+                    label: widget.label,
+                    fontColor: widget.fontColor,
+                  ),
                 )),
           ])
         ]),
@@ -195,14 +172,14 @@ class _JoystickState extends State<Joystick> {
 
     _callbackTimer?.cancel();
     //send zero offset when the stick is released
-    widget.dragCallback(DragInfo(_stickOffset.dx, _stickOffset.dy));
+    widget.onDragUpdated(DragInfo(_stickOffset.dx, _stickOffset.dy));
     _startDragStickPosition = Offset.zero;
     widget.onDragEnd?.call();
   }
 
   void _runCallback() {
     _callbackTimer = Timer.periodic(widget.timeFrequency, (timer) {
-      widget.dragCallback(DragInfo(_stickOffset.dx, _stickOffset.dy));
+      widget.onDragUpdated(DragInfo(_stickOffset.dx, _stickOffset.dy));
     });
   }
 
@@ -255,13 +232,11 @@ class StickOffsetHandler {
 
 /// Draggable ball of the Joystick
 class StickBall extends StatelessWidget {
-  final double size;
   final Color color;
   final String label;
   final Color fontColor;
 
   const StickBall({
-    required this.size,
     required this.color,
     required this.label,
     required this.fontColor,
@@ -271,8 +246,8 @@ class StickBall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: size,
-      height: size,
+      width: double.infinity,
+      height: double.infinity,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         boxShadow: [
