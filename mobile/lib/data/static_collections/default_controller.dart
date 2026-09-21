@@ -89,7 +89,7 @@ class DefaultController {
           screenRelativeSize: 0.5,
           internalMargin: 0.01,
         ),
-        relativePosition: const Offset(0.16282051282051282, 0.8568518518518519),
+        relativePosition: const Offset(0.14282051282051282, 0.8568518518518519),
       ),
       PositionedButtonGroup(
         buttonGroup: ButtonGroup(

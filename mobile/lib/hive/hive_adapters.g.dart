@@ -215,6 +215,7 @@ class ControllerAdapter extends TypeAdapter<Controller> {
     return Controller(
       id: fields[0] as String?,
       name: fields[1] as String?,
+      i10ln: fields[6] as String?,
       description: fields[2] as String?,
       lastEdited: fields[3] as DateTime?,
       buttonGroups: fields[5] == null
@@ -226,7 +227,7 @@ class ControllerAdapter extends TypeAdapter<Controller> {
   @override
   void write(BinaryWriter writer, Controller obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -236,7 +237,9 @@ class ControllerAdapter extends TypeAdapter<Controller> {
       ..writeByte(3)
       ..write(obj.lastEdited)
       ..writeByte(5)
-      ..write(obj.buttonGroups);
+      ..write(obj.buttonGroups)
+      ..writeByte(6)
+      ..write(obj.i10ln);
   }
 
   @override
@@ -262,23 +265,28 @@ class ButtonGroupAdapter extends TypeAdapter<ButtonGroup> {
     };
     return ButtonGroup(
       buttons: (fields[6] as List).cast<Button>(),
-      screenRelativeSize: fields[7] == null
+      screenRelativeSize: fields[17] == null
           ? 0.23
-          : (fields[7] as num).toDouble(),
-      internalMargin: fields[8] == null ? 0.01 : (fields[8] as num).toDouble(),
+          : (fields[17] as num).toDouble(),
+      internalMargin: fields[15] == null
+          ? 0.01
+          : (fields[15] as num).toDouble(),
+      rotationDegreess: fields[18] == null ? 0 : (fields[18] as num).toDouble(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ButtonGroup obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(6)
       ..write(obj.buttons)
-      ..writeByte(7)
+      ..writeByte(15)
+      ..write(obj.internalMargin)
+      ..writeByte(17)
       ..write(obj.screenRelativeSize)
-      ..writeByte(8)
-      ..write(obj.internalMargin);
+      ..writeByte(18)
+      ..write(obj.rotationDegreess);
   }
 
   @override

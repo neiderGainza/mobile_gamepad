@@ -20,7 +20,8 @@ sealed class PlayerEvent implements Event{
       0 => ButtonPlayerEvent.decode(data),
       1 => UpdateInfoPlayerEvent.decode(data),
       2 => DisconnectPlayerEvent(),
-      
+      3 => MultiButtonPlayerEvent.decode(data),
+
       _ => throw FormatException('Unknown PlayerEvent code: $subCode'),
     };
   }
@@ -86,6 +87,46 @@ class ButtonPlayerEvent extends PlayerEvent {
     return btn.code | (axis.code<<6);
   }
 
+}
+
+
+class MultiButtonPlayerEvent extends PlayerEvent{
+  final List<ButtonPlayerEvent> buttonPlayerEvents;
+
+  const MultiButtonPlayerEvent({
+    required this.buttonPlayerEvents
+  });
+
+
+  @override
+  Uint8List encode() {
+    final result = Uint8List(1 + 2 * buttonPlayerEvents.length);
+    result[0] = Event.getInt8FromInt4(eventCode.code, 3);
+
+    for(int i =0; i < buttonPlayerEvents.length; i++){
+      final encodedEvent = buttonPlayerEvents[i].encode();
+
+      result.setRange(
+        1 + i * 2, 
+        3 + i * 2,
+        encodedEvent.sublist(1)
+      );
+    }
+
+    return result;
+  }
+
+
+  factory MultiButtonPlayerEvent.decode(Uint8List data){
+    return MultiButtonPlayerEvent(
+      buttonPlayerEvents: [
+        for(int i = 0 ; i < data.length / 2 ; i++ )
+        ButtonPlayerEvent.decode(
+          Uint8List.fromList([0 , data[1 + i*2] , data[2 + i*2]])
+        )
+      ]
+    );
+  }
 }
 
 

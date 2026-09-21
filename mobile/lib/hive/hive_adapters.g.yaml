@@ -63,7 +63,7 @@ types:
         index: 1
   Controller:
     typeId: 4
-    nextIndex: 6
+    nextIndex: 7
     fields:
       id:
         index: 0
@@ -75,16 +75,20 @@ types:
         index: 3
       buttonGroups:
         index: 5
+      i10ln:
+        index: 6
   ButtonGroup:
     typeId: 6
-    nextIndex: 9
+    nextIndex: 19
     fields:
       buttons:
         index: 6
-      screenRelativeSize:
-        index: 7
       internalMargin:
-        index: 8
+        index: 15
+      screenRelativeSize:
+        index: 17
+      rotationDegreess:
+        index: 18
   ButtonData:
     typeId: 7
     nextIndex: 8

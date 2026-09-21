@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +8,7 @@ import 'package:game_controller/data/repositories/connection_repository_impl.dar
 import 'package:game_controller/domain/model/button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SinglePressButtonPainter extends ConsumerWidget{
+class SinglePressButtonPainter extends ConsumerStatefulWidget{
   const SinglePressButtonPainter({
     super.key,
     required this.button
@@ -15,43 +17,46 @@ class SinglePressButtonPainter extends ConsumerWidget{
   final Button button;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final connectionRepo = ref.watch(connectionRepositoryProvider);
-    final buttonData = button.buttonData;
+  ConsumerState<SinglePressButtonPainter> createState() => _SinglePressButtonPainterState();
+}
 
+class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPainter> {
+  Timer ? releaseTimer;
+
+  @override
+  Widget build(BuildContext context) {
+    final connectionRepo = ref.watch(connectionRepositoryProvider);
+    final buttonData = widget.button.buttonData;
 
     return Material(
       color: Colors.transparent,
       clipBehavior: .hardEdge,
-      elevation   : button.buttonData.elevation.toDouble(),
-      shape: button.buttonData.shape == .circle
+      elevation   : widget.button.buttonData.elevation.toDouble(),
+      shape: widget.button.buttonData.shape == .circle
         ? CircleBorder()
         : RoundedRectangleBorder(
-            borderRadius: .circular( button.buttonData.borderRadius),
+            borderRadius: .circular( widget.button.buttonData.borderRadius),
           ),
 
       child: InkWell(
         onTapDown: (details) {
+          releaseTimer?.cancel();
+          releaseTimer = null;
+
           HapticFeedback.vibrate();
           connectionRepo.send(ButtonPlayerEvent(
-            btn: button.buttonCode, 
+            btn: widget.button.buttonCode, 
             axis: .depth, 
             value: 1
           ));
         },
         onTapCancel: () {
-          connectionRepo.send(ButtonPlayerEvent(
-            btn: button.buttonCode, 
-            axis: .depth, 
-            value: 0
-          ));
+          releaseTimer?.cancel();
+          releaseTimer = Timer(Duration(milliseconds: 10), release);
         },
         onTapUp: (details) {
-          connectionRepo.send(ButtonPlayerEvent(
-            btn: button.buttonCode, 
-            axis: .depth, 
-            value: 0
-          ));
+          releaseTimer?.cancel();
+          releaseTimer = Timer(Duration(milliseconds: 10), release);
         },
         child: Container(
           margin: .all(8),
@@ -84,5 +89,15 @@ class SinglePressButtonPainter extends ConsumerWidget{
         ),
       ),
     );
+  }
+
+  void release(){
+    final connectionRepo = ref.watch(connectionRepositoryProvider);
+    
+    connectionRepo.send(ButtonPlayerEvent(
+      btn: widget.button.buttonCode, 
+      axis: .depth, 
+      value: 0
+    ));
   }
 }

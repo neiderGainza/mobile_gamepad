@@ -9,6 +9,7 @@ part of 'controller.dart';
 Controller _$ControllerFromJson(Map<String, dynamic> json) => Controller(
   id: json['id'] as String?,
   name: json['name'] as String?,
+  i10ln: json['i10ln'] as String?,
   description: json['description'] as String?,
   lastEdited: json['lastEdited'] == null
       ? null
@@ -26,6 +27,7 @@ Map<String, dynamic> _$ControllerToJson(Controller instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'i10ln': instance.i10ln,
       'description': instance.description,
       'lastEdited': instance.lastEdited.toIso8601String(),
       'buttonGroups': instance.buttonGroups,

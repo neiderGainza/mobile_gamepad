@@ -86,6 +86,9 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
             mode: ProcessStartMode.detached,
           );
           
+          /// TODO : improve this
+          await Future.delayed(Duration(seconds: 1));
+
           final lastPort = await ServerConfigService.serverPort;
           if(lastPort != null){
             await connectionService.connectToServer(lastPort);

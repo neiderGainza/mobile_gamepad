@@ -150,7 +150,6 @@ class UinputXbox implements VirtualDevice {
   /// fd tiene que tener valor antes de invocar
   /// recorre los botones y axis existentes y los registra
   int _registerAllButtonsAndAxis(){
-
     for(final btn in UinputXbox._xboxButtons.values){  
       switch(btn){
         case VirtualDeviceAxisButton():

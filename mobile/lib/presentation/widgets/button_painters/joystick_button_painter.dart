@@ -29,21 +29,16 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
   Widget build(BuildContext context) {
     final buttonData = widget.button.buttonData;
     
-    return LayoutBuilder(
-      builder: (context, contrains) {
-        return Joystick(
-          dragCallback: onDrag,
-          onDragEnd: onDragEnded,
-
-          label: buttonData.label,
-          stickSize: contrains.maxHeight / 2.5,
-          borderWidth: buttonData.borderWidth,          
-          fontColor: buttonData.color,
-          stickColor: buttonData.backgroundColor,
-          borderColor: buttonData.borderColor,
-          dragPadColor: Colors.transparent,
-        );
-      },
+    return Joystick(
+      dragCallback: onDrag,
+      onDragEnd: onDragEnded,
+    
+      label: buttonData.label,
+      borderWidth: buttonData.borderWidth,          
+      fontColor: buttonData.color,
+      stickColor: buttonData.backgroundColor,
+      borderColor: buttonData.borderColor,
+      dragPadColor: Colors.transparent,
     );
   }
 
@@ -52,11 +47,14 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
 
 
   void onDrag(j.DragInfo info){
+    // todo change to send a MultiButtonPlayerEvent
+    // only one send , when the server updates
+
     if((lastInfo.x - info.x).abs() > minChangeToSend){
       ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
         btn: widget.button.buttonCode, 
         axis: .horizontal, 
-        value: info.x
+        value: info.x / 0.8 /// Not force the user to get to max 
       ));
       lastInfo = j.DragInfo(info.x, lastInfo.y);
     }
@@ -65,11 +63,12 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
       ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
         btn: widget.button.buttonCode, 
         axis: .vertical, 
-        value: info.y
+        value: info.y / 0.8 /// only 80% of the muvement is required
       ));
       lastInfo = j.DragInfo(lastInfo.x, info.y);
     }
   }
+
 
   void onDragEnded(){
     ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(

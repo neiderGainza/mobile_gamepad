@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Controller {
 
- String? get id; String? get name; String? get description; DateTime get lastEdited;//actual controller
+ String? get id; String? get name; String? get i10ln; String? get description; DateTime get lastEdited;//actual controller
  UnmodifiableListView<PositionedButtonGroup> get buttonGroups;
 /// Create a copy of Controller
 /// with the given fields replaced by the non-null parameter values.
@@ -26,16 +26,16 @@ $ControllerCopyWith<Controller> get copyWith => _$ControllerCopyWithImpl<Control
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Controller&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.lastEdited, lastEdited) || other.lastEdited == lastEdited)&&const DeepCollectionEquality().equals(other.buttonGroups, buttonGroups));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Controller&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.i10ln, i10ln) || other.i10ln == i10ln)&&(identical(other.description, description) || other.description == description)&&(identical(other.lastEdited, lastEdited) || other.lastEdited == lastEdited)&&const DeepCollectionEquality().equals(other.buttonGroups, buttonGroups));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,lastEdited,const DeepCollectionEquality().hash(buttonGroups));
+int get hashCode => Object.hash(runtimeType,id,name,i10ln,description,lastEdited,const DeepCollectionEquality().hash(buttonGroups));
 
 @override
 String toString() {
-  return 'Controller(id: $id, name: $name, description: $description, lastEdited: $lastEdited, buttonGroups: $buttonGroups)';
+  return 'Controller(id: $id, name: $name, i10ln: $i10ln, description: $description, lastEdited: $lastEdited, buttonGroups: $buttonGroups)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $ControllerCopyWith<$Res>  {
   factory $ControllerCopyWith(Controller value, $Res Function(Controller) _then) = _$ControllerCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? name, String? description, DateTime? lastEdited, List<PositionedButtonGroup> buttonGroups
+ String? id, String? name, String? i10ln, String? description, DateTime? lastEdited, List<PositionedButtonGroup> buttonGroups
 });
 
 
@@ -63,10 +63,11 @@ class _$ControllerCopyWithImpl<$Res>
 
 /// Create a copy of Controller
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? description = freezed,Object? lastEdited = freezed,Object? buttonGroups = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? i10ln = freezed,Object? description = freezed,Object? lastEdited = freezed,Object? buttonGroups = null,}) {
   return _then(Controller(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,i10ln: freezed == i10ln ? _self.i10ln : i10ln // ignore: cast_nullable_to_non_nullable
 as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,lastEdited: freezed == lastEdited ? _self.lastEdited! : lastEdited // ignore: cast_nullable_to_non_nullable
 as DateTime?,buttonGroups: null == buttonGroups ? _self.buttonGroups! : buttonGroups // ignore: cast_nullable_to_non_nullable

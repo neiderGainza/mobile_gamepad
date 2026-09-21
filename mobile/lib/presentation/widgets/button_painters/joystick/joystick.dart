@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_joystick_customisable/flutter_joystick_customisable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -56,7 +57,7 @@ class Joystick extends StatefulWidget {
       this.timeFrequency = const Duration(milliseconds: 10),
 
       /// Size of the stick/ball is by default 100 pixel.
-      this.stickSize = 100,
+      this.stickSize = 80,
       this.enableButtonControls = false,
       required this.stickColor,
       required this.fontColor,
@@ -68,12 +69,15 @@ class Joystick extends StatefulWidget {
   State<Joystick> createState() => _JoystickState();
 }
 
+
 class _JoystickState extends State<Joystick> {
   final GlobalKey _baseKey = GlobalKey();
 
   Offset _stickOffset = Offset.zero;
   Timer? _callbackTimer;
   Offset _startDragStickPosition = Offset.zero;
+  /// traslacion de la posicion inicial del jpoystick
+  Offset _updatePosition = Offset.zero;
 
   @override
   void initState() {
@@ -89,47 +93,65 @@ class _JoystickState extends State<Joystick> {
   Widget build(BuildContext context) {
     var draggableContainerSize = widget.stickSize * 2.5;
     var borderContainerSize    = draggableContainerSize * 1.03;
+    
 
-    return GestureDetector(
-      onPanStart: (details) => _stickDragStart(details.globalPosition),
-      onPanUpdate: (details) => _stickDragUpdate(details.globalPosition),
-      onPanEnd: (details) => _stickDragEnd(),
-              
-      child: Stack(
-        alignment: Alignment.center, 
-        children: [
-          IgnorePointer(
-            child: Container(
-              width: borderContainerSize,
-              height: borderContainerSize,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(draggableContainerSize / 2),
-                  border: Border.all(color: widget.borderColor, width: widget.borderWidth)),
-          )),
-      
-        Stack(
-          alignment: Alignment(_stickOffset.dx, _stickOffset.dy), 
+
+    return TweenAnimationBuilder(
+      tween: Tween<Offset>(begin: _updatePosition, end: _updatePosition),
+      duration: Duration(milliseconds: 200),
+
+      builder: (context, offset, child) {
+        return Transform.translate(
+          offset: offset,
+          child: child
+        );
+      },
+
+      child: GestureDetector(
+        onPanStart:  (details){
+          HapticFeedback.vibrate();
+          _stickDragStart(details.globalPosition);
+        },
+        onPanUpdate: (details) => _stickDragUpdate(details.globalPosition),
+        onPanEnd:    (details) => _stickDragEnd(),
+                
+        child: Stack(
+          alignment: Alignment.center, 
           children: [
-          Container(
-            key: _baseKey,
-            child: widget.draggableContainer ??
-                DragPad(size: draggableContainerSize, color: widget.dragPadColor),
-          ),
-          GestureDetector(
-              child: StickBall(
-                size: widget.stickSize,
-                color: widget.stickColor,
-                label: widget.label,
-                fontColor: widget.fontColor,
-              )),
-        ])
-      ]),
+            IgnorePointer(
+              child: Container(
+                width: borderContainerSize,
+                height: borderContainerSize,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(draggableContainerSize / 2),
+                    border: Border.all(color: widget.borderColor, width: widget.borderWidth)),
+            )),
+        
+          Stack(
+            alignment: Alignment(_stickOffset.dx, _stickOffset.dy), 
+            children: [
+            Container(
+              key: _baseKey,
+              child: widget.draggableContainer ??
+                  DragPad(size: draggableContainerSize, color: widget.dragPadColor),
+            ),
+            GestureDetector(
+                child: StickBall(
+                  size: widget.stickSize,
+                  color: widget.stickColor,
+                  label: widget.label,
+                  fontColor: widget.fontColor,
+                )),
+          ])
+        ]),
+      ),
     );
   }
 
   void _stickDragStart(Offset globalPosition) {
     _runCallback();
     _startDragStickPosition = globalPosition;
+    _updatePosition = globalPosition - _getInicialCenter();
     widget.onDragStart?.call();
   }
 
@@ -143,14 +165,32 @@ class _JoystickState extends State<Joystick> {
       baseSize: baseRenderBox.size,
     );
 
+    /// es circular la box siempre
+    /// Esto es para updatear la posicion si se mueve fuera de los limites
+    final boxRadius   = baseRenderBox.size.width / 2;
+    /// vector desde dnode estoy dibujado hasta el toque 
+    final touchVector = globalPosition - (_getInicialCenter() + _updatePosition); 
+    // resistencia al cambio
+    const double resistence = 1;
+
+
     setState(() {
       _stickOffset = stickOffset;
+    
+    
+      if(touchVector.distance - boxRadius > resistence){
+        final inBox = touchVector - Offset.fromDirection( 
+          touchVector.direction, boxRadius);  
+        final outBox = touchVector - inBox;
+        _updatePosition = _updatePosition + outBox;
+      }
     });
   }
 
   void _stickDragEnd() {
     setState(() {
       _stickOffset = Offset.zero;
+      _updatePosition = Offset.zero;
     });
 
     _callbackTimer?.cancel();
@@ -164,6 +204,14 @@ class _JoystickState extends State<Joystick> {
     _callbackTimer = Timer.periodic(widget.timeFrequency, (timer) {
       widget.dragCallback(DragInfo(_stickOffset.dx, _stickOffset.dy));
     });
+  }
+
+
+  Offset _getInicialCenter(){
+    final baseRenderBox =
+      _baseKey.currentContext!.findRenderObject()! as RenderBox;
+   
+    return baseRenderBox.localToGlobal(baseRenderBox.paintBounds.center);
   }
 
   @override
@@ -244,7 +292,7 @@ class StickBall extends StatelessWidget {
           fit: .fill,
           child: Text(
             label,
-            style: GoogleFonts.nunito(
+            style: TextStyle(
               fontWeight: .bold,
               color: fontColor
             ) ,
