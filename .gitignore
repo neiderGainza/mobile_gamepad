@@ -1,3 +1,8 @@
+# mines 
+**.tar.gz
+**.tar.zst
+**/builds/
+
 # Miscellaneous
 *.class
 *.log
@@ -36,8 +41,6 @@ migrate_working_dir/
 *.iws
 
 # Build and generated artifacts
-**/builds/
-**/packaging/
 **/build/
 **/dist/
 **/out/
@@ -72,7 +75,6 @@ app.*.map.json
 
 # Testing and coverage
 coverage/
-**/builds/
 htmlcov/
 .pytest_cache/
 .dart_tool/test/

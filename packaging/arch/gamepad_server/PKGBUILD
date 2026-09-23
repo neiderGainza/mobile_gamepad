@@ -1,0 +1,22 @@
+pkgname=gamepad-server-dev
+pkgver=0.0.1
+pkgrel=2
+pkgdesc='Server for the Mobile GamePad virtual controller'
+arch=('x86_64')
+options=('!strip')
+license=('custom')
+depends=(
+    'glibc'
+
+)
+
+url="https://github.com/neiderGainza/gamepad_releases"
+source=("$url/raw/dev/gamepad_server/gamepad-server-dev-0.0.1-x86_64.tar.gz")
+sha256sums=('3fa1c67f61d7e3f92c347d444e12af646ebded3ad0730b9358ec0d92028fd01f')
+
+package() {
+    install -Dm755 output/bundle/bin/server "$pkgdir/usr/bin/gamepad_server-dev"
+    install -Dm755 output/bundle/lib/libvirtual_device.so "$pkgdir/usr/lib/libvirtual_device.so"
+
+    install -Dm644 99-gamepad-uinput.rules "$pkgdir/usr/lib/udev/rules.d/99-gamepad-uinput.rules"
+}

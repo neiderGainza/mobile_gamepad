@@ -40,7 +40,6 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
     _initServerInterfaceSubscription();
     _initServerPortSubscritpion();
     connect();
-
   }
 
   // ---------------------- Server Address ---------------------
@@ -86,13 +85,15 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
             mode: ProcessStartMode.detached,
           );
           
-          /// TODO : improve this
-          await Future.delayed(Duration(seconds: 1));
+          for(int i = 0 ; i < 3; i++){
+            await Future.delayed(Duration(seconds: 1));
+            final lastPort = await ServerConfigService.serverPort;
+            
+            if(lastPort != null){
+              if(await connectionService.connectToServer(lastPort)) break;
+            }          
+          }
 
-          final lastPort = await ServerConfigService.serverPort;
-          if(lastPort != null){
-            await connectionService.connectToServer(lastPort);
-          }          
         }
       }
 
