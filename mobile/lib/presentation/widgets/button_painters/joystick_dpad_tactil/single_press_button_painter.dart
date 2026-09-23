@@ -32,7 +32,7 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
       color: Colors.transparent,
       clipBehavior: .hardEdge,
       elevation   : widget.button.buttonData.elevation.toDouble(),
-      shape: widget.button.buttonData.shape == .circle
+      shape: widget.button.buttonData.shape != .rectangle
         ? CircleBorder()
         : RoundedRectangleBorder(
             borderRadius: .circular( widget.button.buttonData.borderRadius),
@@ -61,9 +61,9 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
         child: Container(
           margin: .all(8),
           decoration: BoxDecoration(
-            shape: buttonData.shape,
+            shape: buttonData.shape ?? .circle,
             color: buttonData.backgroundColor,   
-            borderRadius: buttonData.shape == .circle 
+            borderRadius: buttonData.shape != .rectangle 
               ? null 
               : .circular(buttonData.borderRadius),
             border: .all(

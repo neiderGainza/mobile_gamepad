@@ -34,5 +34,7 @@ enum ButtonType {
   joystick,
   @JsonValue(2)
   tactilPanel,
+  @JsonValue(3)
+  dpad,
 }
 

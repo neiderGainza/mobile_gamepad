@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ButtonData {
 
- BoxShape get shape; int? get backgroundColorValue; int? get borderColorValue; int? get colorValue; int get elevation; double get borderWidth; String get label; double get borderRadius;
+ BoxShape? get shape; int? get backgroundColorValue; int? get borderColorValue; int? get colorValue; int get elevation; double get borderWidth; String get label; double get borderRadius;
 /// Create a copy of ButtonData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $ButtonDataCopyWith<$Res>  {
   factory $ButtonDataCopyWith(ButtonData value, $Res Function(ButtonData) _then) = _$ButtonDataCopyWithImpl;
 @useResult
 $Res call({
- String label, BoxShape shape, int? backgroundColorValue, int? borderColorValue, int? colorValue, double borderWidth, double borderRadius, int elevation
+ String label, BoxShape? shape, int? backgroundColorValue, int? borderColorValue, int? colorValue, double borderWidth, double borderRadius, int elevation
 });
 
 
@@ -62,11 +62,11 @@ class _$ButtonDataCopyWithImpl<$Res>
 
 /// Create a copy of ButtonData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? label = null,Object? shape = null,Object? backgroundColorValue = freezed,Object? borderColorValue = freezed,Object? colorValue = freezed,Object? borderWidth = null,Object? borderRadius = null,Object? elevation = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? label = null,Object? shape = freezed,Object? backgroundColorValue = freezed,Object? borderColorValue = freezed,Object? colorValue = freezed,Object? borderWidth = null,Object? borderRadius = null,Object? elevation = null,}) {
   return _then(ButtonData(
 label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
-as String,shape: null == shape ? _self.shape : shape // ignore: cast_nullable_to_non_nullable
-as BoxShape,backgroundColorValue: freezed == backgroundColorValue ? _self.backgroundColorValue : backgroundColorValue // ignore: cast_nullable_to_non_nullable
+as String,shape: freezed == shape ? _self.shape : shape // ignore: cast_nullable_to_non_nullable
+as BoxShape?,backgroundColorValue: freezed == backgroundColorValue ? _self.backgroundColorValue : backgroundColorValue // ignore: cast_nullable_to_non_nullable
 as int?,borderColorValue: freezed == borderColorValue ? _self.borderColorValue : borderColorValue // ignore: cast_nullable_to_non_nullable
 as int?,colorValue: freezed == colorValue ? _self.colorValue : colorValue // ignore: cast_nullable_to_non_nullable
 as int?,borderWidth: null == borderWidth ? _self.borderWidth : borderWidth // ignore: cast_nullable_to_non_nullable

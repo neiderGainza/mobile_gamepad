@@ -9,7 +9,7 @@ part 'button_data.g.dart';
 @freezed
 @JsonSerializable()
 class ButtonData with _$ButtonData{  
-  final BoxShape shape;
+  final BoxShape ? shape;
   
   final int ? backgroundColorValue;
   final int ? borderColorValue;
@@ -22,7 +22,7 @@ class ButtonData with _$ButtonData{
 
   const ButtonData({
     required this.label,
-    this.shape = .circle,
+    this.shape,
     this.backgroundColorValue,
     this.borderColorValue,
     this.colorValue,

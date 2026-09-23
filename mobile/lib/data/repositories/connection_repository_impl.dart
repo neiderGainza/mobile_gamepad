@@ -118,7 +118,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
   }
 
   @override
-  void send(ButtonPlayerEvent pbe) => connectionService.send(pbe);
+  void send(Event event) => connectionService.send(event);
 
   @override
   Future<void> syncPlayerData() async {

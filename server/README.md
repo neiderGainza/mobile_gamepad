@@ -10,7 +10,7 @@ dart_frog build
 
 dart build cli \
 	--target=bin/server.dart \
-	--output=../builds/dev/gamepad_server/output \
+	--output=../builds/gamepad_server/output \
 	--verbosity=error
 ```
 

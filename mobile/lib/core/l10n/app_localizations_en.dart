@@ -9,9 +9,33 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Game Controller';
+  String get appName => 'Mobile Game Controller';
 
   @override
   String get howToUse =>
-      'Hola cosas que escribir aqui porq aun no se que voy a poner coassosososdkaskdaksd asdka skdas asd asd';
+      'Welcome, dowload the server (available for windows and linux) and enjoy';
+
+  @override
+  String get defaultController => 'Default Controller';
+
+  @override
+  String get unnamedPlayer => 'Unnamed Player';
+
+  @override
+  String get generalController => 'General Controller';
+
+  @override
+  String get typeAddress => 'Type Address';
+
+  @override
+  String get scanQr => 'Scan Qr';
+
+  @override
+  String get connected => 'Connected';
+
+  @override
+  String get disconnected => 'Disconnected';
+
+  @override
+  String get connecting => 'Disconnecting';
 }

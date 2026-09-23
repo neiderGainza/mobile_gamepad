@@ -29,7 +29,7 @@ abstract interface class ConnectionService{
 
   Future<void> connect(String serverAddress, int serverPort);
   
-  void send(PlayerEvent event);
+  void send(Event event);
 
   void disconnect();
 
@@ -120,7 +120,7 @@ class ConnectionServiceImpl extends ConnectionService{
   }
 
   @override
-  void send(PlayerEvent event) {
+  void send(Event event) {
     _channel?.sink.add(event.encode());
   }
 

@@ -8,7 +8,7 @@ part of 'button_data.dart';
 
 ButtonData _$ButtonDataFromJson(Map<String, dynamic> json) => ButtonData(
   label: json['label'] as String,
-  shape: $enumDecodeNullable(_$BoxShapeEnumMap, json['shape']) ?? .circle,
+  shape: $enumDecodeNullable(_$BoxShapeEnumMap, json['shape']),
   backgroundColorValue: (json['backgroundColorValue'] as num?)?.toInt(),
   borderColorValue: (json['borderColorValue'] as num?)?.toInt(),
   colorValue: (json['colorValue'] as num?)?.toInt(),
@@ -19,7 +19,7 @@ ButtonData _$ButtonDataFromJson(Map<String, dynamic> json) => ButtonData(
 
 Map<String, dynamic> _$ButtonDataToJson(ButtonData instance) =>
     <String, dynamic>{
-      'shape': _$BoxShapeEnumMap[instance.shape]!,
+      'shape': _$BoxShapeEnumMap[instance.shape],
       'backgroundColorValue': instance.backgroundColorValue,
       'borderColorValue': instance.borderColorValue,
       'colorValue': instance.colorValue,

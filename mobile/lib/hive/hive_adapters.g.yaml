@@ -119,7 +119,7 @@ types:
         index: 1
   ButtonType:
     typeId: 11
-    nextIndex: 3
+    nextIndex: 4
     fields:
       sinlgePress:
         index: 0
@@ -127,6 +127,8 @@ types:
         index: 1
       tactilPanel:
         index: 2
+      dpad:
+        index: 3
   Player:
     typeId: 12
     nextIndex: 3

@@ -1,10 +1,9 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_joystick_customisable/flutter_joystick_customisable.dart' as j;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/data/repositories/connection_repository_impl.dart';
 import 'package:game_controller/domain/model/button.dart';
-import 'package:game_controller/presentation/widgets/button_painters/joystick/joystick.dart';
+import 'package:game_controller/presentation/widgets/button_painters/joystick_dpad_tactil/joystick.dart';
 
 /// Problema: el joistick envia informacion cada 5ms
 /// (lo que puede sobrecargar la red)
@@ -24,7 +23,7 @@ class JoystickButtonPainter extends ConsumerStatefulWidget {
 }
 
 class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
-  j.DragInfo lastInfo = j.DragInfo(0, 0);
+  DragInfo lastInfo = DragInfo(0, 0);
   final double minChangeToSend = 0.05;
 
   @override
@@ -35,42 +34,57 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
       size: double.infinity, // size is controlled on ButtonPainter
 
       onDragUpdated: onDrag,
-      onDragEnd: onDragEnded,
+      onDragEnd    : onDragEnded,
     
       label: buttonData.label,
       borderWidth: buttonData.borderWidth,          
       fontColor: buttonData.color,
       stickColor: buttonData.backgroundColor,
       borderColor: buttonData.borderColor,
-      dragPadColor: Colors.transparent,
-      
     );
   }
 
+  void onDrag(DragInfo info){
+    // if((lastInfo.x - info.x).abs() > minChangeToSend ||
+    //    (lastInfo.y - info.y).abs() > minChangeToSend
+    // ){
+    //   ref.read(connectionRepositoryProvider).send(MultiButtonPlayerEvent(
+    //     buttonPlayerEvents: [
+    //       ButtonPlayerEvent(
+    //         btn  : widget.button.buttonCode, 
+    //         axis : .horizontal, 
+    //         value: info.x / 0.8
+    //       ),
+    //       ButtonPlayerEvent(
+    //         btn: widget.button.buttonCode, 
+    //         axis: .vertical, 
+    //         value: info.y/ 0.8
+    //       )
+    //   ]));
 
-  void onDrag(j.DragInfo info){
-    // todo change to send a MultiButtonPlayerEvent
-    // only one send , when the server updates
-
+    //   lastInfo = DragInfo(info.x, info.y);
+    // }
+    
     if((lastInfo.x - info.x).abs() > minChangeToSend){
       ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-        btn: widget.button.buttonCode, 
-        axis: .horizontal, 
-        value: info.x / 0.8 /// Not force the user to get to max 
-      ));
-      lastInfo = j.DragInfo(info.x, lastInfo.y);
+        btn  : widget.button.buttonCode, 
+        axis : .horizontal, 
+        value: info.x / 0.8
+      ));  
+
+      lastInfo = DragInfo(info.x, lastInfo.y);
     }
 
     if((lastInfo.y - info.y).abs() > minChangeToSend){
       ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-        btn: widget.button.buttonCode, 
-        axis: .vertical, 
-        value: info.y / 0.8 /// only 80% of the muvement is required
-      ));
-      lastInfo = j.DragInfo(lastInfo.x, info.y);
+        btn  : widget.button.buttonCode, 
+        axis : .vertical, 
+        value: info.y / 0.8
+      ));  
+
+      lastInfo = DragInfo(lastInfo.x, info.y);
     }
   }
-
 
   void onDragEnded(){
     ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
@@ -85,6 +99,6 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
       value: 0
     ));
 
-    lastInfo = j.DragInfo(0, 0);
+    lastInfo = DragInfo(0, 0);
   }
 }

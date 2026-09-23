@@ -101,14 +101,62 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'Game Controller'**
+  /// **'Mobile Game Controller'**
   String get appName;
 
   /// No description provided for @howToUse.
   ///
   /// In en, this message translates to:
-  /// **'Hola cosas que escribir aqui porq aun no se que voy a poner coassosososdkaskdaksd asdka skdas asd asd'**
+  /// **'Welcome, dowload the server (available for windows and linux) and enjoy'**
   String get howToUse;
+
+  /// No description provided for @defaultController.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Controller'**
+  String get defaultController;
+
+  /// No description provided for @unnamedPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Unnamed Player'**
+  String get unnamedPlayer;
+
+  /// No description provided for @generalController.
+  ///
+  /// In en, this message translates to:
+  /// **'General Controller'**
+  String get generalController;
+
+  /// No description provided for @typeAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Type Address'**
+  String get typeAddress;
+
+  /// No description provided for @scanQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan Qr'**
+  String get scanQr;
+
+  /// No description provided for @connected.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected'**
+  String get connected;
+
+  /// No description provided for @disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get disconnected;
+
+  /// No description provided for @connecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnecting'**
+  String get connecting;
 }
 
 class _AppLocalizationsDelegate

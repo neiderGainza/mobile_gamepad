@@ -1,33 +1,19 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_joystick_customisable/flutter_joystick_customisable.dart';
 
 
 /// Copy of JoystickWidget from [flutter_joystick_customisable] 
 /// to change some paramenters not allowed from the interface
 /// 
 class Joystick extends StatefulWidget {
-  /// Size of the hole joystick
-  /// size on the circle in the middle is calculated
   final double size;
-
-  /// Frequency of calling [dragCallback] from the moment the stick is dragged.
   final Duration timeFrequency;
 
-  /// Specifies the color of the [DragPad].
-  final Color dragPadColor;
-
-  /// Callback, which is called when the stick starts dragging.
   final Function? onDragStart;
-
-  /// Callback, which is called when the stick released.
   final Function? onDragEnd;
-
-  /// Callback, which is called with [timeFrequency] when the stick is dragged.
-  final StickDragCallback onDragUpdated;
+  final Function(DragInfo dragInfo) onDragUpdated;
 
   /// Specifies the button color
   final Color  stickColor;
@@ -42,7 +28,6 @@ class Joystick extends StatefulWidget {
       required this.size,
       this.onDragStart,
       this.onDragEnd,
-      this.dragPadColor = Colors.purple,
       this.borderColor = Colors.purple,    
       this.timeFrequency = const Duration(milliseconds: 10),
       
@@ -60,20 +45,21 @@ class Joystick extends StatefulWidget {
 
 class _JoystickState extends State<Joystick> {
   final GlobalKey _baseKey = GlobalKey();
-
-  Offset _stickOffset = Offset.zero;
+  
   Timer? _callbackTimer;
-  Offset _startDragStickPosition = Offset.zero;
-  /// traslacion de la posicion inicial del jpoystick
-  Offset _updatePosition = Offset.zero;
-
+  /// between -1 a 1 
+  Offset _stickOffset    = Offset.zero;
+  /// global position
+  Offset _updateCenterPosition = Offset.zero;
+  /// first touch center
+  Offset _firstCenterPosition = Offset.zero;
 
   @override
   Widget build(BuildContext context) {
 
     return TweenAnimationBuilder(
-      tween: Tween<Offset>(begin: _updatePosition, end: _updatePosition),
-      duration: Duration(milliseconds: 200),
+      tween: Tween<Offset>(begin: _updateCenterPosition, end: _updateCenterPosition),
+      duration: Duration(milliseconds: 0),
 
       builder: (context, offset, child) {
         return Transform.translate(
@@ -83,97 +69,90 @@ class _JoystickState extends State<Joystick> {
       },
 
       child: GestureDetector(
-        onPanStart:  (details){
-          HapticFeedback.vibrate();
-          _stickDragStart(details.globalPosition);
-        },
+        onPanStart:  (details) => _stickDragStart(details.globalPosition),
         onPanUpdate: (details) => _stickDragUpdate(details.globalPosition),
         onPanEnd:    (details) => _stickDragEnd(),
                 
         child: Stack(
           alignment: Alignment.center, 
           children: [
-            IgnorePointer(
-              child: Container(
-                width: widget.size,
-                height: widget.size,
-                decoration: BoxDecoration(
-                    shape: .circle,
-                    border: Border.all(color: widget.borderColor, width: widget.borderWidth)),
-            )),
-        
-          Stack(
-            alignment: Alignment(_stickOffset.dx, _stickOffset.dy), 
-            children: [
             Container(
               key: _baseKey,
-              child: DragPad(size: widget.size, color: widget.dragPadColor),
+              width: widget.size,
+              height: widget.size,
+              decoration: BoxDecoration(
+                shape: .circle,
+                border: Border.all(color: widget.borderColor, width: widget.borderWidth)
+              ),
             ),
-            GestureDetector(
-                child: FractionallySizedBox(
-                  widthFactor: 0.4,
-                  heightFactor: 0.4,
-                  child: StickBall(
-                    color: widget.stickColor,
-                    label: widget.label,
-                    fontColor: widget.fontColor,
-                  ),
-                )),
-          ])
-        ]),
+        
+            Align(
+              alignment: Alignment(_stickOffset.dx, _stickOffset.dy), 
+              child: FractionallySizedBox(
+                widthFactor: 0.4,
+                heightFactor: 0.4,
+                child: StickBall(
+                  color: widget.stickColor,
+                  label: widget.label,
+                  fontColor: widget.fontColor,
+                ),
+              ),
+            )
+          
+          ]
+        ),
       ),
     );
   }
 
   void _stickDragStart(Offset globalPosition) {
+    HapticFeedback.vibrate();
     _runCallback();
-    _startDragStickPosition = globalPosition;
-    _updatePosition = globalPosition - _getInicialCenter();
+    _firstCenterPosition  = _getCenter();
+    _updateCenterPosition = globalPosition - _firstCenterPosition;
     widget.onDragStart?.call();
+    setState(() {});
   }
+
 
   void _stickDragUpdate(Offset globalPosition) {
     final baseRenderBox =
         _baseKey.currentContext!.findRenderObject()! as RenderBox;
 
-    final stickOffset = StickOffsetHandler.calculate(
-      startDragStickPosition: _startDragStickPosition,
-      currentDragStickPosition: globalPosition,
-      baseSize: baseRenderBox.size,
-    );
-
-    /// es circular la box siempre
-    /// Esto es para updatear la posicion si se mueve fuera de los limites
     final boxRadius   = baseRenderBox.size.width / 2;
-    /// vector desde dnode estoy dibujado hasta el toque 
-    final touchVector = globalPosition - (_getInicialCenter() + _updatePosition); 
-    // resistencia al cambio
-    const double resistence = 1;
+    final touchV      = globalPosition - (
+      _firstCenterPosition + _updateCenterPosition
+    ); 
+    
+    // si el toque esta fuera de la caja mueve la caja
+    if(touchV.distance > boxRadius){
+      final outBox = Offset.fromDirection(
+        touchV.direction,
+        touchV.distance - boxRadius
+      );
 
+      _updateCenterPosition += outBox;
+    }
+
+    final touchVFromCurrentCenter = globalPosition - _getCenter();
+    final stickV = Offset.fromDirection(
+      touchVFromCurrentCenter.direction, 
+      (touchVFromCurrentCenter.distance / boxRadius).clamp(0, 1)
+    ); 
 
     setState(() {
-      _stickOffset = stickOffset;
-    
-    
-      if(touchVector.distance - boxRadius > resistence){
-        final inBox = touchVector - Offset.fromDirection( 
-          touchVector.direction, boxRadius);  
-        final outBox = touchVector - inBox;
-        _updatePosition = _updatePosition + outBox;
-      }
+      _stickOffset  = stickV;  
     });
   }
 
   void _stickDragEnd() {
     setState(() {
       _stickOffset = Offset.zero;
-      _updatePosition = Offset.zero;
+      _updateCenterPosition = Offset.zero;
     });
 
     _callbackTimer?.cancel();
-    //send zero offset when the stick is released
     widget.onDragUpdated(DragInfo(_stickOffset.dx, _stickOffset.dy));
-    _startDragStickPosition = Offset.zero;
     widget.onDragEnd?.call();
   }
 
@@ -183,8 +162,7 @@ class _JoystickState extends State<Joystick> {
     });
   }
 
-
-  Offset _getInicialCenter(){
+  Offset _getCenter(){
     final baseRenderBox =
       _baseKey.currentContext!.findRenderObject()! as RenderBox;
    
@@ -195,36 +173,6 @@ class _JoystickState extends State<Joystick> {
   void dispose() {
     _callbackTimer?.cancel();
     super.dispose();
-  }
-}
-
-
-
-
-class StickOffsetHandler {
-  const StickOffsetHandler();
-
-  static Offset calculate({
-    required Offset startDragStickPosition,
-    required Offset currentDragStickPosition,
-    required Size baseSize,
-  }) {
-    double x = currentDragStickPosition.dx - startDragStickPosition.dx;
-    double y = currentDragStickPosition.dy - startDragStickPosition.dy;
-    final radius = baseSize.width / 2;
-
-    final isPointInCircle = x * x + y * y < radius * radius;
-
-    if (!isPointInCircle) {
-      final multiply = sqrt(radius * radius / (y * y + x * x));
-      x *= multiply;
-      y *= multiply;
-    }
-
-    final xOffset = x / radius;
-    final yOffset = y / radius;
-
-    return Offset(xOffset, yOffset);
   }
 }
 
@@ -277,4 +225,10 @@ class StickBall extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class DragInfo{
+  final double x , y;
+  const DragInfo(this.x , this.y);
 }

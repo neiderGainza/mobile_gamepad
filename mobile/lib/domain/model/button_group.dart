@@ -16,7 +16,7 @@ class ButtonGroup with _$ButtonGroup{
 
   ButtonGroup({   
     required List<Button> buttons,
-    double screenRelativeSize = 0.23,
+    double screenRelativeSize = 0.09,
     double internalMargin     = 0.01,
     int  ? rotationDegreess,
   }): buttons = UnmodifiableListView(buttons)
@@ -26,7 +26,7 @@ class ButtonGroup with _$ButtonGroup{
 
   ButtonGroup.singleButtonGroup({
     required Button button,
-    double screenRelativeSize = 0.23
+    double screenRelativeSize = 0.09
   }) : this(
       buttons: [button], 
       screenRelativeSize: screenRelativeSize , 

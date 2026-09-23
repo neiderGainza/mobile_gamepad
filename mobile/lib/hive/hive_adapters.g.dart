@@ -312,7 +312,7 @@ class ButtonDataAdapter extends TypeAdapter<ButtonData> {
     };
     return ButtonData(
       label: fields[6] as String,
-      shape: fields[0] == null ? .circle : fields[0] as BoxShape,
+      shape: fields[0] as BoxShape?,
       backgroundColorValue: (fields[1] as num?)?.toInt(),
       borderColorValue: (fields[2] as num?)?.toInt(),
       colorValue: (fields[3] as num?)?.toInt(),
@@ -407,6 +407,8 @@ class ButtonTypeAdapter extends TypeAdapter<ButtonType> {
         return ButtonType.joystick;
       case 2:
         return ButtonType.tactilPanel;
+      case 3:
+        return ButtonType.dpad;
       default:
         return ButtonType.sinlgePress;
     }
@@ -421,6 +423,8 @@ class ButtonTypeAdapter extends TypeAdapter<ButtonType> {
         writer.writeByte(1);
       case ButtonType.tactilPanel:
         writer.writeByte(2);
+      case ButtonType.dpad:
+        writer.writeByte(3);
     }
   }
 

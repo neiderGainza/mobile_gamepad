@@ -24,7 +24,7 @@ abstract class ConnectionRepository {
 
   void disconnect();
 
-  void send(ButtonPlayerEvent pbe);
+  void send(Event event);
 
   /// los intentos de sincronizacion son automaticos
   /// pero esto los fuerza (util en caso de fallo de 

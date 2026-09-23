@@ -14,4 +14,28 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get howToUse =>
       'Hola cosas que escribir aqui porq aun no se que voy a poner coassosososdkaskdaksd asdka skdas asd asd';
+
+  @override
+  String get defaultController => 'Default Controller';
+
+  @override
+  String get unnamedPlayer => 'Unnamed Player';
+
+  @override
+  String get generalController => 'General Controller';
+
+  @override
+  String get typeAddress => 'Type Address';
+
+  @override
+  String get scanQr => 'Scan Qr';
+
+  @override
+  String get connected => 'Connected';
+
+  @override
+  String get disconnected => 'Disconnected';
+
+  @override
+  String get connecting => 'Disconnecting';
 }

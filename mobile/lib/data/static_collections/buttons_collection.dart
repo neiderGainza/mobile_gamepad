@@ -92,6 +92,24 @@ class DefaultBtnCollection{
 
   );
 
+  static Button dpad = Button(
+    buttonType: .dpad,
+    buttonData: ButtonData(
+      label : 'dpad',
+      borderWidth: 2   
+    ), 
+    buttonCode: .dpad,
 
+  );
+  
+  static Button tactilPanel = Button(
+    buttonType: .tactilPanel,
+    buttonData: ButtonData(
+      label: "tactilPanel",
+      borderWidth: 2,
+      borderRadius: 20
+    ), 
+    buttonCode: .rs
+  );
 }
 

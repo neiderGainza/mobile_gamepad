@@ -22,7 +22,6 @@ dependencies:
   go_router: ^17.5.0
   riverpod: ^3.3.2
   flutter_riverpod: ^3.3.2
-  flutter_joystick_customisable: ^0.3.0
   hive_ce_flutter: ^2.3.4
   json_annotation: ^4.12.0
   freezed_annotation: ^3.1.0

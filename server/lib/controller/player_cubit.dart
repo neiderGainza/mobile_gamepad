@@ -88,6 +88,32 @@ class PlayerCubit extends Cubit<PlayerState?>{
     }
   }
 
+  Future<void> _onPlayerMultiButtonEvent(MultiButtonPlayerEvent event) async{
+    if(state == null){
+      _requestInfoSync();
+      return;
+    }
+    
+    if(_virtualDevice == null){
+      await _createVirtualDevice();
+      return;
+    }
+
+    final List<VirtualDeviceInput> vdes = [];
+    
+    for(final subEvent in event.buttonPlayerEvents){
+      final vdb = _virtualDevice?.getDefaultVDBfor(subEvent.btn);
+      if(vdb != null){
+        vdes.add(VirtualDeviceInput(
+          button: vdb, 
+          axis  : subEvent.axis,
+          value : subEvent.value
+        ));
+      }
+    }
+    _virtualDevice?.proccessEvent(vdes);
+  }
+
   void _requestInfoSync(){
     _webSocketChannel.sink.add(PlayerInfoRequestServerEvent().encode());
   }
@@ -131,8 +157,13 @@ class PlayerCubit extends Cubit<PlayerState?>{
             _onPlayerDisconnectEvent(event);
           case final ButtonPlayerEvent event:
             _onPlayerBtnEvent(event);
+          case final MultiButtonPlayerEvent event:
+            _onPlayerMultiButtonEvent(event);
         }
-      }
+      },
+      handleNoEvent: (data) {
+        _webSocketChannel.sink.add(UnsuportedServerEvent().encode());
+      },
     )..start();
   }
 

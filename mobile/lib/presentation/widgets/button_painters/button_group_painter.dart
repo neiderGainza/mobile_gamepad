@@ -27,41 +27,43 @@ class ButtonGroupPainter extends StatelessWidget {
     final btnCount = buttonGroup.buttons.length;
     final r  = getrFor(btnCount, R, buttonGroup.internalMargin);
     final builder  = btnBuilder ?? (child, btnIndex) => child;
+    final rotation = (buttonGroup.rotationDegreess ?? 0).toDouble();
 
-    return Transform.rotate(
-      angle: pi * ((buttonGroup.rotationDegreess??0) / 180),
-      child: SizedBox(
-        width: 2 * R,
-        height: 2 * R,
-        
-        child: Stack(
-          children: [
-            for (int i = 0; i < btnCount; i++)
-              Positioned(
-                left  : getXFor(btnCount, R, r, i) - r,
-                bottom: getYFor(btnCount, R, r, i) - r,
+    return SizedBox(
+      width: 2 * R,
+      height: 2 * R,
       
-                child: builder(
-                  ButtonPainter(
-                    button : buttonGroup.buttons[i],
-                    size   : 2 * r,
-                  ),
-                  i 
-                )
-              ),
-          ],
-        ),
+      child: Stack(
+        children: [
+          for (int i = 0; i < btnCount; i++)
+            Positioned(
+              left  : getXFor(btnCount, R, r, i, rotation) - r,
+              bottom: getYFor(btnCount, R, r, i, rotation) - r,
+    
+              child: builder( 
+                ButtonPainter(
+                  button : buttonGroup.buttons[i],
+                  size   : 2 * r,
+                  margin : buttonGroup.internalMargin,
+                ),
+                i 
+              )
+            ),
+        ],
       ),
     );
   }
 
   double getWidgetScaleSize(BuildContext context) {
-    final displaySize = MediaQuery.of(context).size.shortestSide;
+    final l = MediaQuery.of(context).size.longestSide;
+    final a = MediaQuery.of(context).size.shortestSide;
+
+    final displaySize = sqrt(a*a + l*l);
     return displaySize * buttonGroup.screenRelativeSize;
   }
 
-  double getrFor(int btnCount, double R, [double s = 0,]){
-    final minMargin = 0.05;
+  double getrFor(int btnCount, double R, [double s = 0]){
+    final minMargin = 0.00;
     final maxMargin = 0.3;
     final margin    = s * (maxMargin - minMargin) + minMargin; 
     
@@ -73,30 +75,30 @@ class ButtonGroupPainter extends StatelessWidget {
     throw UnimplementedError();
   }
 
-  double getRadiantFor(int btnCount, int btnIndex){
+  double getRadiantFor(int btnCount, int btnIndex, double rotation){
     if(btnCount == 1){
       return 0;
     }
     if(btnCount == 2){
-      return pi*btnIndex; 
+      return pi*btnIndex + (pi * rotation/180); 
     }
     
-    return (pi/2) - (2*pi/btnCount) * btnIndex;
+    return (pi/2) - (2*pi/btnCount) * btnIndex + (pi * rotation/180) ;
   }
 
-  double getXFor(int btnCount, double R, double r, int i){
+  double getXFor(int btnCount, double R, double r, int i , double rotation){
     if(btnCount == 1) return R;
     
-    final cosVal  = cos(getRadiantFor(btnCount, i));
+    final cosVal  = cos(getRadiantFor(btnCount, i, rotation));
     // final cosSign = cosVal.sign < 0 ? -1 : 1;
     
     return R + (R - r)* cosVal;
   }
 
-  double getYFor(int btnCount, double R, double r, int i){
+  double getYFor(int btnCount, double R, double r, int i, double rotation){
     if(btnCount == 1) return R;
     
-    final sinVal  = sin(getRadiantFor(btnCount, i));
+    final sinVal  = sin(getRadiantFor(btnCount, i, rotation));
     // final sinSign = sinVal.sign < 0 ? -1 : 1;
     
     return R + (R - r) * sinVal;

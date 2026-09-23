@@ -14,13 +14,15 @@ class ButtonGroupsCollection {
     .singleButtonGroup(button: DefaultBtnCollection.rt),
     .singleButtonGroup(button: DefaultBtnCollection.rb),
     
-    .singleButtonGroup(button: DefaultBtnCollection.menu , screenRelativeSize: 0.2),
-    .singleButtonGroup(button: DefaultBtnCollection.play , screenRelativeSize: 0.2),
+    .singleButtonGroup(button: DefaultBtnCollection.menu , screenRelativeSize: 0.09),
+    .singleButtonGroup(button: DefaultBtnCollection.play , screenRelativeSize: 0.09),
   ];
   
   static List<ButtonGroup> joystickGroup = [
-    .singleButtonGroup(button: DefaultBtnCollection.leftJoystick  , screenRelativeSize: 0.5),
-    .singleButtonGroup(button: DefaultBtnCollection.rightJoystick , screenRelativeSize: 0.5),    
+    .singleButtonGroup(button: DefaultBtnCollection.leftJoystick  , screenRelativeSize: 0.23),
+    .singleButtonGroup(button: DefaultBtnCollection.rightJoystick , screenRelativeSize: 0.23),    
+    .singleButtonGroup(button: DefaultBtnCollection.dpad, screenRelativeSize: 0.23),
+    .singleButtonGroup(button: DefaultBtnCollection.tactilPanel, screenRelativeSize: 0.30)
   ];
 
   static List<ButtonGroup> multipleButtons  = [
@@ -29,13 +31,22 @@ class ButtonGroupsCollection {
       DefaultBtnCollection.btnB,
       DefaultBtnCollection.btnA,
       DefaultBtnCollection.btnX,
-    ], screenRelativeSize: 0.5, internalMargin: 0.05, rotationDegreess: 0),
+    ], screenRelativeSize: 0.23, internalMargin: 0, rotationDegreess: 0),
+  
+    ButtonGroup(buttons: [
+      DefaultBtnCollection.menu,
+      DefaultBtnCollection.play
+    ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 0),
+
+    ButtonGroup(buttons: [
+      DefaultBtnCollection.rb,
+      DefaultBtnCollection.rt
+    ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 90),
     
     ButtonGroup(buttons: [
-      DefaultBtnCollection.btnY,
-      DefaultBtnCollection.btnA,
-      DefaultBtnCollection.btnX,
-    ], screenRelativeSize: 0.5, internalMargin: 0.05, rotationDegreess: 0),
+      DefaultBtnCollection.lb,
+      DefaultBtnCollection.lt
+    ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 90)
     
   ];
 }

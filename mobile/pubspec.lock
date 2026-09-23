@@ -333,14 +333,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.3.0+2"
-  flutter_joystick_customisable:
-    dependency: "direct main"
-    description:
-      name: flutter_joystick_customisable
-      sha256: dbea03f0442000c194f062884e05da7e8772eb7bb2295cd3af3ae7f654bc3a7c
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:

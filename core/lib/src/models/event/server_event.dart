@@ -21,6 +21,7 @@ sealed class ServerEvent implements Event{
       1 => PlayerInfoRequestServerEvent(),
       2 => PlayerPingUpdated.decode(data),
       3 => PlayerListUpdated.decode(data),
+      4 => UnsuportedServerEvent(),
 
       _ => throw FormatException('Unknown ServerEvent code: $subCode'),
     };
@@ -107,4 +108,12 @@ class PlayerListUpdated extends ServerEvent{
     );
   }
 
+}
+
+
+class UnsuportedServerEvent extends ServerEvent{
+  @override
+  Uint8List encode() => Uint8List.fromList([
+    Event.getInt8FromInt4(eventCode.code, 4)
+  ]);
 }

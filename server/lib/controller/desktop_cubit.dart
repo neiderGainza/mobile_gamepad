@@ -56,7 +56,10 @@ class DesktopCubit extends Cubit<DesktopClientState>{
             onShoutDownServer();
             return;
         }
-      }
+      },
+      handleNoEvent: (data) {
+        send(UnsuportedServerEvent());
+      },
     )..start();
   }
 

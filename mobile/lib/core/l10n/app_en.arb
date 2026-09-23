@@ -1,5 +1,13 @@
 {
     "@@locale":"en",
-    "appName":"Game Controller",
-    "howToUse": "Hola cosas que escribir aqui porq aun no se que voy a poner coassosososdkaskdaksd asdka skdas asd asd"
+    "appName":"Mobile Game Controller",
+    "howToUse": "Welcome, dowload the server (available for windows and linux) and enjoy",
+    "defaultController": "Default Controller",
+    "unnamedPlayer":"Unnamed Player",
+    "generalController":"General Controller",
+    "typeAddress": "Type Address",
+    "scanQr":"Scan Qr",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "connecting":"Disconnecting"
 }
