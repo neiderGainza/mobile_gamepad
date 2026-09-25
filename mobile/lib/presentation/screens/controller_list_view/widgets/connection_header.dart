@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/data/repositories/connection_repository_impl.dart';
 import 'package:game_controller/data/repositories/player_settings_repository_impl.dart';
 import 'package:game_controller/presentation/providers/connection_status_provider.dart';
@@ -12,6 +11,7 @@ import 'package:game_controller/presentation/widgets/connection_status_indicator
 import 'package:game_controller/presentation/widgets/ping_indicator.dart';
 import 'package:game_controller/presentation/widgets/player_info_sync_indicator.dart';
 import 'package:game_controller/presentation/widgets/player_name.dart';
+import 'package:go_router/go_router.dart';
 
 
 class ConnectionHeader extends ConsumerWidget {
@@ -40,7 +40,7 @@ class ConnectionHeader extends ConsumerWidget {
           
           /// Connected -------- Ping 4 ms
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(8,8,8,0),
             
             child: Row(
               mainAxisAlignment: .spaceBetween,
@@ -84,13 +84,22 @@ class ConnectionHeader extends ConsumerWidget {
               const SizedBox(width: 8,)
             ],
           ),
+          const SizedBox(height: 8,),
 
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context)?.howToUse??''),
+          Container(
+            clipBehavior: .antiAlias,
+            decoration: BoxDecoration(
+              color: cs.surfaceContainerHighest,
+              borderRadius: .circular(10),
+            ),
+            child: ListTile(
+              title: Text("How to use"),
+              trailing: Icon(Icons.question_mark_rounded),
+              onTap: () => context.push('how_to'),
+            ),
           ),
-
+          
+          const SizedBox(height: 8,),
           const ActionsTile()
         ],
       ),

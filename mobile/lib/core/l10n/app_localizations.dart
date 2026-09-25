@@ -107,56 +107,68 @@ abstract class AppLocalizations {
   /// No description provided for @howToUse.
   ///
   /// In en, this message translates to:
-  /// **'Welcome, dowload the server (available for windows and linux) and enjoy'**
+  /// **'How to use?.'**
   String get howToUse;
 
-  /// No description provided for @defaultController.
+  /// No description provided for @howToUseStep1.
   ///
   /// In en, this message translates to:
-  /// **'Default Controller'**
-  String get defaultController;
+  /// **'1. Dowload the server for your computer (available for linux and windows) on '**
+  String get howToUseStep1;
 
-  /// No description provided for @unnamedPlayer.
+  /// No description provided for @howToUseStep2.
   ///
   /// In en, this message translates to:
-  /// **'Unnamed Player'**
-  String get unnamedPlayer;
+  /// **'2. Connect your computer and mobile device on the same local network.'**
+  String get howToUseStep2;
 
-  /// No description provided for @generalController.
+  /// No description provided for @howToUseStep3.
   ///
   /// In en, this message translates to:
-  /// **'General Controller'**
-  String get generalController;
+  /// **'3. Scan the QR code on the server and select the network interface you want.'**
+  String get howToUseStep3;
 
-  /// No description provided for @typeAddress.
+  /// No description provided for @howToUseStep4.
   ///
   /// In en, this message translates to:
-  /// **'Type Address'**
-  String get typeAddress;
+  /// **'4 . Enjoy.'**
+  String get howToUseStep4;
 
-  /// No description provided for @scanQr.
+  /// No description provided for @howManyUsers.
   ///
   /// In en, this message translates to:
-  /// **'Scan Qr'**
-  String get scanQr;
+  /// **'How many users can be connected?.'**
+  String get howManyUsers;
 
-  /// No description provided for @connected.
+  /// No description provided for @howManyUsersStep1.
   ///
   /// In en, this message translates to:
-  /// **'Connected'**
-  String get connected;
+  /// **'Tecnicly, you could connect as much users as you would like. \nHowever, we recomend connect the first 2 or 3 user by wifi and the four one by bluetooth, since there all others by cable'**
+  String get howManyUsersStep1;
 
-  /// No description provided for @disconnected.
+  /// No description provided for @howConnectThroughtBluetooth.
   ///
   /// In en, this message translates to:
-  /// **'Disconnected'**
-  String get disconnected;
+  /// **'How to connect throught bluetooth?.'**
+  String get howConnectThroughtBluetooth;
 
-  /// No description provided for @connecting.
+  /// No description provided for @howConnectThroughtBluetoothStep1.
   ///
   /// In en, this message translates to:
-  /// **'Disconnecting'**
-  String get connecting;
+  /// **'1. Connect your computer and your phone by bluetooth.'**
+  String get howConnectThroughtBluetoothStep1;
+
+  /// No description provided for @howConnectThroughtBluetoothStep2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Activate internet sharing throght bluetooth (tetering).'**
+  String get howConnectThroughtBluetoothStep2;
+
+  /// No description provided for @howConnectThroughtBluetoothStep3.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Scan de QR code and select bluetooth'**
+  String get howConnectThroughtBluetoothStep3;
 }
 
 class _AppLocalizationsDelegate

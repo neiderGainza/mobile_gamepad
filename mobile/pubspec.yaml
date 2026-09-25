@@ -39,6 +39,7 @@ dependencies:
   dotted_border: ^3.1.0
   flex_color_picker: ^3.8.0
   mobile_scanner: ^7.4.2
+  url_launcher: ^6.3.2
   
 
 dev_dependencies:

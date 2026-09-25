@@ -1,13 +1,20 @@
 {
     "@@locale":"en",
     "appName":"Mobile Game Controller",
-    "howToUse": "Welcome, dowload the server (available for windows and linux) and enjoy",
-    "defaultController": "Default Controller",
-    "unnamedPlayer":"Unnamed Player",
-    "generalController":"General Controller",
-    "typeAddress": "Type Address",
-    "scanQr":"Scan Qr",
-    "connected": "Connected",
-    "disconnected": "Disconnected",
-    "connecting":"Disconnecting"
+
+    "howToUse": "How to use?.",
+    "howToUseStep1": "1. Dowload the server for your computer (available for linux and windows) on ",
+    "howToUseStep2": "2. Connect your computer and mobile device on the same local network.",
+    "howToUseStep3": "3. Scan the QR code on the server and select the network interface you want.",
+    "howToUseStep4": "4 . Enjoy.",
+    
+    "howManyUsers": "How many users can be connected?.",
+    "howManyUsersStep1" : "Tecnicly, you could connect as much users as you would like. \nHowever, we recomend connect the first 2 or 3 user by wifi and the four one by bluetooth, since there all others by cable",
+
+    "howConnectThroughtBluetooth": "How to connect throught bluetooth?.",
+    "howConnectThroughtBluetoothStep1": "1. Connect your computer and your phone by bluetooth.",
+    "howConnectThroughtBluetoothStep2": "2. Activate internet sharing throght bluetooth (tetering).",
+    "howConnectThroughtBluetoothStep3": "3. Scan de QR code and select bluetooth"
+    
+
 }

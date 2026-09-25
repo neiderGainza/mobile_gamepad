@@ -12,30 +12,43 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appName => 'Controlador de juegos';
 
   @override
-  String get howToUse =>
-      'Hola cosas que escribir aqui porq aun no se que voy a poner coassosososdkaskdaksd asdka skdas asd asd';
+  String get howToUse => 'How to use?.';
 
   @override
-  String get defaultController => 'Default Controller';
+  String get howToUseStep1 =>
+      '1. Dowload the server for your computer (available for linux and windows) on ';
 
   @override
-  String get unnamedPlayer => 'Unnamed Player';
+  String get howToUseStep2 =>
+      '2. Connect your computer and mobile device on the same local network.';
 
   @override
-  String get generalController => 'General Controller';
+  String get howToUseStep3 =>
+      '3. Scan the QR code on the server and select the network interface you want.';
 
   @override
-  String get typeAddress => 'Type Address';
+  String get howToUseStep4 => '4 . Enjoy.';
 
   @override
-  String get scanQr => 'Scan Qr';
+  String get howManyUsers => 'How many users can be connected?.';
 
   @override
-  String get connected => 'Connected';
+  String get howManyUsersStep1 =>
+      'Tecnicly, you could connect as much users as you would like. \nHowever, we recomend connect the first 2 or 3 user by wifi and the four one by bluetooth, since there all others by cable';
 
   @override
-  String get disconnected => 'Disconnected';
+  String get howConnectThroughtBluetooth =>
+      'How to connect throught bluetooth?.';
 
   @override
-  String get connecting => 'Disconnecting';
+  String get howConnectThroughtBluetoothStep1 =>
+      '1. Connect your computer and your phone by bluetooth.';
+
+  @override
+  String get howConnectThroughtBluetoothStep2 =>
+      '2. Activate internet sharing throght bluetooth (tetering).';
+
+  @override
+  String get howConnectThroughtBluetoothStep3 =>
+      '3. Scan de QR code and select bluetooth';
 }
