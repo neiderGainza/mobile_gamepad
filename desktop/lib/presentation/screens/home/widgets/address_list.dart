@@ -81,7 +81,6 @@ class InstrucctionsTile extends StatelessWidget {
         Text("1- Start the server."),
         Text("1- Scan the QR Code with your mobile."),
         const SizedBox(height: 6,),
-              
       ],
     );
   }
