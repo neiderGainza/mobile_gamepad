@@ -430,7 +430,7 @@ class ButtonPropertiesTitle extends ConsumerWidget {
               alignment: .centerStart,
               fit: .scaleDown,
               child: Text(
-                "Button properties: (${selectedBtn?.buttonCode.toString().split('.')[1]})", 
+                "Button properties: (${selectedBtn?.buttonCodes.toString().split('.')[1]})", 
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onTertiaryContainer
                 ),),

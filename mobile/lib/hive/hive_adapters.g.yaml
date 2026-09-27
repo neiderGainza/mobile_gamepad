@@ -13,14 +13,14 @@ types:
         index: 1
   Button:
     typeId: 1
-    nextIndex: 6
+    nextIndex: 7
     fields:
       buttonData:
         index: 0
       buttonType:
         index: 1
-      buttonCode:
-        index: 4
+      buttonCodes:
+        index: 6
   PlayerButton:
     typeId: 2
     nextIndex: 14
@@ -79,7 +79,7 @@ types:
         index: 6
   ButtonGroup:
     typeId: 6
-    nextIndex: 19
+    nextIndex: 20
     fields:
       buttons:
         index: 6
@@ -89,6 +89,8 @@ types:
         index: 17
       rotationDegreess:
         index: 18
+      id:
+        index: 19
   ButtonData:
     typeId: 7
     nextIndex: 8

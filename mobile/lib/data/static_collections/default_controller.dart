@@ -36,7 +36,7 @@ class DefaultController {
                 label: 'Y',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnY,
+              buttonCodes: [PlayerButton.btnY],
             ),
             Button(
               buttonData: ButtonData(
@@ -44,7 +44,7 @@ class DefaultController {
                 label: 'B',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnB,
+              buttonCodes: [PlayerButton.btnB],
             ),
             Button(
               buttonData: ButtonData(
@@ -52,7 +52,7 @@ class DefaultController {
                 label: 'A',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnA,
+              buttonCodes: [PlayerButton.btnA],
             ),
             Button(
               buttonData: ButtonData(
@@ -60,7 +60,7 @@ class DefaultController {
                 label: 'X',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnX,
+              buttonCodes: [PlayerButton.btnX],
             ),
           ],
           screenRelativeSize: 0.23,
@@ -80,7 +80,7 @@ class DefaultController {
                 borderRadius: 8.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.menu,
+              buttonCodes: [PlayerButton.menu],
             ),
             Button(
               buttonData: ButtonData(
@@ -90,7 +90,7 @@ class DefaultController {
                 borderRadius: 8.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.view,
+              buttonCodes: [PlayerButton.view],
             ),
           ],
           screenRelativeSize: 0.18,
@@ -111,7 +111,7 @@ class DefaultController {
                 borderRadius: 12.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.rb,
+              buttonCodes: [PlayerButton.rb],
             ),
             Button(
               buttonData: ButtonData(
@@ -121,7 +121,7 @@ class DefaultController {
                 borderRadius: 12.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.rt,
+              buttonCodes: [PlayerButton.rt],
             ),
           ],
           screenRelativeSize: 0.18,
@@ -142,7 +142,7 @@ class DefaultController {
                 borderRadius: 12.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.lb,
+              buttonCodes: [PlayerButton.lb],
             ),
             Button(
               buttonData: ButtonData(
@@ -152,7 +152,7 @@ class DefaultController {
                 borderRadius: 12.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.lt,
+              buttonCodes: [PlayerButton.lt,]
             ),
           ],
           screenRelativeSize: 0.18,
@@ -174,7 +174,7 @@ class DefaultController {
                 borderRadius: 10.0,
               ),
               buttonType: ButtonType.joystick,
-              buttonCode: PlayerButton.ls,
+              buttonCodes: [PlayerButton.ls],
             ),
           ],
           screenRelativeSize: 0.23,

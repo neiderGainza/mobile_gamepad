@@ -43,16 +43,8 @@ class GameController extends ConsumerWidget {
       
       routerConfig: router,
       builder: (context, child) => StartupWidget(
-        onLoad: () async {
-          await ref.read(controllerLocalStorageProvider.future);
-          await ref.read(playerLocalStorageProvider.future);
-        },
-        onError: (error) async {
-          await Hive.deleteBoxFromDisk(
-            LocalStorageKeys.controllerIdsKey);
-        },
         builder: (_)=>child!
-      )
+      ) 
     );
   }
 

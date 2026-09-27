@@ -1,27 +1,27 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/data/sources/controller_local_storage_service.dart';
+import 'package:game_controller/data/sources/player_local_storage_service.dart';
+import 'package:game_controller/data/static_collections/local_storage_keys.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 
 
-final startupProvider = AsyncNotifierProvider.family<StartupNotifier, void, AsyncCallback>(
+final startupProvider = AsyncNotifierProvider<StartupNotifier, void>(
   StartupNotifier.new,
   retry: (retryCount, error) => null, // do not retry
 );
 
 
 class StartupNotifier extends AsyncNotifier<void>{
-  StartupNotifier(this.onLoad);
-
-  final AsyncCallback onLoad;
-
+  
   @override
   Future<void> build() async {
-    await onLoad();
+    await ref.watch(controllerLocalStorageProvider.future);
+    await ref.watch(playerLocalStorageProvider.future);
   }
 
-  Future<void> retry( Future<void> Function(Object ? error) onRetry ) async{
-    final Object ? error = state.error;
+  Future<void> retry() async{
     state = AsyncLoading();
-    await onRetry(error);
+    await Hive.deleteBoxFromDisk(LocalStorageKeys.cacheKey);
     state = await AsyncValue.guard(build);
   }
 }

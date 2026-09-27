@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ButtonGroup {
 
- UnmodifiableListView<Button> get buttons; double get screenRelativeSize; double get internalMargin; int? get rotationDegreess;
+ UnmodifiableListView<Button> get buttons; double get screenRelativeSize; double get internalMargin; int? get rotationDegreess; String? get id;
 /// Create a copy of ButtonGroup
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ButtonGroupCopyWith<ButtonGroup> get copyWith => _$ButtonGroupCopyWithImpl<Butt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ButtonGroup&&const DeepCollectionEquality().equals(other.buttons, buttons)&&(identical(other.screenRelativeSize, screenRelativeSize) || other.screenRelativeSize == screenRelativeSize)&&(identical(other.internalMargin, internalMargin) || other.internalMargin == internalMargin)&&(identical(other.rotationDegreess, rotationDegreess) || other.rotationDegreess == rotationDegreess));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ButtonGroup&&const DeepCollectionEquality().equals(other.buttons, buttons)&&(identical(other.screenRelativeSize, screenRelativeSize) || other.screenRelativeSize == screenRelativeSize)&&(identical(other.internalMargin, internalMargin) || other.internalMargin == internalMargin)&&(identical(other.rotationDegreess, rotationDegreess) || other.rotationDegreess == rotationDegreess)&&(identical(other.id, id) || other.id == id));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(buttons),screenRelativeSize,internalMargin,rotationDegreess);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(buttons),screenRelativeSize,internalMargin,rotationDegreess,id);
 
 @override
 String toString() {
-  return 'ButtonGroup(buttons: $buttons, screenRelativeSize: $screenRelativeSize, internalMargin: $internalMargin, rotationDegreess: $rotationDegreess)';
+  return 'ButtonGroup(buttons: $buttons, screenRelativeSize: $screenRelativeSize, internalMargin: $internalMargin, rotationDegreess: $rotationDegreess, id: $id)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ButtonGroupCopyWith<$Res>  {
   factory $ButtonGroupCopyWith(ButtonGroup value, $Res Function(ButtonGroup) _then) = _$ButtonGroupCopyWithImpl;
 @useResult
 $Res call({
- List<Button> buttons, double screenRelativeSize, double internalMargin, int? rotationDegreess
+ List<Button> buttons, double screenRelativeSize, double internalMargin, int? rotationDegreess, String? id
 });
 
 
@@ -62,13 +62,14 @@ class _$ButtonGroupCopyWithImpl<$Res>
 
 /// Create a copy of ButtonGroup
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? buttons = null,Object? screenRelativeSize = null,Object? internalMargin = null,Object? rotationDegreess = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? buttons = null,Object? screenRelativeSize = null,Object? internalMargin = null,Object? rotationDegreess = freezed,Object? id = freezed,}) {
   return _then(ButtonGroup(
 buttons: null == buttons ? _self.buttons! : buttons // ignore: cast_nullable_to_non_nullable
 as List<Button>,screenRelativeSize: null == screenRelativeSize ? _self.screenRelativeSize : screenRelativeSize // ignore: cast_nullable_to_non_nullable
 as double,internalMargin: null == internalMargin ? _self.internalMargin : internalMargin // ignore: cast_nullable_to_non_nullable
 as double,rotationDegreess: freezed == rotationDegreess ? _self.rotationDegreess : rotationDegreess // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

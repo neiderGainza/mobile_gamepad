@@ -38,6 +38,11 @@ class TopMenu extends ConsumerWidget {
       onPressed: () async {
         final buttonGroup = await showModalBottomSheet(
           context: context,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.8,
+            maxWidth : MediaQuery.of(context).size.width * 0.9
+          ),
+          isScrollControlled: true,
           builder: (context) => const ButtonMenu(),
         );
 

@@ -1,26 +1,32 @@
 enum PlayerButton {
-  btnA(0),
-  btnB(1),
-  btnX(2),
-  btnY(3),
+  btnA(0, "A"),
+  btnB(1, "B"),
+  btnX(2, "C"),
+  btnY(3, "D"),
 
-  dpad(4),
+  dpad(4, "Dpad", hasAxis: true),
 
-  lb(5),
-  rb(6),
+  lb(5, "LB"),
+  rb(6, "RB"),
 
-  lt(7),
-  rt(8),
+  lt(7, "LT"),
+  rt(8, "RT"),
 
-  ls(9), 
-  rs(10),
+  ls(9, "LJ", hasAxis: true), 
+  rs(10,"RJ", hasAxis: true),
 
-  view(11), 
-  menu(12), 
-  xbox(13);
+  view(11, "View", isMenu: true), 
+  menu(12, "Menu", isMenu: true), 
+  xbox(13, "Xbox", isMenu: true);
 
   final int code; // up to 64 (int6)
-  const PlayerButton(this.code);
+  final bool hasAxis;
+  final bool isMenu;
+  final String i10n;
+  const PlayerButton(this.code, this.i10n, {
+    this.hasAxis = false,
+    this.isMenu = false
+  });
 
   static PlayerButton fromCode(int code) {
     for (final b in PlayerButton.values) {

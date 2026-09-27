@@ -44,10 +44,15 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
           releaseTimer = null;
 
           HapticFeedback.vibrate();
-          connectionRepo.send(ButtonPlayerEvent(
-            btn: widget.button.buttonCode, 
-            axis: .depth, 
-            value: 1
+          connectionRepo.send(MultiButtonPlayerEvent(
+            buttonPlayerEvents: [
+              for(final code in widget.button.buttonCodes)
+              ButtonPlayerEvent(
+                btn: code, 
+                axis: .depth, 
+                value: 1
+              )
+            ]
           ));
         },
         onTapCancel: () {
@@ -93,11 +98,15 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
 
   void release(){
     final connectionRepo = ref.watch(connectionRepositoryProvider);
-    
-    connectionRepo.send(ButtonPlayerEvent(
-      btn: widget.button.buttonCode, 
-      axis: .depth, 
-      value: 0
+    connectionRepo.send(MultiButtonPlayerEvent(
+      buttonPlayerEvents: [
+        for(final code in widget.button.buttonCodes)
+        ButtonPlayerEvent(
+          btn: code, 
+          axis: .depth, 
+          value: 1
+        )
+      ]
     ));
   }
 }

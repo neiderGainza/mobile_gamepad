@@ -56,7 +56,7 @@ class ButtonAdapter extends TypeAdapter<Button> {
     return Button(
       buttonData: fields[0] as ButtonData,
       buttonType: fields[1] == null ? .sinlgePress : fields[1] as ButtonType,
-      buttonCode: fields[4] as PlayerButton,
+      buttonCodes: (fields[6] as List).cast<PlayerButton>(),
     );
   }
 
@@ -68,8 +68,8 @@ class ButtonAdapter extends TypeAdapter<Button> {
       ..write(obj.buttonData)
       ..writeByte(1)
       ..write(obj.buttonType)
-      ..writeByte(4)
-      ..write(obj.buttonCode);
+      ..writeByte(6)
+      ..write(obj.buttonCodes);
   }
 
   @override
@@ -266,19 +266,20 @@ class ButtonGroupAdapter extends TypeAdapter<ButtonGroup> {
     return ButtonGroup(
       buttons: (fields[6] as List).cast<Button>(),
       screenRelativeSize: fields[17] == null
-          ? 0.23
+          ? 0.09
           : (fields[17] as num).toDouble(),
       internalMargin: fields[15] == null
           ? 0.01
           : (fields[15] as num).toDouble(),
       rotationDegreess: (fields[18] as num?)?.toInt(),
+      id: fields[19] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ButtonGroup obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(6)
       ..write(obj.buttons)
       ..writeByte(15)
@@ -286,7 +287,9 @@ class ButtonGroupAdapter extends TypeAdapter<ButtonGroup> {
       ..writeByte(17)
       ..write(obj.screenRelativeSize)
       ..writeByte(18)
-      ..write(obj.rotationDegreess);
+      ..write(obj.rotationDegreess)
+      ..writeByte(19)
+      ..write(obj.id);
   }
 
   @override
