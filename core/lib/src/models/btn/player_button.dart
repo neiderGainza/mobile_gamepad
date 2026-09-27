@@ -16,8 +16,7 @@ enum PlayerButton {
   rs(10,"RJ", hasAxis: true),
 
   view(11, "View", isMenu: true), 
-  menu(12, "Menu", isMenu: true), 
-  xbox(13, "Xbox", isMenu: true);
+  menu(12, "Menu", isMenu: true);
 
   final int code; // up to 64 (int6)
   final bool hasAxis;
