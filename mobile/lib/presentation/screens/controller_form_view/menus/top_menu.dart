@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/domain/model/positioned_button_group.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
 import 'package:game_controller/presentation/screens/controller_form_view/menus/buttons_menu.dart';
@@ -51,7 +52,7 @@ class TopMenu extends ConsumerWidget {
             .addPositionedBtnGroup(PositionedButtonGroup(buttonGroup: buttonGroup));
         }
       },
-      child: Text("Add Button"),
+      child: Text(AppLocalizations.of(context)!.addButton),
     );
   }
 
@@ -69,7 +70,7 @@ class TopMenu extends ConsumerWidget {
 
     return IconButton(
       onPressed: () async {
-        final updatedAndSaved = await showDialog(
+        final updatedControllerName = await showDialog(
           useSafeArea: false,
           context: context, 
           builder: (context) => ControllerMetadaForm(
@@ -78,7 +79,9 @@ class TopMenu extends ConsumerWidget {
           )
         );
 
-        if(updatedAndSaved == true){ context.pop(); }
+        if(updatedControllerName != true){
+          context.go('/controller/$updatedControllerName');
+        }
       },
       icon: Icon(
         Icons.save_as_outlined,

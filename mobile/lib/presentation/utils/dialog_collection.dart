@@ -1,26 +1,30 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class DialogCollection {
   static Future<bool?> areYouSureDialog(BuildContext context, String message) 
     => showDialog<bool>(
       context: context, 
-      builder: (context) => AlertDialog(
-        title: Text("Are you sure?"),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: (){ context.pop(false); }, 
-            child: Text("Cancel")
-          ),
-          TextButton(
-            onPressed: (){ context.pop(true); }, 
-            child: Text("Accept")
-          ),
-        ],
-      )
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return AlertDialog(
+          title: Text(l10n.areYouSure),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: (){ context.pop(false); }, 
+              child: Text(l10n.cancel)
+            ),
+            TextButton(
+              onPressed: (){ context.pop(true); }, 
+              child: Text(l10n.accept)
+            ),
+          ],
+        );
+      }
     );
 
   static Future<String?> simplePopUpForm(
@@ -46,7 +50,9 @@ class DialogCollection {
             initialValue: initValue,
             keyboardType: keyboardType,
             validator: (value) {
-              if(value == null || value.isEmpty) return "Field requried";
+              if(value == null || value.isEmpty) {
+                return AppLocalizations.of(context)!.fieldRequired;
+              }
               return null;
             },
           )
@@ -55,7 +61,7 @@ class DialogCollection {
         actions: [
           TextButton(
             onPressed: (){ context.pop(); }, 
-            child: Text("Cancel")
+            child: Text(AppLocalizations.of(context)!.cancel)
           ),
           TextButton(
             onPressed: (){ 
@@ -63,7 +69,7 @@ class DialogCollection {
                 context.pop(formKey.currentState?.value['field']); 
               }  
             }, 
-            child: Text("Save")
+            child: Text(AppLocalizations.of(context)!.save)
           ),
         ],
       )
@@ -77,7 +83,7 @@ class DialogCollection {
         context: context, 
         builder: (context) => AlertDialog(
           contentPadding: .symmetric(horizontal: 16, vertical: 8),
-          title  : Text("Pick a network interface"),
+          title  : Text(AppLocalizations.of(context)!.pickNetworkInterface),
 
           content: Column(
             mainAxisSize: .min,
@@ -99,7 +105,7 @@ class DialogCollection {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  ' You must be already connected by the selected network interface, or the connection proccess will failed.',
+                  AppLocalizations.of(context)!.networkInterfaceWarning,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.error
                   ),
@@ -112,7 +118,7 @@ class DialogCollection {
           actions: [
             TextButton(
               onPressed: (){ Navigator.of(context).pop(); }, 
-              child: Text("Cancel")
+              child: Text(AppLocalizations.of(context)!.cancel)
             ),
           ],
         )

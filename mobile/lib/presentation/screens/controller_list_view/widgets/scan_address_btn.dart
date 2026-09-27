@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/data/repositories/connection_repository_impl.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,7 +30,7 @@ class ScanAddressBtn extends ConsumerWidget {
           borderRadius: .circular(10)
         )
       ),
-      child : Text("Scan QR") 
+      child : Text(AppLocalizations.of(context)!.scanQr)
     );
   }
 

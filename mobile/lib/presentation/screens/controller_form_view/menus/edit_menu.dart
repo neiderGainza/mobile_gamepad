@@ -1,6 +1,7 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
 import 'package:game_controller/presentation/utils/inherited_value.dart';
 
@@ -108,7 +109,7 @@ class EditingMenuTitle extends ConsumerWidget {
             child: FittedBox(
               alignment: .centerStart,
               fit: .scaleDown,
-              child: Text("Editing Menu", style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              child: Text(AppLocalizations.of(context)!.editingMenu, style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onTertiaryContainer
               ),),
             ),
@@ -150,7 +151,7 @@ class EditSizeTile extends ConsumerWidget {
         title: FittedBox(
           fit: .scaleDown,
           alignment: .centerStart,
-          child: Text("Size:")),
+          child: Text(AppLocalizations.of(context)!.size)),
         trailing: LessStringPlus(
           plus: (){
             updateValue(controllerId, 0.01, ref);
@@ -205,7 +206,7 @@ class EditPositionTile extends ConsumerWidget {
           title: FittedBox(
             fit: .scaleDown,
             alignment: .centerStart,
-            child: Text("Pos x:")),
+            child: Text(AppLocalizations.of(context)!.positionX)),
           trailing: LessStringPlus(
             plus: (){
               updateValue(controllerId,0.01, ref);
@@ -222,7 +223,7 @@ class EditPositionTile extends ConsumerWidget {
           title: FittedBox(
             fit: .scaleDown,
             alignment: .centerStart,
-            child: Text("Pos y:")),
+            child: Text(AppLocalizations.of(context)!.positionY)),
           
           trailing: LessStringPlus(
             plus: (){
@@ -283,7 +284,7 @@ class EditRotationTile extends ConsumerWidget {
         title: FittedBox(
           fit: .scaleDown,
           alignment: .centerStart,
-          child: Text("Rotation:")),
+          child: Text(AppLocalizations.of(context)!.rotation)),
         trailing: LessStringPlus(
           plus: (){
             updateValue(controllerId, 15, ref);
@@ -339,7 +340,7 @@ class EditMarginTile extends ConsumerWidget {
         title: FittedBox(
           fit: .scaleDown,
           alignment: .centerStart,
-          child: Text("Margin:")),
+          child: Text(AppLocalizations.of(context)!.margin)),
         trailing: LessStringPlus(
           plus: (){
             updateValue(controllerId, 0.01, ref);
@@ -391,7 +392,7 @@ class GroupPropertiesTitle extends ConsumerWidget {
             child: FittedBox(
               alignment: .centerStart,
               fit: .scaleDown,
-              child: Text("Group properties: ", style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              child: Text(AppLocalizations.of(context)!.groupProperties, style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onTertiaryContainer
               ),),
             ),
@@ -430,7 +431,7 @@ class ButtonPropertiesTitle extends ConsumerWidget {
               alignment: .centerStart,
               fit: .scaleDown,
               child: Text(
-                "Button properties: (${selectedBtn?.buttonCodes.toString().split('.')[1]})", 
+                "${AppLocalizations.of(context)!.buttonProperties} (${selectedBtn?.buttonCodes.toString().split('.')[1]})", 
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onTertiaryContainer
                 ),),
@@ -464,7 +465,7 @@ class EditButtonElevationTile extends ConsumerWidget {
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text("Elevation:")),
+        child: Text(AppLocalizations.of(context)!.elevation)),
       trailing: LessStringPlus(
         plus: (){
           updateValue(controllerId, 1, ref);
@@ -518,7 +519,7 @@ class EditButtonBorderWithTile extends ConsumerWidget {
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text("Border\nWidth:")),
+        child: Text(AppLocalizations.of(context)!.borderWidth)),
       trailing: LessStringPlus(
         plus: (){
           updateValue(controllerId, 0.1, ref);
@@ -578,7 +579,7 @@ class EditButtonShapeTile extends ConsumerWidget {
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text("Shape:")),
+        child: Text(AppLocalizations.of(context)!.shape)),
       trailing: Container(
         clipBehavior: .hardEdge,
         padding: .only(left: 8),
@@ -590,7 +591,12 @@ class EditButtonShapeTile extends ConsumerWidget {
           value: property,
           items: [
             for(final shape in BoxShape.values)
-            DropdownMenuItem(value: shape,child: Text(shape.toString()))
+            DropdownMenuItem(
+              value: shape,
+              child: Text(shape == BoxShape.circle
+                ? AppLocalizations.of(context)!.circle
+                : AppLocalizations.of(context)!.rectangle),
+            )
           ], 
           onChanged: (newShape){
             if(newShape != null){
@@ -653,7 +659,7 @@ class EditButtonBorderRadiusTile extends ConsumerWidget {
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text("Border\nRadius:")),
+        child: Text(AppLocalizations.of(context)!.borderRadius)),
       trailing: LessStringPlus(
         plus: (){
           updateValue(controllerId, 1, ref);
@@ -707,7 +713,7 @@ class EditButtonBackgroundColorTile extends ConsumerWidget {
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text("Background Color:")
+        child: Text(AppLocalizations.of(context)!.backgroundColor)
       ),
       trailing: ColorIndicator(
         color: btnBackgroundColor,
@@ -771,7 +777,7 @@ class EditButtonBorderColorTile extends ConsumerWidget {
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text("Border Color:")
+        child: Text(AppLocalizations.of(context)!.borderColor)
       ),
       trailing: ColorIndicator(
         color: color,
@@ -834,7 +840,7 @@ class EditButtonColorTile extends ConsumerWidget {
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text("Font Color:")
+        child: Text(AppLocalizations.of(context)!.fontColor)
       ),
       trailing: ColorIndicator(
         color: color,

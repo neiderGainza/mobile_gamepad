@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
 import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/presentation/providers/connection_message_provider.dart';
@@ -73,7 +74,7 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> with Ro
 
         slivers: [
           SliverAppBar(
-            title: const Text("Mobile Game Controller"),
+            title: Text(AppLocalizations.of(context)!.appName),
             actions: [
               const ThreeDotMenu()
             ],

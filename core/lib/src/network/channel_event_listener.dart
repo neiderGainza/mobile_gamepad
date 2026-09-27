@@ -41,7 +41,8 @@ class ChannelEventListener {
           final event = Event.decode(data);
           handleEvent(event);
           _eventSubject.add(event);
-        }catch(_){
+        }catch(e){
+          print(e);
           handleNoEvent?.call(data);
         }
       }

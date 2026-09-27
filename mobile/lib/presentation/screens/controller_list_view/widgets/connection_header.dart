@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/data/repositories/connection_repository_impl.dart';
 import 'package:game_controller/data/repositories/player_settings_repository_impl.dart';
 import 'package:game_controller/presentation/providers/connection_status_provider.dart';
@@ -21,6 +22,7 @@ class ConnectionHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final tt = Theme.of(context).textTheme;
     final cs = Theme.of(context).colorScheme;
 
@@ -93,7 +95,7 @@ class ConnectionHeader extends ConsumerWidget {
               borderRadius: .circular(10),
             ),
             child: ListTile(
-              title: Text("How to use"),
+              title: Text(l10n.howToUseTitle),
               trailing: Icon(Icons.question_mark_rounded),
               onTap: () => context.push('how_to'),
             ),
@@ -112,7 +114,7 @@ class ConnectionHeader extends ConsumerWidget {
   ) async {
     final newUserName = await DialogCollection.simplePopUpForm(
       context,
-      title: 'Edit UserName',
+      title: AppLocalizations.of(context)!.editUsername,
       initValue: ref.read(playerProvider).value?.name
     );
 
@@ -184,7 +186,7 @@ class TypeAddressBtn extends ConsumerWidget {
       onPressed : () async {
         final address = await DialogCollection.simplePopUpForm(
           context, 
-          title: 'ServerAddress:ServerPort',
+          title: AppLocalizations.of(context)!.serverAddressPort,
           initValue: ref.read(connectionRepositoryProvider).lastServerAddress,
           keyboardType: .number
         );
@@ -197,7 +199,7 @@ class TypeAddressBtn extends ConsumerWidget {
               int.parse(parts[1])
             );
           }catch(e){
-            SnackbarCollection.errorSnackbar(context, "Conection Failed");
+            SnackbarCollection.errorSnackbar(context, AppLocalizations.of(context)!.connectionFailed);
           }
         }
       }, 
@@ -206,7 +208,7 @@ class TypeAddressBtn extends ConsumerWidget {
           borderRadius: .circular(10)
         )
       ),
-      child     : Text("Type address") 
+      child     : Text(AppLocalizations.of(context)!.typeAddress)
     );
   }
 }
@@ -233,7 +235,7 @@ class DisconnectionBtn extends ConsumerWidget {
               )
             ),
             child : Text(
-              "Disconnect" ,
+              AppLocalizations.of(context)!.disconnect,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary
               ),  

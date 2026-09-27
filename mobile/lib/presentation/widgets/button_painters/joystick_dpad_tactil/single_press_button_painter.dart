@@ -104,7 +104,7 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
         ButtonPlayerEvent(
           btn: code, 
           axis: .depth, 
-          value: 1
+          value: 0
         )
       ]
     ));

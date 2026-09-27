@@ -121,6 +121,9 @@ class ConnectionServiceImpl extends ConnectionService{
 
   @override
   void send(Event event) {
+    if(event is MultiButtonPlayerEvent){
+      print(event.buttonPlayerEvents.first.value);
+    }
     _channel?.sink.add(event.encode());
   }
 

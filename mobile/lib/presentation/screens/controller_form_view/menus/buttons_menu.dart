@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/data/repositories/controller_repository_impl.dart';
 import 'package:game_controller/data/static_collections/button_groups_collection.dart';
 import 'package:game_controller/domain/model/button_group.dart';
@@ -13,6 +14,7 @@ class ButtonMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16),
 
@@ -22,20 +24,20 @@ class ButtonMenu extends StatelessWidget {
             const CustomButtonTile(),
 
             buttonsTile(
-              'Simple Buttons',
+              l10n.simpleButtons,
               ButtonGroupsCollection.simpleSingleButtonGroup,
               80,
               true,
             ),
             buttonsTile(
-              'Joysticks',
+              l10n.joysticks,
               ButtonGroupsCollection.joystickGroup,
               160,
               true,
             ),
 
             buttonsTile(
-              'Collections',
+              l10n.collections,
               ButtonGroupsCollection.multipleButtons,
               160,
               true,
@@ -101,7 +103,7 @@ class CustomButtonTile extends ConsumerWidget{
     return ExpansionTile(
       initiallyExpanded: true,
       tilePadding: .zero,
-      title: Text("Shortcuts"),
+      title: Text(AppLocalizations.of(context)!.shortcuts),
       shape: RoundedRectangleBorder(),
 
       children: [

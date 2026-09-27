@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 
 class MyErrorWidget extends StatelessWidget{
   const MyErrorWidget({
@@ -25,7 +26,7 @@ class MyErrorWidget extends StatelessWidget{
             const SizedBox(height: 8,),
             FilledButton.tonal(
               onPressed: retry, 
-              child : Text("Reload")
+              child : Text(AppLocalizations.of(context)!.reload)
             )
           ],
         ),

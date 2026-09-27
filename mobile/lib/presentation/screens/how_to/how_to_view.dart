@@ -13,7 +13,7 @@ class HowToView extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text(AppLocalizations.of(context)?.howToUse??'How to use'),
+        title: Text(AppLocalizations.of(context)!.howToUseTitle),
       ),
       
       body: ListView(
@@ -87,15 +87,15 @@ class HowToUse extends StatelessWidget {
 
     return HowToTile(
       initialyExpanded: true,
-      title: AppLocalizations.of(context)?.howToUse??'How to user?', 
+      title: AppLocalizations.of(context)!.howToUse, 
       steps: [
         RichText(
           text: TextSpan(
-            text: AppLocalizations.of(context)?.howToUseStep1??'',
+            text: AppLocalizations.of(context)!.howToUseStep1,
             style: tt.bodyMedium,
             children: [
               TextSpan(
-                text:'dowload page',
+                text: AppLocalizations.of(context)!.downloadPage,
                 style: tt.bodyMedium?.copyWith(
                   decoration: .underline,
                   color: cs.tertiary
@@ -112,8 +112,8 @@ class HowToUse extends StatelessWidget {
             ]
           ),
         ),
-        Text(AppLocalizations.of(context)?.howToUseStep2??''),
-        Text(AppLocalizations.of(context)?.howToUseStep3??''),
+        Text(AppLocalizations.of(context)!.howToUseStep2),
+        Text(AppLocalizations.of(context)!.howToUseStep3),
       ]
     );
   }
@@ -128,14 +128,13 @@ class HowManyUserCanIConnect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
+    // final cs = Theme.of(context).colorScheme;
+    // final tt = Theme.of(context).textTheme;
 
     return HowToTile(
-      title: AppLocalizations.of(context)?.howManyUsers??'How many users can be connected?.', 
+      title: AppLocalizations.of(context)!.howManyUsers, 
       steps: [
-        Text(AppLocalizations.of(context)?.howManyUsersStep1??''), 
-          
+        Text(AppLocalizations.of(context)!.howManyUsersStep1),
       ]
     );
 
@@ -152,11 +151,11 @@ class HowToConnectoThroughtBluetooth extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return HowToTile(
-      title: AppLocalizations.of(context)?.howConnectThroughtBluetooth??'How to connect throght bluetooth?.', 
+      title: AppLocalizations.of(context)!.howConnectThroughtBluetooth,
       steps: [
-        Text(AppLocalizations.of(context)?.howConnectThroughtBluetoothStep1??''),
-        Text(AppLocalizations.of(context)?.howConnectThroughtBluetoothStep2??''),
-        Text(AppLocalizations.of(context)?.howConnectThroughtBluetoothStep3??''),
+        Text(AppLocalizations.of(context)!.howConnectThroughtBluetoothStep1),
+        Text(AppLocalizations.of(context)!.howConnectThroughtBluetoothStep2),
+        Text(AppLocalizations.of(context)!.howConnectThroughtBluetoothStep3),
       ]
     );
   }
