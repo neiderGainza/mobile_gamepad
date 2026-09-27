@@ -116,8 +116,6 @@ class PlayerButtonAdapter extends TypeAdapter<PlayerButton> {
         return PlayerButton.view;
       case 12:
         return PlayerButton.menu;
-      case 13:
-        return PlayerButton.xbox;
       default:
         return PlayerButton.btnA;
     }
@@ -152,8 +150,6 @@ class PlayerButtonAdapter extends TypeAdapter<PlayerButton> {
         writer.writeByte(11);
       case PlayerButton.menu:
         writer.writeByte(12);
-      case PlayerButton.xbox:
-        writer.writeByte(13);
     }
   }
 
