@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=GamePad Desktop
+Name=Gamepad Desktop
 Comment=Desktop client for the Mobile GamePad virtual controller
 Exec=gamepad-desktop
 TryExec=gamepad-desktop
