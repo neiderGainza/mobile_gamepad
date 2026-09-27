@@ -524,6 +524,12 @@ abstract class AppLocalizations {
   /// **'Contact at'**
   String get contactAt;
 
+  /// No description provided for @pingIndicator.
+  ///
+  /// In en, this message translates to:
+  /// **'Ping: {value} ms'**
+  String pingIndicator(String value);
+
   /// No description provided for @connectionErrorDetails.
   ///
   /// In en, this message translates to:

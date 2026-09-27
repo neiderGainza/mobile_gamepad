@@ -234,6 +234,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactAt => 'Contact at';
 
   @override
+  String pingIndicator(String value) {
+    return 'Ping: $value ms';
+  }
+
+  @override
   String connectionErrorDetails(String address, String port) {
     return 'Error connecting to $address:$port. Please verify the address.';
   }

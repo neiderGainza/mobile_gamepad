@@ -95,9 +95,9 @@ class DefaultController {
           ],
           screenRelativeSize: 0.18,
           internalMargin: 0.0,
-          rotationDegreess: 30,
+          rotationDegreess: 0,
         ),
-        relativePosition: const Offset(0.07786324786324787, 0.1062962962962963),
+        relativePosition: const Offset(0.10854700854700854, 0.2675925925925926),
       ),
       
       PositionedButtonGroup(
@@ -126,9 +126,9 @@ class DefaultController {
           ],
           screenRelativeSize: 0.18,
           internalMargin: 0.0,
-          rotationDegreess: 75,
+          rotationDegreess: 90,
         ),
-        relativePosition: const Offset(0.6871794871794872, 0.7314814814814815),
+        relativePosition: const Offset(0.7064102564102563, 0.9131481481481482),
       ),
       
       PositionedButtonGroup(
@@ -137,7 +137,7 @@ class DefaultController {
             Button(
               buttonData: ButtonData(
                 shape: BoxShape.rectangle,
-                backgroundColorValue: 4282263331,
+                backgroundColorValue: 4280693304,
                 label: 'LB',
                 borderRadius: 12.0,
               ),
@@ -157,9 +157,9 @@ class DefaultController {
           ],
           screenRelativeSize: 0.18,
           internalMargin: 0.0,
-          rotationDegreess: 105,
+          rotationDegreess: 90,
         ),
-        relativePosition: const Offset(0.39666666666666667, 0.7379629629629628),
+        relativePosition: const Offset(0.34444444444444444, 0.9055555555555554),
       ),
       
       PositionedButtonGroup(
@@ -177,12 +177,14 @@ class DefaultController {
               buttonCodes: [PlayerButton.ls],
             ),
           ],
-          screenRelativeSize: 0.23,
+          screenRelativeSize: 0.18,
           internalMargin    : 0.01,
           rotationDegreess  : null,
         ),
         relativePosition: const Offset(0.1064102564102564, 0.9259259259259259),
       ),
+
+      
     ],
   );
 

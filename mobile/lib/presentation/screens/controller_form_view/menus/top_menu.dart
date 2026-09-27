@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/l10n/app_localizations.dart';
+import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/domain/model/positioned_button_group.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
 import 'package:game_controller/presentation/screens/controller_form_view/menus/buttons_menu.dart';
@@ -79,8 +80,12 @@ class TopMenu extends ConsumerWidget {
           )
         );
 
-        if(updatedControllerName != true){
-          context.go('/controller/$updatedControllerName');
+        if(updatedControllerName != null){
+          if(controllerId == null || DefaultController.isDefaultById(controllerId)){
+            context.go('/controllers');
+          }else{
+            context.pop();
+          }
         }
       },
       icon: Icon(

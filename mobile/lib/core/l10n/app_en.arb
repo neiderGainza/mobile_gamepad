@@ -80,6 +80,12 @@
     "appVersion": "Version",
     "developedBy": "Developed by",
     "contactAt": "Contact at",
+    "pingIndicator": "Ping: {value} ms",
+    "@pingIndicator": {
+        "placeholders": {
+            "value": { "type": "String" }
+        }
+    },
     "connectionErrorDetails": "Error connecting to {address}:{port}. Please verify the address.",
     "@connectionErrorDetails": {
         "placeholders": {

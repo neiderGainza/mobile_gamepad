@@ -24,6 +24,7 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> with Ro
   
   @override void initState() {
     _routeObserver = ref.read(routeOvserverProvider);
+    OrientationFunctionCollection.setPortrait();
     super.initState();
   }
 
@@ -36,6 +37,7 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> with Ro
       _routeObserver.subscribe(this, route);
     }
   }
+
 
   @override
   void dispose() {

@@ -76,6 +76,12 @@
     "appVersion": "Versión",
     "developedBy": "Desarrollado por",
     "contactAt": "Contacto",
+    "pingIndicator": "Ping: {value} ms",
+    "@pingIndicator": {
+        "placeholders": {
+            "value": { "type": "String" }
+        }
+    },
     "connectionErrorDetails": "Error al conectar con {address}:{port}. Verifica la dirección.",
     "@connectionErrorDetails": {
         "placeholders": {

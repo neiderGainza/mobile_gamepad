@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/presentation/providers/connection_ping_provider.dart';
 
 class PingIndicator extends ConsumerWidget{
@@ -17,7 +18,9 @@ class PingIndicator extends ConsumerWidget{
     return ping.value == null
       ? SizedBox.shrink()
       : Text(
-        'Ping: ${ping.value?.inMilliseconds} ms',
+        AppLocalizations.of(context)!.pingIndicator(
+          '${ping.value!.inMilliseconds}',
+        ),
         style: style,
       );
   }

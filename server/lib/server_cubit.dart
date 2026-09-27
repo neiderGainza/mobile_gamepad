@@ -66,7 +66,6 @@ class ServerCubit extends Cubit<ServerState>{
     _activeDesktopConnections[clientId] = desktopCubit;
   }
 
-
   @override
   void onChange(Change<ServerState> change) {
     _activeDesktopConnections.forEach(
@@ -77,7 +76,6 @@ class ServerCubit extends Cubit<ServerState>{
     
     super.onChange(change);
   }
-
 
   @override
   Future<void> close() {

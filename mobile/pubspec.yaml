@@ -3,7 +3,7 @@ description: "A new Flutter project."
 publish_to: 'none' 
 
 flutter_app_name:
-  name: "Game Controller"
+  name: "Mobile Gamepad"
 
 version: 1.0.0+1
 
