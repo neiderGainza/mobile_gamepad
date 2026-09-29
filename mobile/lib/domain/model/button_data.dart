@@ -20,16 +20,20 @@ class ButtonData with _$ButtonData{
   final String label;
   final double borderRadius;
 
-  const ButtonData({
+  ButtonData({
     required this.label,
     this.shape,
     this.backgroundColorValue,
     this.borderColorValue,
     this.colorValue,
-    this.borderWidth = 1,
-    this.borderRadius = 10,
-    this.elevation = 0,
-  });
+
+    double borderWidth = 1,
+    double borderRadius = 10,
+    int elevation = 0,
+  }): borderRadius = borderRadius.clamp(0, 60),
+      borderWidth  = borderWidth.clamp(0, 10),
+      elevation    = elevation.clamp(0, 10);
+  
 
   Color get backgroundColor => backgroundColorValue != null 
     ? Color(backgroundColorValue!) 

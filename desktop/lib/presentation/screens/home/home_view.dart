@@ -17,27 +17,28 @@ class HomeView extends ConsumerWidget{
         const SliverToBoxAdapter(child: ConnectionHeader()),
         
         if(playersState != null)
-        SliverList.separated(
-          separatorBuilder: (context, index) => const SizedBox(height: 8,),
-          itemCount: playersState.length,
-          itemBuilder: (context, index){
-            final playerState = playersState[index];
+        if(playersState.isNotEmpty)
+          SliverList.separated(
+            separatorBuilder: (context, index) => const SizedBox(height: 8,),
+            itemCount: playersState.length,
+            itemBuilder: (context, index){
+              final playerState = playersState[index];
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: .circular(12)
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: .circular(12)
+                  ),
+                  tileColor: Theme.of(context).colorScheme.surfaceContainer,
+                  title : Text(playerState.player.name),
+                  subtitle: Text(playerState.player.deviceName),
+                  trailing: Text(playerState.connectionStatus.name),
                 ),
-                tileColor: Theme.of(context).colorScheme.surfaceContainer,
-                title : Text(playerState.player.name),
-                subtitle: Text(playerState.player.deviceName),
-                trailing: Text(playerState.connectionStatus.name),
-              ),
-            );
-          }
-        )
-
+              );
+            }
+          )
+        
         
       ],
     );
