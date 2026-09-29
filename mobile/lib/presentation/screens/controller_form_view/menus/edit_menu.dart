@@ -1,5 +1,6 @@
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
@@ -118,7 +119,7 @@ class EditingMenuTitle extends ConsumerWidget {
           IconButton(onPressed: (){
             ref.read(controllerEditProvider(controllerId).notifier)
               .removeSelecteds();
-          }, icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.onTertiaryContainer,))
+          }, icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error,))
         ],
       ),
     );
@@ -168,7 +169,7 @@ class EditSizeTile extends ConsumerWidget {
   void updateValue(String? controllerId, double change, WidgetRef ref){
     final selectedGroup = ref.read(controllerEditProvider(controllerId))
       .selectedGroup;
-    
+
     if(selectedGroup == null){
       return;
     }
@@ -189,7 +190,9 @@ class EditPositionTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref){
     final controllerId = InheritedValue.of<String?>(context);
-    
+    final screenSize  = MediaQuery.of(context).size;
+    final movePixels  = 10;
+
     final groupPosition = ref.watch(controllerEditProvider(controllerId)
       .select(
         (cs) => cs.selectedGroupIndex == null 
@@ -209,10 +212,10 @@ class EditPositionTile extends ConsumerWidget {
             child: Text(AppLocalizations.of(context)!.positionX)),
           trailing: LessStringPlus(
             plus: (){
-              updateValue(controllerId,0.01, ref);
+              updateValue(controllerId, movePixels / screenSize.width, ref);
             }, 
             less: (){
-              updateValue(controllerId,-0.01, ref);
+              updateValue(controllerId,-movePixels / screenSize.width, ref);
             }, 
             label: groupPosition.dx.toStringAsFixed(2)
           ),
@@ -227,10 +230,10 @@ class EditPositionTile extends ConsumerWidget {
           
           trailing: LessStringPlus(
             plus: (){
-              updateValue(controllerId, 0.01, ref, false);
+              updateValue(controllerId, movePixels / screenSize.height, ref, false);
             }, 
             less: (){
-              updateValue(controllerId, -0.01, ref, false);
+              updateValue(controllerId, -movePixels / screenSize.height, ref, false);
             }, 
             label: groupPosition.dy.toStringAsFixed(2)
           ),
@@ -522,10 +525,10 @@ class EditButtonBorderWithTile extends ConsumerWidget {
         child: Text(AppLocalizations.of(context)!.borderWidth)),
       trailing: LessStringPlus(
         plus: (){
-          updateValue(controllerId, 0.1, ref);
+          updateValue(controllerId, 1, ref);
         }, 
         less: (){
-          updateValue(controllerId, -0.1, ref);
+          updateValue(controllerId, -1, ref);
         }, 
         label: property.toStringAsFixed(1)
       ),
@@ -662,10 +665,10 @@ class EditButtonBorderRadiusTile extends ConsumerWidget {
         child: Text(AppLocalizations.of(context)!.borderRadius)),
       trailing: LessStringPlus(
         plus: (){
-          updateValue(controllerId, 1, ref);
+          updateValue(controllerId, 5, ref);
         }, 
         less: (){
-          updateValue(controllerId, -1, ref);
+          updateValue(controllerId, -5, ref);
         }, 
         label: radius.toStringAsFixed(0)
       ),

@@ -61,10 +61,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get size => 'Tamaño:';
 
   @override
-  String get positionX => 'Posición X:';
+  String get positionX => 'Pos X:';
 
   @override
-  String get positionY => 'Posición Y:';
+  String get positionY => 'Pos Y:';
 
   @override
   String get rotation => 'Rotación:';
@@ -82,7 +82,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get elevation => 'Elevación:';
 
   @override
-  String get borderWidth => 'Ancho del borde:';
+  String get borderWidth => 'Ancho del\nborde:';
 
   @override
   String get shape => 'Forma:';
@@ -94,7 +94,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get circle => 'Círculo';
 
   @override
-  String get borderRadius => 'Radio del borde:';
+  String get borderRadius => 'Radio del\nborde:';
 
   @override
   String get backgroundColor => 'Color de fondo:';

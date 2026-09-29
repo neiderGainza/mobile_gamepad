@@ -191,13 +191,13 @@ abstract class AppLocalizations {
   /// No description provided for @positionX.
   ///
   /// In en, this message translates to:
-  /// **'Position X:'**
+  /// **'Pos X:'**
   String get positionX;
 
   /// No description provided for @positionY.
   ///
   /// In en, this message translates to:
-  /// **'Position Y:'**
+  /// **'Pos Y:'**
   String get positionY;
 
   /// No description provided for @rotation.
@@ -233,7 +233,7 @@ abstract class AppLocalizations {
   /// No description provided for @borderWidth.
   ///
   /// In en, this message translates to:
-  /// **'Border Width:'**
+  /// **'Border\nWidth:'**
   String get borderWidth;
 
   /// No description provided for @shape.
@@ -257,7 +257,7 @@ abstract class AppLocalizations {
   /// No description provided for @borderRadius.
   ///
   /// In en, this message translates to:
-  /// **'Border Radius:'**
+  /// **'Border\nRadius:'**
   String get borderRadius;
 
   /// No description provided for @backgroundColor.

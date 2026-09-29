@@ -24,7 +24,7 @@ class DefaultBtnCollection{
     buttonData: ButtonData(
       label: '≡', 
       shape: .rectangle,
-      borderRadius: 8,
+      borderRadius: 10,
     ), 
     buttonCodes: [.menu],
   );
@@ -33,7 +33,7 @@ class DefaultBtnCollection{
     buttonData: ButtonData(
       label: '►', 
       shape: .rectangle,
-      borderRadius: 8,
+      borderRadius: 10,
     ), 
     buttonCodes: [.view],
   );
@@ -42,7 +42,7 @@ class DefaultBtnCollection{
     buttonData: ButtonData(
       label: 'LT', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
     buttonCodes: [.lt],
   );
@@ -50,7 +50,7 @@ class DefaultBtnCollection{
     buttonData: ButtonData(
       label: 'RT', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
     buttonCodes: [.rt],
   );
@@ -58,7 +58,7 @@ class DefaultBtnCollection{
     buttonData: ButtonData(
       label: 'LB', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
     buttonCodes: [.lb],
   );
@@ -67,7 +67,7 @@ class DefaultBtnCollection{
     buttonData: ButtonData(
       label: 'RB', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
     buttonCodes: [.rb],
   );

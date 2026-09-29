@@ -51,8 +51,6 @@ types:
         index: 11
       menu:
         index: 12
-      xbox:
-        index: 13
   Offset:
     typeId: 3
     nextIndex: 2

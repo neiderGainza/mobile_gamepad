@@ -78,8 +78,8 @@ class InstrucctionsTile extends StatelessWidget {
         const SizedBox(height: 6,),
         Text("Instruccions: ", style: tt.bodyLarge,),
         Text("1- Connect your mobile device and your computer \non the same local network."),
-        Text("1- Start the server."),
-        Text("1- Scan the QR Code with your mobile."),
+        Text("2- Start the server."),
+        Text("3- Scan the QR Code with your mobile."),
         const SizedBox(height: 6,),
       ],
     );
