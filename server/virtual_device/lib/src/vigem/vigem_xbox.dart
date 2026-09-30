@@ -28,13 +28,13 @@ class VigemXBox implements VirtualDevice {
     .ls   : VirtualDeviceAxisButton(
       codeByAxis: {.horizontal: XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB.value , .vertical : XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB.value}, 
       i10nKey: 'ls',
-      minAllowValue: -32768,
+      minAllowValue: -32767,
       maxAllowValue: 32767,
     ),
     .rs   : VirtualDeviceAxisButton(
       codeByAxis: {.horizontal: XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_THUMB.value, .vertical: XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_THUMB.value},
       i10nKey: 'rs',
-      minAllowValue: -32768,
+      minAllowValue: -32767,
       maxAllowValue: 32767,
     ),
     .rt   : VirtualDeviceAxisButton(
@@ -180,18 +180,17 @@ class VigemXBox implements VirtualDevice {
     final usbReport = _controllerReport!;
     final axisCode  = XUSB_BUTTON.fromValue(btn.codeByAxis[axis]!);
 
-    // right joystick
     if(axisCode == .XUSB_GAMEPAD_RIGHT_THUMB){
       axis == .horizontal
         ? usbReport.ref.sThumbRX = btn.scaleInputValue(value)
-        : usbReport.ref.sThumbRY = btn.scaleInputValue(value);
+        : usbReport.ref.sThumbRY = -1 * btn.scaleInputValue(value);
       return;
     }   
     // left joystick
     if(axisCode == .XUSB_GAMEPAD_LEFT_THUMB){
       axis == .horizontal
         ? usbReport.ref.sThumbLX = btn.scaleInputValue(value)
-        : usbReport.ref.sThumbLY = btn.scaleInputValue(value);
+        : usbReport.ref.sThumbLY = -1 * btn.scaleInputValue(value);
       return;
     }   
 
@@ -225,11 +224,11 @@ class VigemXBox implements VirtualDevice {
       _proccessSinglePress(VirtualDeviceSinglePressButton(
         code: XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP.value, 
         i10nKey: ''
-      ), value > 0.05 ? 1 : 0);
+      ), -1 * value < -0.05 ? 1 : 0);
       _proccessSinglePress(VirtualDeviceSinglePressButton(
         code: XUSB_BUTTON.XUSB_GAMEPAD_DPAD_DOWN.value, 
         i10nKey: ''
-      ),value < -0.05 ? 1 : 0);
+      ), -1 * value > 0.05 ? 1 : 0);
     }
   }
 
