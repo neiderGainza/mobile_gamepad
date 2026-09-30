@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 
 class AppInfoView extends StatelessWidget{
   const AppInfoView({
@@ -9,6 +10,7 @@ class AppInfoView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cc = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
@@ -22,7 +24,7 @@ class AppInfoView extends StatelessWidget{
         children: [
           const SizedBox(height: 32,),
           Text(
-            "Mobile Game Controller",
+            l10n.appName,
             style: tt.headlineMedium,
           ),
           const SizedBox(height: 16,),
@@ -53,9 +55,9 @@ class AppInfoView extends StatelessWidget{
 
           const SizedBox(height: 16,),
           SelectableText(
-            "Version: 0.0.1\n"
-            "Developed by: Neider Gainza Llacer\n"
-            "Contact at: neidergainza1@gmail.com",
+            "${l10n.appVersion}: 0.0.1\n"
+            "${l10n.developedBy}: Neider Gainza Llacer\n"
+            "${l10n.contactAt}: neidergainza1@gmail.com",
             style: tt.titleMedium,
             textAlign: .center,
           ),

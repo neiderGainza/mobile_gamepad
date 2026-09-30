@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/domain/model/button.dart';
 
 class TactilPanel extends StatefulWidget{
@@ -57,7 +58,7 @@ class _TactilPanelState extends State<TactilPanel> {
           Positioned(
             top: 8,
             left: 12,
-            child: Text('Tactil Panel (RS)', style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            child: Text(AppLocalizations.of(context)!.tactilePanel, style: Theme.of(context).textTheme.labelMedium?.copyWith(
               color: widget.button.buttonData.borderColor,
             ),),
           )

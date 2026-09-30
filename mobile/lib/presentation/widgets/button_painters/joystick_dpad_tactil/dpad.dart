@@ -142,7 +142,7 @@ class _DpadPainterState extends State<Dpad> {
     );
 
     /// actualizar teclas presionadas
-    final sensivility = 0.2;
+    final sensivility = 0.1;
     if(_actualPress.dy > sensivility){
       if(!_pressArrows[0]) HapticFeedback.vibrate();
       _pressArrows[0] = true;

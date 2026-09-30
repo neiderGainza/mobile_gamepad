@@ -2,10 +2,14 @@ class ConnectionMessage{
   final ConnectionMessageType type;
   final DateTime time;
   final String content;
+  final String? connectionAddress;
+  final String? connectionPort;
 
   ConnectionMessage({
     required this.type,
     required this.content,
+    this.connectionAddress,
+    this.connectionPort,
   }) : time = DateTime.now();
 
   ConnectionMessage.message(String content) 
@@ -16,6 +20,14 @@ class ConnectionMessage{
   
   ConnectionMessage.warning(String content) 
     : this(type: .warning, content : content);  
+
+  ConnectionMessage.connectionFailure(String address, int port)
+    : this(
+        type: .error,
+        content: '',
+        connectionAddress: address,
+        connectionPort: '$port',
+      );
 }
 
 

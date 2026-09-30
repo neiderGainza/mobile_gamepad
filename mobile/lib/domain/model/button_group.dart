@@ -13,12 +13,14 @@ class ButtonGroup with _$ButtonGroup{
   final double screenRelativeSize;
   final double internalMargin;
   final int ? rotationDegreess;
+  final String ? id;
 
   ButtonGroup({   
     required List<Button> buttons,
     double screenRelativeSize = 0.09,
     double internalMargin     = 0.01,
     int  ? rotationDegreess,
+    this.id
   }): buttons = UnmodifiableListView(buttons)
     , internalMargin     = internalMargin.clamp(0, 1)
     , screenRelativeSize = screenRelativeSize.clamp(0.05, 1)

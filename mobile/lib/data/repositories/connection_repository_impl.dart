@@ -100,10 +100,7 @@ class ConnectionRepositoryImpl extends ConnectionRepository {
       syncPlayerData();
     }catch(e){
       debugPrint("Error connection on ConnectionRepo: $e");
-      _messageSubject.add(.error(
-        "Error connecting to $serverAddress:$port\n"
-        "Please verify the address"
-      ));
+      _messageSubject.add(ConnectionMessage.connectionFailure(serverAddress, port));
       disconnect();
       rethrow;
     }

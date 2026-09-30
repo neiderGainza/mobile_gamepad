@@ -12,12 +12,12 @@ class Button with _$Button{
   final ButtonData buttonData;
   final ButtonType buttonType;
   @ButtonCodeConverter()
-  final PlayerButton buttonCode;
+  final List<PlayerButton> buttonCodes;
 
   const Button({
     required this.buttonData,
     this.buttonType = .sinlgePress,
-    required this.buttonCode,
+    required this.buttonCodes,
   });
 
   static Button fromJson(Map json) => _$ButtonFromJson(

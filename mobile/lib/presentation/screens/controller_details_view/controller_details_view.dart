@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/core/navigation/navigation.dart';
 import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/domain/model/controller.dart';
@@ -103,6 +104,9 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
 
   Widget onData(BuildContext context, Controller controller){    
     
+    // for(final buttonGroup in controller.buttonGroups)
+    // print(buttonGroup.toJson());
+
 
     return InheritedValue<String>(
       value: widget.controllerId, 
@@ -138,6 +142,6 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
   }
 
   Widget errorWidget(BuildContext context){
-    return Center(child: Text("Error"),);
+    return Center(child: Text(AppLocalizations.of(context)!.error),);
   }
 }

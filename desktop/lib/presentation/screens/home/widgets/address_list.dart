@@ -71,19 +71,17 @@ class InstrucctionsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
 
-    return FittedBox(
-      fit: .fitHeight,
-      child: Column(
-        crossAxisAlignment: .start,
-        mainAxisSize: .min,
-        children: [
-          Text("Instruccions: ", style: tt.bodyLarge,),
-          Text("You are probably with that blond who always madde doubt.\n"
-              "I know we were not perfect but ii never felt this way.\n"
-              "You said for ever now i drive alone pass your street")
-                
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: .start,
+      mainAxisSize: .min,
+      children: [
+        const SizedBox(height: 6,),
+        Text("Instruccions: ", style: tt.bodyLarge,),
+        Text("1- Connect your mobile device and your computer \non the same local network."),
+        Text("2- Start the server."),
+        Text("3- Scan the QR Code with your mobile."),
+        const SizedBox(height: 6,),
+      ],
     );
   }
 }

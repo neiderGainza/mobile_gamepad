@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/domain/model/controller.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
@@ -45,8 +46,8 @@ class MyAppBar extends StatelessWidget {
               fit: .fitWidth,
               child: Text( 
                 DefaultController.isDefault(controller)
-                  ? 'Default Controller'
-                  :  controller.name ?? 'Unnamed Controller', 
+                  ? AppLocalizations.of(context)!.defaultController
+                  : controller.name ?? AppLocalizations.of(context)!.unnamedController,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimaryContainer
                 ),

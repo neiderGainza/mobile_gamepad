@@ -33,7 +33,7 @@ class _DpadPainterState extends ConsumerState<DpadPainter> {
 
         if(lastPress[0] != pressed[0] || lastPress[2] != pressed[2]){
           connectionRepository.send(ButtonPlayerEvent(
-            btn  : widget.button.buttonCode, 
+            btn  : widget.button.buttonCodes.first, 
             axis : .vertical, 
             value: pressed[0] 
                     ? 1 
@@ -45,7 +45,7 @@ class _DpadPainterState extends ConsumerState<DpadPainter> {
         
         if(lastPress[1] != pressed[1] || lastPress[3] != pressed[3]){
           connectionRepository.send(ButtonPlayerEvent(
-            btn  : widget.button.buttonCode, 
+            btn  : widget.button.buttonCodes.first, 
             axis : .horizontal, 
             value: pressed[1] 
                     ? 1 
