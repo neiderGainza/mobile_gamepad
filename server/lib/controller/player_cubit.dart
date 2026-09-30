@@ -161,7 +161,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
         }
       },
       handleNoEvent: (data, err) {
-        print(err);
         _webSocketChannel.sink.add(UnsuportedServerEvent().encode());
       },
     )..start();

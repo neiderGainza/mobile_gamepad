@@ -1,6 +1,9 @@
 #pragma once
 
 #include <ViGEm/Client.h>
+#include <cstdint>
+
+using namespace std;
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,6 +51,19 @@ void my_vigem_target_remove(
 
 __declspec(dllexport)
 void my_vigem_target_free(
+    PVIGEM_TARGET target
+);
+
+
+
+
+struct RumbleState{
+    uint8_t largeMotor;
+    uint8_t smallMotor;
+};
+
+__declspec(dllexport)
+RumbleState my_vigem_target_get_rumble(
     PVIGEM_TARGET target
 );
 
