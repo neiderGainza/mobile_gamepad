@@ -53,7 +53,62 @@ void main() {
   }
 
   if(Platform.isWindows){
+    final enumsAndTypes = {
+      '_XUSB_BUTTON',
+      '_VIGEM_ERROR',
+      '_VIGEM_TARGET_TYPE',
+      'PVIGEM_TARGET',
+      'PVIGEM_CLIENT',
+      'XUSB_REPORT',
+    };
+
+
+    FfiGenerator(
+      output: Output(
+        dart: DartOutput(
+          path: packageRoot.resolve('lib/src/vigem/vigem_bridge.dart'),
+        ),
+      ),
+      
+      input: Input(
+        entryPoints: [
+          packageRoot.resolve('src/vigem/include/ViGEm/Client.h'),
+          packageRoot.resolve('src/vigem/include/ViGEm/Common.h'),
+          packageRoot.resolve('src/vigem/vigem_bridge.h'),
+        ],
+        compilerOptions: [
+          '-Isrc',
+          '-Isrc/vigem/include',
+        ],
+        ignoreSourceErrors: true,
+      ),
     
+      visitors: [
+        Visitor(
+          func: (node) {
+            if (node.originalName.startsWith('my_')) {
+              node.name = node.originalName.substring(3);
+            }
+            node.isIncluded = node.originalName.startsWith("my_");
+          },
+          enumClass: (p0) {
+            if (p0.originalName.startsWith('_')) {
+              p0.name = p0.originalName.substring(1);
+            }
+            p0.isIncluded = enumsAndTypes.contains(p0.originalName);
+          },
+          typealias: (p0) {
+            if (p0.originalName.startsWith('_')) {
+              p0.name = p0.originalName.substring(1);
+            }
+            p0.isIncluded = enumsAndTypes.contains(p0.originalName)
+              ? .always
+              : .never;
+          },
+          
+        ),
+      ],
+    ).generate();
   }
 
 }

@@ -13,7 +13,7 @@ dart build cli \
 	--output=../builds/gamepad_server/output \
 	--verbosity=error
 ```
-
+	
 El resultado queda en:
 
 ```text

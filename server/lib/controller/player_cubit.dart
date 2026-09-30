@@ -79,7 +79,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
       await _createVirtualDevice();
       return;
     }
-
     final vdb = _virtualDevice?.getDefaultVDBfor(event.btn);
     if(vdb != null){
       _virtualDevice?.proccessEvent([
@@ -132,7 +131,6 @@ class PlayerCubit extends Cubit<PlayerState?>{
           _webSocketChannel.sink.add(
             FailInitVDEvent(error:e.message??'Fallo de inicialización').encode()
           );
-          print("Error inicializing device : ${e.message}");
         default:
           _webSocketChannel.sink.add(const 
             FailInitVDEvent(error:'Fallo inesperado de inicialización').encode()
@@ -150,6 +148,7 @@ class PlayerCubit extends Cubit<PlayerState?>{
     _channelEventListener = ChannelEventListener(
       _webSocketChannel, 
       handleEvent: (event){
+        
         switch(event){
           case final UpdateInfoPlayerEvent event:
             _onPlayerUpdateInfo(event);
@@ -161,7 +160,8 @@ class PlayerCubit extends Cubit<PlayerState?>{
             _onPlayerMultiButtonEvent(event);
         }
       },
-      handleNoEvent: (data) {
+      handleNoEvent: (data, err) {
+        print(err);
         _webSocketChannel.sink.add(UnsuportedServerEvent().encode());
       },
     )..start();

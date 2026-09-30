@@ -147,7 +147,7 @@ class ConnectionServiceImpl extends ConnectionService{
         }
 
       },
-      handleNoEvent: (data) {
+      handleNoEvent: (data, error) {
         print("Was error");
       },
     )..start();

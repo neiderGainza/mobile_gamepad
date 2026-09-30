@@ -23,7 +23,7 @@ class ChannelEventListener {
   void Function(Event event) handleEvent;
 
   /// Entrada al webSocketChannel q no pasa por Event.decode
-  void Function(dynamic data) ? handleNoEvent;
+  void Function(dynamic data, Object err) ? handleNoEvent;
   
   /// exposicion
   Stream<Event> get eventStream => _eventSubject.stream;
@@ -41,8 +41,8 @@ class ChannelEventListener {
           final event = Event.decode(data);
           handleEvent(event);
           _eventSubject.add(event);
-        }catch(_){
-          handleNoEvent?.call(data);
+        }catch(e){
+          handleNoEvent?.call(data, e);
         }
       }
     );

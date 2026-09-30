@@ -13,10 +13,29 @@ Future<void> main(List<String> args) async {
             name: packageName,
             assetName: 'src/uinput/uinput_bridge.dart',
             sources: [
-              'src/uinput_bridge.c',
+              'src/uinput/uinput_bridge.c',
             ]
           );  
           await uinputBridge.build(input: input, output: output);
+          break;
+
+
+        case .windows:
+          final dll = input.packageRoot.resolve(
+            'src/vigem/vigem_bridge.dll'
+          );
+
+          output.assets.code.add(
+            CodeAsset(
+              package: input.packageName,
+              name: 'src/vigem/vigem_bridge.dart',
+              linkMode: DynamicLoadingBundled(),
+              file: dll,
+            ),
+          );
+          break;
+
+        default:
           break;
       } 
       

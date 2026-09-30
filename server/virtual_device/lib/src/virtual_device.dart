@@ -4,6 +4,7 @@ import 'package:core/core.dart';
 import 'package:virtual_device/src/models/virtual_device_button.dart';
 import 'package:virtual_device/src/models/virtual_device_input.dart';
 import 'package:virtual_device/src/uinput/uinput_xbox.dart';
+import 'package:virtual_device/src/vigem/vigem_xbox.dart';
 
 
 /// Representa un dispositivo virtual capaz de recibir y procesar eventos.
@@ -29,6 +30,10 @@ abstract class VirtualDevice {
       return UinputXbox();
     }
     
+    if(Platform.isWindows){
+      return VigemXBox();
+    }
+
     throw UnimplementedError('Virtual device not implemented');
   }
 

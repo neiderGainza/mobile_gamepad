@@ -4,20 +4,28 @@ import 'package:native_toolchain_c/native_toolchain_c.dart';
 
 Future<void> main(List<String> args) async {
   await link(args, (input, output) async {
-    if (input.config.code.targetOS != OS.linux) return;
+    switch(input.config.code.targetOS){
+      case .linux:
+        final uinputBridge = CLibrary(
+          name: input.packageName,
+          assetName: 'src/uinput/uinput_bridge.dart',
+          sources: [
+            'src/uinput/uinput_bridge.c',
+          ],
+        );
 
-    final uinputBridge = CLibrary(
-      name: input.packageName,
-      assetName: 'src/uinput/uinput_bridge.dart',
-      sources: [
-        'src/uinput_bridge.c',
-      ],
-    );
+        await uinputBridge.link(
+          input: input,
+          output: output,
+          linkerOptions: LinkerOptions.manual(),
+        );
+        break;
 
-    await uinputBridge.link(
-      input: input,
-      output: output,
-      linkerOptions: LinkerOptions.manual(),
-    );
+      case .windows:
+
+        break;
+      default:
+        return;
+    }
   });
 }

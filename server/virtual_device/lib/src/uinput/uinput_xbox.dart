@@ -140,6 +140,10 @@ class UinputXbox implements VirtualDevice {
             axisCode, 
             actionBtn.scaleInputValue(action.value)
           );
+
+        default:
+          // Handle unknown button types
+      
       }
     }
     sync_device(_fd);
@@ -156,6 +160,8 @@ class UinputXbox implements VirtualDevice {
           if(_registerAxis(btn) < 0) return -1;
         case VirtualDeviceSinglePressButton():
           if(ioctl_ui_set_keybit(_fd, btn.code) < 0) return -1;
+        default:
+          // Handle unknown button types
       }
     }
     return 0;

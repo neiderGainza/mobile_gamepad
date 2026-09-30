@@ -9,6 +9,7 @@ sealed class VirtualDeviceButton {
   String get i10nKey;
 }
 
+/// these are for uinput
 class VirtualDeviceAxisButton implements VirtualDeviceButton{
   final Map<ButtonAxis, int> codeByAxis;
   final int minAllowValue;
@@ -41,6 +42,7 @@ class VirtualDeviceAxisButton implements VirtualDeviceButton{
   }
 }
 
+
 class VirtualDeviceSinglePressButton implements VirtualDeviceButton{
   final int code;
   @override
@@ -57,3 +59,4 @@ class VirtualDeviceSinglePressButton implements VirtualDeviceButton{
   }
 
 }
+
