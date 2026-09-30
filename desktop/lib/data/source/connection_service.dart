@@ -106,8 +106,9 @@ class ConnectionServiceImpl extends ConnectionService{
   void stopServer() {
     _portSubject.add(null);
     _playersSubject.add([]);
-    _connectionStatusSubject.add(.disconnecting);
     _webSocketChannel?.sink.add(StopServerDesktopEvent().encode());
+    
+    disconnectFromServer();
   }
 
   @override
@@ -129,7 +130,6 @@ class ConnectionServiceImpl extends ConnectionService{
 
 
   // ------------------------------ helpers ---------------------------------
-
   void _initChannelEventListener(){
     if(_webSocketChannel == null){
       throw Exception('_initChannelEventListner wwith null WebSocketChannel');

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/presentation/providers/controller_edit_provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,6 +24,7 @@ class _ControllerMetadaFormState extends ConsumerState<ControllerMetadaForm> {
  
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AlertDialog(
       contentPadding: .symmetric(horizontal: 16, vertical: 8),
       actionsPadding: .only(left: 16, right: 16, bottom: 6),
@@ -34,17 +36,17 @@ class _ControllerMetadaFormState extends ConsumerState<ControllerMetadaForm> {
           mainAxisSize: .min,
           crossAxisAlignment: .start,
           children: [
-            Text("Controller's name", style: Theme.of(context).textTheme.titleMedium,),
+            Text(l10n.controllerNameTitle, style: Theme.of(context).textTheme.titleMedium,),
             const SizedBox(height: 8,),
 
             FormBuilderTextField(
               name: "controllerName",
               initialValue: widget.initValue,
               decoration: InputDecoration(
-                hintText: "Name"
+                hintText: l10n.name
               ),
               validator: (value){
-                if(value == null || value.isEmpty) return "Nombre requerido";
+                if(value == null || value.isEmpty) return l10n.fieldRequired;
                 return null;
               },
             ),
@@ -57,11 +59,11 @@ class _ControllerMetadaFormState extends ConsumerState<ControllerMetadaForm> {
       actions: [
         TextButton(onPressed: (){
           context.pop(false);
-        }, child: Text("Cancelar")),
+        }, child: Text(l10n.cancel)),
         
         TextButton(onPressed: (){
           processForm(context);
-        }, child: Text("Aceptar")), 
+        }, child: Text(l10n.accept)), 
       ],
     );
   }
@@ -79,15 +81,15 @@ class _ControllerMetadaFormState extends ConsumerState<ControllerMetadaForm> {
 
       try{
         await ref.read(controllerEditProvider(widget.controllerId).notifier).save();
-        context.pop(true);
+        context.pop(values['controllerName']);
       }catch(e){
-        ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
+        ScaffoldMessenger.of(context).showSnackBar(errorSnackBar(context));
       }
     }
   }
 
-  SnackBar get errorSnackBar => SnackBar(
-    content: Text('Error saving the changes, please reestar the app'));
+  SnackBar errorSnackBar(BuildContext context) => SnackBar(
+    content: Text(AppLocalizations.of(context)!.saveChangesError));
 }
 
 

@@ -1,0 +1,89 @@
+# Run nfpm from this directory:
+#   nfpm package --config nfpm.yaml --packager deb
+name: "gamepad"
+arch: "amd64"
+platform: "linux"
+version: "0.0.1"
+release: "2"
+section: "utils"
+priority: "optional"
+maintainer: "neiderGainza <neidergainza@gmail.com>"
+description: "Mobile GamePad virtual controller (Server and Desktop Client)"
+homepage: "https://github.com/neiderGainza/gamepad_releases"
+license: "custom"
+
+# Reemplaza o entra en conflicto con versiones anteriores
+conflicts:
+  - gamepad-dev
+  - gamepad-server-dev
+  - gamepad-desktop-dev
+replaces:
+  - gamepad-dev
+  - gamepad-server-dev
+  - gamepad-desktop-dev
+
+# Dependencias adaptadas por tipo de paquete
+overrides:
+  deb:
+    depends:
+      - libc6
+      - libgtk-3-0
+  rpm:
+    depends:
+      - glibc
+      - gtk3
+  archlinux:
+    depends:
+      - glibc
+      - gtk3
+
+# Archivos a instalar en el sistema
+contents:
+  # ---------------------------------------------------------------------------
+  # 1. Servidor y Librería C (uinput)
+  # ---------------------------------------------------------------------------
+  - src: "gamepad_server/bundle/bin/server"
+    dst: "/usr/bin/gamepad_server-dev"
+    file_info:
+      mode: 0755
+
+  - src: "gamepad_server/bundle/lib/libvirtual_device.so"
+    dst: "/usr/lib/libvirtual_device.so"
+    file_info:
+      mode: 0755
+
+  # Regla udev para permitir /dev/uinput sin ser root
+  - src: "gamepad_server/99-gamepad-uinput.rules"
+    dst: "/usr/lib/udev/rules.d/99-gamepad-uinput.rules"
+    file_info:
+      mode: 0644
+
+  # ---------------------------------------------------------------------------
+  # 2. Cliente Desktop (Flutter App)
+  # ---------------------------------------------------------------------------
+  # Flutter necesita conservar los directorios lib/ y data/ del bundle.
+  - src: "gamepad_desktop/bundle/data"
+    dst: "/opt/gamepad-desktop/data"
+
+  - src: "gamepad_desktop/bundle/lib"
+    dst: "/opt/gamepad-desktop/lib"
+
+  - src: "gamepad_desktop/bundle/desktop"
+    dst: "/opt/gamepad-desktop/desktop"
+
+  # Enlace simbólico para lanzar 'gamepad-desktop' desde terminal
+  - src: "/opt/gamepad-desktop/desktop"
+    dst: "/usr/bin/gamepad-desktop"
+    type: "symlink"
+
+  # Icono de la aplicación
+  - src: "gamepad_desktop/bundle/data/flutter_assets/assets/icons/icon.png"
+    dst: "/usr/share/icons/hicolor/256x256/apps/gamepad-desktop.png"
+    file_info:
+      mode: 0644
+
+  # Acceso directo del menú (.desktop)
+  - src: "gamepad-desktop.desktop"
+    dst: "/usr/share/applications/gamepad-desktop.desktop"
+    file_info:
+      mode: 0644

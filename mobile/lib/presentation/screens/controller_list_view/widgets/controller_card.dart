@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/data/static_collections/default_controller.dart';
 import 'package:game_controller/domain/model/controller.dart';
 import 'package:game_controller/presentation/providers/controllers_provider.dart';
@@ -24,9 +25,9 @@ class ControllerCard extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondaryContainer.withAlpha(100),
         margin: const .symmetric(vertical: 4, horizontal: 8),
         child: ListTile(
-          title: Text(controller.name ?? "Unnamed Controller"),
+          title: Text(controller.name ?? AppLocalizations.of(context)!.unnamedController),
           subtitle: DefaultController.isDefault(controller) 
-            ? Text('Defult Controller')
+            ? Text(AppLocalizations.of(context)!.defaultController)
             : Text(timeago.format(controller.lastEdited)),
           trailing: actions(context),
         ),
@@ -57,7 +58,9 @@ class ControllerCard extends StatelessWidget {
             
             final sure = await DialogCollection.areYouSureDialog(
               context,
-              'Are you sure about deleting the controller ${controller.name}' 
+              AppLocalizations.of(context)!.deleteControllerConfirmation(
+                controller.name ?? AppLocalizations.of(context)!.unnamedController,
+              )
             );
         
             if(sure == true && controller.id != null){

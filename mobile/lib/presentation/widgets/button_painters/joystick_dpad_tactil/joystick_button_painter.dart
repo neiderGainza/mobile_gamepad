@@ -45,59 +45,42 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
   }
 
   void onDrag(DragInfo info){
-    // if((lastInfo.x - info.x).abs() > minChangeToSend ||
-    //    (lastInfo.y - info.y).abs() > minChangeToSend
-    // ){
-    //   ref.read(connectionRepositoryProvider).send(MultiButtonPlayerEvent(
-    //     buttonPlayerEvents: [
-    //       ButtonPlayerEvent(
-    //         btn  : widget.button.buttonCode, 
-    //         axis : .horizontal, 
-    //         value: info.x / 0.8
-    //       ),
-    //       ButtonPlayerEvent(
-    //         btn: widget.button.buttonCode, 
-    //         axis: .vertical, 
-    //         value: info.y/ 0.8
-    //       )
-    //   ]));
+    if((lastInfo.x - info.x).abs() > minChangeToSend ||
+       (lastInfo.y - info.y).abs() > minChangeToSend
+    ){
+      ref.read(connectionRepositoryProvider).send(MultiButtonPlayerEvent(
+        buttonPlayerEvents: [
+          ButtonPlayerEvent(
+            btn  : widget.button.buttonCodes.first, 
+            axis : .horizontal, 
+            value: info.x / 0.8
+          ),
+          ButtonPlayerEvent(
+            btn: widget.button.buttonCodes.first, 
+            axis: .vertical, 
+            value: info.y/ 0.8
+          )
+      ]));
 
-    //   lastInfo = DragInfo(info.x, info.y);
-    // }
+      lastInfo = DragInfo(info.x, info.y);
+    }
     
-    if((lastInfo.x - info.x).abs() > minChangeToSend){
-      ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-        btn  : widget.button.buttonCode, 
-        axis : .horizontal, 
-        value: info.x / 0.8
-      ));  
-
-      lastInfo = DragInfo(info.x, lastInfo.y);
-    }
-
-    if((lastInfo.y - info.y).abs() > minChangeToSend){
-      ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-        btn  : widget.button.buttonCode, 
-        axis : .vertical, 
-        value: info.y / 0.8
-      ));  
-
-      lastInfo = DragInfo(lastInfo.x, info.y);
-    }
   }
 
   void onDragEnded(){
-    ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-      btn: widget.button.buttonCode, 
-      axis: .horizontal, 
-      value: 0
-    ));
-
-    ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
-      btn: widget.button.buttonCode, 
-      axis: .vertical, 
-      value: 0
-    ));
+    ref.read(connectionRepositoryProvider).send(MultiButtonPlayerEvent(
+      buttonPlayerEvents: [
+        ButtonPlayerEvent(
+          btn  : widget.button.buttonCodes.first, 
+          axis : .horizontal, 
+          value: 0
+        ),
+        ButtonPlayerEvent(
+          btn: widget.button.buttonCodes.first, 
+          axis: .vertical, 
+          value: 0
+        )
+    ]));
 
     lastInfo = DragInfo(0, 0);
   }

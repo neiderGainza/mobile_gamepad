@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/domain/model/connection_message.dart';
 
 /// AI generated
@@ -144,10 +145,18 @@ class SnackbarCollection {
     ConnectionMessage message, {
     SnackbarPosition position = SnackbarPosition.bottom,
   }){
+    final localizedError = message.connectionAddress != null &&
+        message.connectionPort != null
+      ? AppLocalizations.of(context)!.connectionErrorDetails(
+          message.connectionAddress!,
+          message.connectionPort!,
+        )
+      : message.content;
+
     return switch(message.type){
       .message => messageSnackbar(context, message.content, position: position),
       .warning => warningSnackbar(context, message.content, position: position),
-      .error   => errorSnackbar(context, message.content, position: position),
+      .error   => errorSnackbar(context, localizedError, position: position),
     };
   }
 }

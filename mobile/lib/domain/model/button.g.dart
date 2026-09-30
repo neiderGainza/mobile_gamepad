@@ -11,15 +11,17 @@ Button _$ButtonFromJson(Map<String, dynamic> json) => Button(
   buttonType:
       $enumDecodeNullable(_$ButtonTypeEnumMap, json['buttonType']) ??
       .sinlgePress,
-  buttonCode: const ButtonCodeConverter().fromJson(
-    json['buttonCode'] as String,
-  ),
+  buttonCodes: (json['buttonCodes'] as List<dynamic>)
+      .map((e) => const ButtonCodeConverter().fromJson(e as String))
+      .toList(),
 );
 
 Map<String, dynamic> _$ButtonToJson(Button instance) => <String, dynamic>{
   'buttonData': instance.buttonData,
   'buttonType': _$ButtonTypeEnumMap[instance.buttonType]!,
-  'buttonCode': const ButtonCodeConverter().toJson(instance.buttonCode),
+  'buttonCodes': instance.buttonCodes
+      .map(const ButtonCodeConverter().toJson)
+      .toList(),
 };
 
 const _$ButtonTypeEnumMap = {

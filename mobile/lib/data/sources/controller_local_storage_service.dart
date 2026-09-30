@@ -2,9 +2,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_controller/data/static_collections/local_storage_keys.dart';
+import 'package:game_controller/domain/model/button_group.dart';
 import 'package:game_controller/domain/model/controller.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:uuid/uuid.dart';
+
 
 // ---------------------- Provider -------------------------
 final controllerLocalStorageProvider = FutureProvider((ref) async {
@@ -25,6 +27,13 @@ abstract interface class ControllerLocalStorageService {
   Future<void> removeController(String controllerId);
 
   Controller getControllerById(String controllerId);
+
+  // Custom buttons
+  List<ButtonGroup> get customButtons;
+
+  Future<String> upsertCustomButton(ButtonGroup btn);
+
+  Future<void> deleteCustomButton(String id);
 }
 
 
@@ -37,6 +46,8 @@ class ControllerLocalStorageServiceImpl implements ControllerLocalStorageService
 
   final Box localStorage;
 
+
+  /// ---------------------- Controllers ---------------------------
   @override
   List<Controller> get controllers => [
     for(final controllerId in _controllerIds)
@@ -84,7 +95,65 @@ class ControllerLocalStorageServiceImpl implements ControllerLocalStorageService
   }
 
 
-  /// Helpers
+  /// ------------------ Custom buttons -----------------------
+  @override
+  List<ButtonGroup> get customButtons => [
+    ...localStorage.get(LocalStorageKeys.customButtonsKey, defaultValue: [])
+  ].whereType<ButtonGroup>().toList();
+  
+
+  @override
+  Future<String> upsertCustomButton(ButtonGroup btn) async {
+    try{
+      final id = btn.id ?? Uuid().v4();
+      
+      List<ButtonGroup> updatedCustomButtons = []; 
+      if(btn.id == null){
+        updatedCustomButtons = [
+          ...customButtons,
+          btn.copyWith(id: id)
+        ];
+      }else{
+        updatedCustomButtons = [
+          for(final customButton in customButtons)
+          if(customButton.id != btn.id) customButton
+          else btn
+        ];
+      }
+      
+      await localStorage.put(
+        LocalStorageKeys.customButtonsKey,
+        updatedCustomButtons
+      );
+
+      return id;
+    }catch(e){
+      debugPrint("Error upserting customButton (id: ${btn.id}): $e");
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteCustomButton(String id) async {
+    try{
+      List<ButtonGroup> updatedCustomButtons = [
+        for(final customButton in customButtons)
+        if(customButton.id != id) customButton
+      ]; 
+      
+      await localStorage.put(
+        LocalStorageKeys.customButtonsKey,
+        updatedCustomButtons
+      );
+    
+    }catch(e){
+      debugPrint("Error deleting customButton (id: $id): $e");
+      rethrow;
+    }
+  }
+
+
+  /// -------------------- Helpers, exhageracion jjj ------------
   Set<String> get _controllerIds {
     try{
       final controllerIds = localStorage.get(

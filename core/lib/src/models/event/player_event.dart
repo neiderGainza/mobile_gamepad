@@ -120,7 +120,7 @@ class MultiButtonPlayerEvent extends PlayerEvent{
   factory MultiButtonPlayerEvent.decode(Uint8List data){
     return MultiButtonPlayerEvent(
       buttonPlayerEvents: [
-        for(int i = 0 ; i < data.length / 2 ; i++ )
+        for(int i = 0 ; i < (data.length / 2).toInt() ; i++ )
         ButtonPlayerEvent.decode(
           Uint8List.fromList([0 , data[1 + i*2] , data[2 + i*2]])
         )

@@ -5,71 +5,71 @@ import 'package:game_controller/domain/model/button_data.dart';
 class DefaultBtnCollection{
   static Button btnA = Button(
     buttonData: ButtonData(label: 'A', backgroundColorValue: 4294901760), 
-    buttonCode: .btnA,
+    buttonCodes: [.btnA],
   );
   static Button btnB = Button(
     buttonData: ButtonData(label: 'B'), 
-    buttonCode: .btnB,
+    buttonCodes: [.btnB],
   );
   static Button btnX = Button(
     buttonData: ButtonData(label: 'X'), 
-    buttonCode: .btnX,
+    buttonCodes: [.btnX],
   );
   static Button btnY = Button(
     buttonData: ButtonData(label: 'Y'), 
-    buttonCode: .btnY,
+    buttonCodes: [.btnY],
   );
   
   static Button menu = Button(
     buttonData: ButtonData(
       label: '≡', 
       shape: .rectangle,
-      borderRadius: 8,
+      borderRadius: 10,
     ), 
-    buttonCode: .menu,
+    buttonCodes: [.menu],
   );
 
   static Button play = Button(
     buttonData: ButtonData(
       label: '►', 
       shape: .rectangle,
-      borderRadius: 8,
+      borderRadius: 10,
     ), 
-    buttonCode: .view,
+    buttonCodes: [.view],
   );
 
   static Button lt = Button(
     buttonData: ButtonData(
       label: 'LT', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
-    buttonCode: .lt,
+    buttonCodes: [.lt],
   );
   static Button rt = Button(
     buttonData: ButtonData(
       label: 'RT', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
-    buttonCode: .rt,
+    buttonCodes: [.rt],
   );
   static Button lb = Button(
     buttonData: ButtonData(
       label: 'LB', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
-    buttonCode: .lb,
+    buttonCodes: [.lb],
   );
 
   static Button rb = Button(
     buttonData: ButtonData(
       label: 'RB', 
       shape: .rectangle,
-      borderRadius: 12,
+      borderRadius: 10,
     ), 
-    buttonCode: .rb,
+    buttonCodes: [.rb],
   );
 
 
@@ -79,7 +79,7 @@ class DefaultBtnCollection{
       label: 'l', 
       borderWidth: 4
     ), 
-    buttonCode: .ls,
+    buttonCodes: [.ls],
   );
 
   static Button rightJoystick = Button(
@@ -88,7 +88,7 @@ class DefaultBtnCollection{
       label: 'r',
       borderWidth: 4 
     ), 
-    buttonCode: .rs,
+    buttonCodes: [.rs],
 
   );
 
@@ -98,7 +98,7 @@ class DefaultBtnCollection{
       label : 'dpad',
       borderWidth: 2   
     ), 
-    buttonCode: .dpad,
+    buttonCodes: [.dpad],
 
   );
   
@@ -109,7 +109,7 @@ class DefaultBtnCollection{
       borderWidth: 2,
       borderRadius: 20
     ), 
-    buttonCode: .rs
+    buttonCodes: [.rs]
   );
 }
 

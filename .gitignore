@@ -2,6 +2,8 @@
 **.tar.gz
 **.tar.zst
 **/builds/
+packagin/gamepad_desktop/
+packagin/gamepad_server/
 
 # Miscellaneous
 *.class

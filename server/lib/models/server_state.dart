@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/src/models/player/player_state.dart';
 
 /// Estado del servidor
 /// Lista de jugarores [players] con metadatos
@@ -31,12 +30,10 @@ class ServerState{
   /// inserta o actualiza el player dado
   ServerState upsertPlayerState(PlayerState playerState){
     
-    if(playersState.any(
-      (ps) => ps.player == playerState.player )
-    ){
+    if(playersState.any( (ps) => ps.player.id == playerState.player.id )){
       return ServerState._(playersState: [
         for(final p in playersState)
-        if(p.player == playerState.player) playerState
+        if(p.player.id == playerState.player.id) playerState
         else p
       ]);
     }else{

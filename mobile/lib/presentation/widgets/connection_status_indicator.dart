@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/presentation/providers/connection_status_provider.dart';
 
 class ConnectionStatusIndicator extends ConsumerWidget{
@@ -36,15 +37,15 @@ class ConnectionStatusIndicator extends ConsumerWidget{
     final connectionStatus = ref.watch(connectionStatusProvider);
     
     return switch(connectionStatus.value){
-      .connected => _connected(),
-      .disconnected => _disconnected(),
-      .connecting => _connecting(),
+      .connected => _connected(context),
+      .disconnected => _disconnected(context),
+      .connecting => _connecting(context),
 
-      _ => _connecting()
+      _ => _connecting(context)
     };
   }
 
-  Widget _connected(){
+  Widget _connected(BuildContext context){
     return Row(
       mainAxisSize: .min,
       crossAxisAlignment: .center,
@@ -54,12 +55,12 @@ class ConnectionStatusIndicator extends ConsumerWidget{
         if(showDot && showLabel)
         const SizedBox(width: 8,),
         if(showLabel)
-        Text('Connected', style: connectedStyle ?? defaultStyle)
+        Text(AppLocalizations.of(context)!.connected, style: connectedStyle ?? defaultStyle)
       ],
     );
   }
 
-  Widget _disconnected(){
+  Widget _disconnected(BuildContext context){
     return Row(
       mainAxisSize: .min,
       crossAxisAlignment: .center,
@@ -69,12 +70,12 @@ class ConnectionStatusIndicator extends ConsumerWidget{
         if(showDot && showLabel)
         const SizedBox(width: 8,),
         if(showLabel)
-        Text('Disconnected', style: disconnectedStyle ?? defaultStyle)
+        Text(AppLocalizations.of(context)!.disconnected, style: disconnectedStyle ?? defaultStyle)
       ],
     );
   }
 
-  Widget _connecting(){
+  Widget _connecting(BuildContext context){
     return Row(
       mainAxisSize: .min,
       crossAxisAlignment: .center,
@@ -84,7 +85,7 @@ class ConnectionStatusIndicator extends ConsumerWidget{
         if(showDot && showLabel)
         const SizedBox(width: 8,),
         if(showLabel)
-        Text('Connecting', style: connectingStyle ?? defaultStyle)
+        Text(AppLocalizations.of(context)!.connecting, style: connectingStyle ?? defaultStyle)
       ],
     );
   }

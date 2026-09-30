@@ -12,6 +12,7 @@ import 'package:game_controller/presentation/widgets/connection_status_indicator
 import 'package:game_controller/presentation/widgets/ping_indicator.dart';
 import 'package:game_controller/presentation/widgets/player_info_sync_indicator.dart';
 import 'package:game_controller/presentation/widgets/player_name.dart';
+import 'package:go_router/go_router.dart';
 
 
 class ConnectionHeader extends ConsumerWidget {
@@ -21,6 +22,7 @@ class ConnectionHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final tt = Theme.of(context).textTheme;
     final cs = Theme.of(context).colorScheme;
 
@@ -40,7 +42,7 @@ class ConnectionHeader extends ConsumerWidget {
           
           /// Connected -------- Ping 4 ms
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(8,8,8,0),
             
             child: Row(
               mainAxisAlignment: .spaceBetween,
@@ -84,13 +86,22 @@ class ConnectionHeader extends ConsumerWidget {
               const SizedBox(width: 8,)
             ],
           ),
+          const SizedBox(height: 8,),
 
-
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(AppLocalizations.of(context)?.howToUse??''),
+          Container(
+            clipBehavior: .antiAlias,
+            decoration: BoxDecoration(
+              color: cs.surfaceContainerHighest,
+              borderRadius: .circular(10),
+            ),
+            child: ListTile(
+              title: Text(l10n.howToUseTitle),
+              trailing: Icon(Icons.question_mark_rounded),
+              onTap: () => context.push('how_to'),
+            ),
           ),
-
+          
+          const SizedBox(height: 8,),
           const ActionsTile()
         ],
       ),
@@ -103,7 +114,7 @@ class ConnectionHeader extends ConsumerWidget {
   ) async {
     final newUserName = await DialogCollection.simplePopUpForm(
       context,
-      title: 'Edit UserName',
+      title: AppLocalizations.of(context)!.editUsername,
       initValue: ref.read(playerProvider).value?.name
     );
 
@@ -175,7 +186,7 @@ class TypeAddressBtn extends ConsumerWidget {
       onPressed : () async {
         final address = await DialogCollection.simplePopUpForm(
           context, 
-          title: 'ServerAddress:ServerPort',
+          title: AppLocalizations.of(context)!.serverAddressPort,
           initValue: ref.read(connectionRepositoryProvider).lastServerAddress,
           keyboardType: .number
         );
@@ -188,7 +199,7 @@ class TypeAddressBtn extends ConsumerWidget {
               int.parse(parts[1])
             );
           }catch(e){
-            SnackbarCollection.errorSnackbar(context, "Conection Failed");
+            SnackbarCollection.errorSnackbar(context, AppLocalizations.of(context)!.connectionFailed);
           }
         }
       }, 
@@ -197,7 +208,7 @@ class TypeAddressBtn extends ConsumerWidget {
           borderRadius: .circular(10)
         )
       ),
-      child     : Text("Type address") 
+      child     : Text(AppLocalizations.of(context)!.typeAddress)
     );
   }
 }
@@ -224,7 +235,7 @@ class DisconnectionBtn extends ConsumerWidget {
               )
             ),
             child : Text(
-              "Disconnect" ,
+              AppLocalizations.of(context)!.disconnect,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary
               ),  

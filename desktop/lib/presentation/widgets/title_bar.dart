@@ -30,7 +30,7 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget{
                     const SizedBox(width: 16,),
 
                     Text(
-                      "Mobile Game Controller  Server",
+                      "Mobile Gamepad Server",
                       style: tt.titleLarge?.copyWith(
                         color: cc.onSurface
                       ),

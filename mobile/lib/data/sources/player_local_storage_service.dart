@@ -82,7 +82,7 @@ class PlayerLocalStorageServiceImpl implements PlayerLocalStorageService{
       localPlayer=Player(
         deviceId: Uuid().v4(), 
         deviceName: await _deviceInfoService.deviceName, 
-        name: 'Unnamed Player'
+        name: 'New Player'
       );
       
       await _box.put(LocalStorageKeys.playerKey, localPlayer);

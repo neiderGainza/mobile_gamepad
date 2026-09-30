@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:game_controller/presentation/utils/dialog_collection.dart';
 import 'package:game_controller/presentation/utils/snackbar_collection.dart';
 import 'package:go_router/go_router.dart';
@@ -20,7 +21,7 @@ class _ScanQrViewState extends State<ScanQrView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Qr'),
+        title: Text(AppLocalizations.of(context)!.scanQrTitle),
         automaticallyImplyLeading:  true,
       ),
       
@@ -33,7 +34,7 @@ class _ScanQrViewState extends State<ScanQrView> {
           _hasFinished = true;
           context.pop(null);
         },
-        child: const Text("Cancel"),
+        child: Text(AppLocalizations.of(context)!.cancel),
       ),
     );
   }
@@ -86,7 +87,10 @@ class _ScanQrViewState extends State<ScanQrView> {
     }
 
     if(wrongBarcodeDetected){
-      SnackbarCollection.errorSnackbar(context, 'This qr does not have the right format');
+      SnackbarCollection.errorSnackbar(
+        context,
+        AppLocalizations.of(context)!.qrFormatError,
+      );
     }
 
     _procesing = false;

@@ -36,7 +36,7 @@ class DefaultController {
                 label: 'Y',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnY,
+              buttonCodes: [PlayerButton.btnY],
             ),
             Button(
               buttonData: ButtonData(
@@ -44,7 +44,7 @@ class DefaultController {
                 label: 'B',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnB,
+              buttonCodes: [PlayerButton.btnB],
             ),
             Button(
               buttonData: ButtonData(
@@ -52,7 +52,7 @@ class DefaultController {
                 label: 'A',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnA,
+              buttonCodes: [PlayerButton.btnA],
             ),
             Button(
               buttonData: ButtonData(
@@ -60,7 +60,7 @@ class DefaultController {
                 label: 'X',
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.btnX,
+              buttonCodes: [PlayerButton.btnX],
             ),
           ],
           screenRelativeSize: 0.23,
@@ -77,27 +77,27 @@ class DefaultController {
                 shape: BoxShape.rectangle,
                 backgroundColorValue: 4280693304,
                 label: '≡',
-                borderRadius: 8.0,
+                borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.menu,
+              buttonCodes: [PlayerButton.menu],
             ),
             Button(
               buttonData: ButtonData(
                 shape: BoxShape.rectangle,
                 backgroundColorValue: 4280693304,
                 label: '►',
-                borderRadius: 8.0,
+                borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.view,
+              buttonCodes: [PlayerButton.view],
             ),
           ],
           screenRelativeSize: 0.18,
           internalMargin: 0.0,
-          rotationDegreess: 30,
+          rotationDegreess: 0,
         ),
-        relativePosition: const Offset(0.07786324786324787, 0.1062962962962963),
+        relativePosition: const Offset(0.10854700854700854, 0.2675925925925926),
       ),
       
       PositionedButtonGroup(
@@ -108,27 +108,27 @@ class DefaultController {
                 shape: BoxShape.rectangle,
                 backgroundColorValue: 4280693304,
                 label: 'RB',
-                borderRadius: 12.0,
+                borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.rb,
+              buttonCodes: [PlayerButton.rb],
             ),
             Button(
               buttonData: ButtonData(
                 shape: BoxShape.rectangle,
                 backgroundColorValue: 4280693304,
                 label: 'RT',
-                borderRadius: 12.0,
+                borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.rt,
+              buttonCodes: [PlayerButton.rt],
             ),
           ],
           screenRelativeSize: 0.18,
           internalMargin: 0.0,
-          rotationDegreess: 75,
+          rotationDegreess: 90,
         ),
-        relativePosition: const Offset(0.6871794871794872, 0.7314814814814815),
+        relativePosition: const Offset(0.7064102564102563, 0.9131481481481482),
       ),
       
       PositionedButtonGroup(
@@ -137,29 +137,29 @@ class DefaultController {
             Button(
               buttonData: ButtonData(
                 shape: BoxShape.rectangle,
-                backgroundColorValue: 4282263331,
+                backgroundColorValue: 4280693304,
                 label: 'LB',
-                borderRadius: 12.0,
+                borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.lb,
+              buttonCodes: [PlayerButton.lb],
             ),
             Button(
               buttonData: ButtonData(
                 shape: BoxShape.rectangle,
                 backgroundColorValue: 4280693304,
                 label: 'LT',
-                borderRadius: 12.0,
+                borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
-              buttonCode: PlayerButton.lt,
+              buttonCodes: [PlayerButton.lt,]
             ),
           ],
           screenRelativeSize: 0.18,
           internalMargin: 0.0,
-          rotationDegreess: 105,
+          rotationDegreess: 90,
         ),
-        relativePosition: const Offset(0.39666666666666667, 0.7379629629629628),
+        relativePosition: const Offset(0.34444444444444444, 0.9055555555555554),
       ),
       
       PositionedButtonGroup(
@@ -174,15 +174,17 @@ class DefaultController {
                 borderRadius: 10.0,
               ),
               buttonType: ButtonType.joystick,
-              buttonCode: PlayerButton.ls,
+              buttonCodes: [PlayerButton.ls],
             ),
           ],
-          screenRelativeSize: 0.23,
+          screenRelativeSize: 0.18,
           internalMargin    : 0.01,
           rotationDegreess  : null,
         ),
         relativePosition: const Offset(0.1064102564102564, 0.9259259259259259),
       ),
+
+      
     ],
   );
 
