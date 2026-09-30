@@ -32,6 +32,11 @@ VIGEM_ERRORS vigem_target_add(PVIGEM_CLIENT client, PVIGEM_TARGET target) {
 @ffi.Native<ffi.Void Function(PVIGEM_TARGET)>(symbol: 'my_vigem_target_free')
 external void vigem_target_free(PVIGEM_TARGET target);
 
+@ffi.Native<RumbleState Function(PVIGEM_TARGET)>(
+  symbol: 'my_vigem_target_get_rumble',
+)
+external RumbleState vigem_target_get_rumble(PVIGEM_TARGET target);
+
 @ffi.Native<ffi.Void Function(PVIGEM_CLIENT, PVIGEM_TARGET)>(
   symbol: 'my_vigem_target_remove',
 )
@@ -64,6 +69,22 @@ typedef PVIGEM_CLIENT = ffi.Pointer<_VIGEM_CLIENT_T>;
 
 /// Defines an alias representing a target device object
 typedef PVIGEM_TARGET = ffi.Pointer<_VIGEM_TARGET_T>;
+
+final class RumbleState extends ffi.Struct {
+  @ffi.Uint8()
+  external int largeMotor;
+
+  @ffi.Uint8()
+  external int smallMotor;
+
+  static ffi.Pointer<RumbleState> $allocate(
+    ffi.Allocator $allocator, {
+    required int largeMotor,
+    required int smallMotor,
+  }) => $allocator<RumbleState>()
+    ..ref.largeMotor = largeMotor
+    ..ref.smallMotor = smallMotor;
+}
 
 /// Values that represent ViGEm errors
 enum VIGEM_ERRORS {

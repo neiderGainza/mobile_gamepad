@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:ffi';
+import 'dart:math';
 import 'package:core/core.dart';
 import 'package:ffi/ffi.dart';
 
@@ -20,7 +22,7 @@ class VigemXBox implements VirtualDevice {
     .btnY : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_Y.value , i10nKey: 'btnY'),
     
     .menu : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_BACK.value  , i10nKey: 'menu'),
-    .view : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_GUIDE.value , i10nKey: 'view'),
+    .view : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_START.value , i10nKey: 'view'),
     
     // joysticks on my languaje
     .ls   : VirtualDeviceAxisButton(
@@ -59,6 +61,7 @@ class VigemXBox implements VirtualDevice {
   
 
   final BehaviorSubject<VirtualDeviceEvent> _vdeSubject = BehaviorSubject();
+  Timer ? _vibrationPooler;
 
   @override
   Stream<VirtualDeviceEvent> get eventStream => _vdeSubject.stream;
@@ -105,7 +108,7 @@ class VigemXBox implements VirtualDevice {
         default:
           throw Exception(addTargetError.toString());
       }
-
+      _initVabritationPooler();
       _controllerReport = calloc<XUSB_REPORT>();
       userCount++;
     }catch(e){
@@ -116,6 +119,7 @@ class VigemXBox implements VirtualDevice {
 
   @override
   void close() {
+    _vibrationPooler?.cancel();
     if(_controller != null){
       userCount --;
 
@@ -227,6 +231,24 @@ class VigemXBox implements VirtualDevice {
         i10nKey: ''
       ),value < -0.05 ? 1 : 0);
     }
+  }
+
+  void _initVabritationPooler(){
+    _vibrationPooler?.cancel();
+    _vibrationPooler = Timer.periodic(
+      Duration(milliseconds: 16),
+      (_){
+        if(_controller == null) return;
+        final rumble = vigem_target_get_rumble(_controller!);
+
+        final small = rumble.smallMotor;
+        final large = rumble.largeMotor;
+
+        if( small != 0 || large != 0){
+          _vdeSubject.add(VibrationVDEvent(id: 1, value: max(small, large)));
+        }
+      }
+    );
   }
 
   @override

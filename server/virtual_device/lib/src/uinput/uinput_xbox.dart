@@ -193,6 +193,7 @@ class UinputXbox implements VirtualDevice {
   }
 
 
+
   Future<int> _initIsolate() async {
 
     _vdeIsolate = await spawnIsolate(
