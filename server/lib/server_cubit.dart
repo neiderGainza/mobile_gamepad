@@ -18,22 +18,20 @@ class ServerCubit extends Cubit<ServerState>{
 
 
   final Map<String, DesktopCubit> _activeDesktopConnections = {};
-  final Map<String, PlayerCubit > _activePlayerConnections = {};
+  final Map<String, (String , PlayerCubit)> _activePlayerConnections = {};
 
 
   /// Procesa nuevas conexiones de players websocket
   void handleNewPlayerConnection(WebSocketChannel channel){
+    final playerSession = const Uuid().v4();
+
     PlayerCubit(
       channel,
       playerNumber: _activePlayerConnections.length,
 
       // player connected
       onPlayerAuth: (playerId, playerCubit) { 
-        if(_activePlayerConnections.containsKey(playerId)){
-          _activePlayerConnections[playerId]?.close();
-          _activePlayerConnections.remove(playerId);
-        }
-        _activePlayerConnections[playerId] = playerCubit;
+        _activePlayerConnections[playerSession] = (playerId, playerCubit);
       },
       
       onPlayerStateUpdated: (playerState) {
@@ -43,8 +41,10 @@ class ServerCubit extends Cubit<ServerState>{
       onPlayerPingUpdated: (playerId , ping){},
 
       onPlayerDisconnect: (playerId){
-        _activePlayerConnections.remove(playerId);
-        emit(state.removePlayerState(playerId));
+        _activePlayerConnections.remove(playerSession);
+        if(!_activePlayerConnections.values.any((pair) => pair.$1 == playerId)){
+          emit(state.removePlayerState(playerId));
+        }
       }
     );
 
@@ -81,7 +81,7 @@ class ServerCubit extends Cubit<ServerState>{
   Future<void> close() {
     ServerController().shoutDown();    
     for(final playerCubit in _activePlayerConnections.values){
-      playerCubit.close();
+      playerCubit.$2.close();
     }
     for(final desktopCubit in _activeDesktopConnections.values){
       desktopCubit.close();
