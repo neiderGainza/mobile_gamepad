@@ -7,7 +7,7 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget{
   });
 
   @override
-  Size get preferredSize => Size.fromHeight(64);
+  Size get preferredSize => Size.fromHeight(40);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget{
             const SizedBox(width: 16,),
             Text(
               "Mobile Gamepad Server", 
-              style: tt.headlineMedium?.copyWith(
+              style: tt.titleMedium?.copyWith(
                 color: cs.onSurface
               ),
             ),

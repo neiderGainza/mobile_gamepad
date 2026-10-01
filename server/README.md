@@ -8,10 +8,7 @@ Desde la carpeta `server`:
 ```bash
 dart_frog build
 
-dart build cli \
-	--target=bin/server.dart \
-	--output=build/output \
-	--verbosity=error
+dart build cli --target=bin/server.dart --output=build/output 
 ```
 	
 El resultado queda en:

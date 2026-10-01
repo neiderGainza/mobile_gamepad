@@ -10,6 +10,7 @@ import 'package:desktop/domain/repository/connection_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:path/path.dart' as p;
 
 final connectionRepositoryProvider = Provider<ConnectionRepository>((ref){
   final repo = ConnectionRepositoryImpl(
@@ -79,11 +80,7 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
         final isConnected = await connectionService.connectToServer(lastPort);
 
         if(!isConnected){
-          await Process.start(
-            'gamepad_server-dev',
-            [],
-            mode: ProcessStartMode.detached,
-          );
+          await _initServer();
           
           for(int i = 0 ; i < 3; i++){
             await Future.delayed(Duration(seconds: 1));
@@ -93,7 +90,6 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
               if(await connectionService.connectToServer(lastPort)) break;
             }          
           }
-
         }
       }
 
@@ -126,6 +122,27 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
   }
 
   // -------------------------- helpers ---------------------------
+  Future<void> _initServer() async {
+    final appDir = File(Platform.resolvedExecutable).parent.path;
+
+    if (Platform.isWindows) {
+      final serverPath = p.join(appDir, 'bin/server.exe');
+      await Process.start(
+        serverPath,
+        [],
+        mode: ProcessStartMode.detached,
+      );
+    } else if (Platform.isLinux) {
+      await Process.start(
+        'gamepad_server-dev',
+        [],
+        mode: ProcessStartMode.detached,
+      );
+    } else {
+      throw Exception('Unsupported platform');
+    }
+  }
+ 
   void _initServerInterfaceSubscription(){
     _serverInterfacesSubscription?.cancel();
     _serverInterfacesSubscription = connectionInterfaceService
@@ -156,4 +173,8 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
       ServerAddress(port: port, interface: interface)
     ]);
   }
+
+
+
+
 }
