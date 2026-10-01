@@ -224,11 +224,11 @@ class VigemXBox implements VirtualDevice {
       _proccessSinglePress(VirtualDeviceSinglePressButton(
         code: XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP.value, 
         i10nKey: ''
-      ), -1 * value < -0.05 ? 1 : 0);
+      ), value < -0.05 ? 1 : 0);
       _proccessSinglePress(VirtualDeviceSinglePressButton(
         code: XUSB_BUTTON.XUSB_GAMEPAD_DPAD_DOWN.value, 
         i10nKey: ''
-      ), -1 * value > 0.05 ? 1 : 0);
+      ), value > 0.05 ? 1 : 0);
     }
   }
 

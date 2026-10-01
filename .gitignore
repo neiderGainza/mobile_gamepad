@@ -4,6 +4,7 @@
 **/builds/
 packagin/gamepad_desktop/
 packagin/gamepad_server/
+**.exe
 
 # Miscellaneous
 *.class

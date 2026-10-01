@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = WindowOptions(
-    size: Size(600, 800),
+    size: Size(500, 600),
     center: true,
     backgroundColor: Colors.transparent,
-    skipTaskbar: true,
+    skipTaskbar: false,
     titleBarStyle: TitleBarStyle.hidden,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -25,27 +24,21 @@ void main() async {
   runApp(const ProviderScope(child: DesktopGamePadClient()));
 }
 
-
-class DesktopGamePadClient extends ConsumerWidget{
-  const DesktopGamePadClient({
-    super.key
-  });
+class DesktopGamePadClient extends ConsumerWidget {
+  const DesktopGamePadClient({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme  = ref.watch(themeProvider);
-
+    final theme = ref.watch(themeProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      theme    : ref.read(themeProvider.notifier).lightTheme,
+      theme: ref.read(themeProvider.notifier).lightTheme,
       darkTheme: ref.read(themeProvider.notifier).darkTheme,
       themeMode: theme.themeMode,
 
-      home: const TitleBarFrame(
-        child: HomeView(),
-      )
-    );   
+      home: const TitleBarFrame(child: HomeView()),
+    );
   }
 }
