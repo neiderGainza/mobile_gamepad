@@ -8,7 +8,7 @@ import 'package:game_controller/presentation/utils/inherited_value.dart';
 
 /// Responsible for reacting to:
 ///   Changes in the ButtonGroup
-class ReactiveButtonGroupPainter extends ConsumerWidget{
+class ReactiveButtonGroupPainter extends ConsumerStatefulWidget{
   const ReactiveButtonGroupPainter({
     super.key,
     required this.btnGroupIndex
@@ -17,18 +17,24 @@ class ReactiveButtonGroupPainter extends ConsumerWidget{
   final int btnGroupIndex;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ReactiveButtonGroupPainter> createState() => _ReactiveButtonGroupPainterState();
+}
+
+class _ReactiveButtonGroupPainterState extends ConsumerState<ReactiveButtonGroupPainter> {
+  
+  @override
+  Widget build(BuildContext context) {
     final controllerId = InheritedValue.of<String?>(context);
 
     final buttonGroup = ref.watch(controllerEditProvider(controllerId)
       .select(
-        (c) => c.controller.buttonGroups.length > btnGroupIndex
-          ? c.controller.buttonGroups[btnGroupIndex].buttonGroup
+        (c) => c.controller.buttonGroups.length > widget.btnGroupIndex
+          ? c.controller.buttonGroups[widget.btnGroupIndex].buttonGroup
           : null
     ));
 
     final isSelected = ref.watch(controllerEditProvider(controllerId)
-      .select( (c) => c.selectedGroupIndex == btnGroupIndex));
+      .select( (c) => c.selectedGroupIndex == widget.btnGroupIndex));
 
     if(buttonGroup == null) return SizedBox.shrink();
     final size = MediaQuery.of(context).size;
@@ -49,24 +55,21 @@ class ReactiveButtonGroupPainter extends ConsumerWidget{
       
           child: AbsorbPointer(child: button,),
        
-          onTap: () {
+          onPanDown: (_) {
             ref.read(controllerEditProvider(controllerId).notifier)
-              .selectGroupAndButton( btnGroupIndex, btnIndex);
+              .selectGroupAndButton( widget.btnGroupIndex, btnIndex);
           },
       
-          onLongPressStart: (details){
-            ref.read(controllerEditProvider(controllerId).notifier)
-              .selectGroupAndButton( btnGroupIndex, btnIndex );
-          },
-      
+          
+
           onLongPressMoveUpdate: (details){
-      
+            
             final double dx = (
-              (details.globalPosition.dx / size.width) 
-            ).clamp(0, 1);
+              (details.globalPosition.dx + details.localPosition.dx)/ size.width 
+            );
             final double dy = (
-              (details.globalPosition.dy / size.height)
-            ).clamp(0, 1);
+              (details.globalPosition.dy + details.localPosition.dy)/ size.height
+            );
             
             ref.read(controllerEditProvider(controllerId).notifier)
               .editSelectedPosition( Offset(dx, dy) );
@@ -76,6 +79,4 @@ class ReactiveButtonGroupPainter extends ConsumerWidget{
       ),
     );
   }
-
-
 }

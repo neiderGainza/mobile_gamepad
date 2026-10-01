@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,11 +19,10 @@ class SinglePressButtonPainter extends ConsumerStatefulWidget{
 }
 
 class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPainter> {
-  Timer ? releaseTimer;
+  // Timer  ? releaseTimer;
 
   @override
   Widget build(BuildContext context) {
-    final connectionRepo = ref.watch(connectionRepositoryProvider);
     final buttonData = widget.button.buttonData;
 
     return Material(
@@ -39,29 +36,13 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
           ),
 
       child: InkWell(
-        onTapDown: (details) {
-          releaseTimer?.cancel();
-          releaseTimer = null;
+        onTapDown: (_) => send(),
 
-          HapticFeedback.vibrate();
-          connectionRepo.send(MultiButtonPlayerEvent(
-            buttonPlayerEvents: [
-              for(final code in widget.button.buttonCodes)
-              ButtonPlayerEvent(
-                btn: code, 
-                axis: .depth, 
-                value: 1
-              )
-            ]
-          ));
-        },
         onTapCancel: () {
-          releaseTimer?.cancel();
-          releaseTimer = Timer(Duration(milliseconds: 10), release);
+          release();
         },
         onTapUp: (details) {
-          releaseTimer?.cancel();
-          releaseTimer = Timer(Duration(milliseconds: 10), release);
+          release();
         },
         child: Container(
           margin: .all(8),
@@ -98,6 +79,15 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
 
   void release(){
     final connectionRepo = ref.watch(connectionRepositoryProvider);
+    if(widget.button.buttonCodes.length == 1){
+      connectionRepo.send(ButtonPlayerEvent(
+          btn: widget.button.buttonCodes.first, 
+          axis: .depth, 
+          value: 0
+      ));
+      return;
+    }
+    
     connectionRepo.send(MultiButtonPlayerEvent(
       buttonPlayerEvents: [
         for(final code in widget.button.buttonCodes)
@@ -105,6 +95,30 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
           btn: code, 
           axis: .depth, 
           value: 0
+        )
+      ]
+    ));
+  }
+
+  void send(){
+    HapticFeedback.vibrate();
+
+    if(widget.button.buttonCodes.length == 1){
+      ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(
+        btn: widget.button.buttonCodes.first, 
+        axis: .depth, 
+        value: 1
+      ));
+      return;
+    }
+
+    ref.read(connectionRepositoryProvider).send(MultiButtonPlayerEvent(
+      buttonPlayerEvents: [
+        for(final code in widget.button.buttonCodes)
+        ButtonPlayerEvent(
+          btn: code, 
+          axis: .depth, 
+          value: 1
         )
       ]
     ));

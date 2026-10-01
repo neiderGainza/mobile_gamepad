@@ -40,9 +40,6 @@ class _TactilPanelPainterState extends ConsumerState<TactilPanelPainter> {
         ));
       },
       onUpdated: (vx, vy){
-        print("Data:");
-        print(vx);
-        print(vy);
 
         connectionRepo.send(ButtonPlayerEvent(
           btn  : .rs, 
