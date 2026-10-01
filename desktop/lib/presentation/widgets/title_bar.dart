@@ -57,7 +57,6 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget{
               icon: Icon(Icons.close)
             ),
             
-            const SizedBox(width: 8,)
           ],
         ),
       ),

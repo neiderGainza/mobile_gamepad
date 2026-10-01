@@ -100,28 +100,39 @@ class ConnectionInterfaceServiceImpl implements ConnectionInterfaceService{
       includeLinkLocal: false
     );
     final List<ServerInterface> newInterfaces   = [];
-
+    
     for(final rawInterface in rawInterfaces){
-      ServerInterface ? newInterface;
       
+      // windows all interfaces
+      if(Platform.isWindows){
+        newInterfaces.add(ServerInterface(
+          interfaceName: rawInterface.name, 
+          ip: rawInterface.addresses.first.address
+        ));
+        continue;
+      }
+
+      // linux rename of interfaces
+      ServerInterface ? newInterface;
       if(rawInterface.name.startsWith('wl')){
         newInterface =ServerInterface(
           interfaceName: 'Wifi', 
           ip: rawInterface.addresses.first.address
         );
       }
-      if(rawInterface.name.startsWith('enp') || rawInterface.name.startsWith('eth')){
+      else if(rawInterface.name.startsWith('enp') || rawInterface.name.startsWith('eth')){
         newInterface =ServerInterface(
           interfaceName: 'Cable', 
           ip: rawInterface.addresses.first.address
         );
       }
-      if(rawInterface.name.startsWith('bnep')){
+      else if(rawInterface.name.startsWith('bnep')){
         newInterface =ServerInterface(
           interfaceName: 'Bluetooth', 
           ip: rawInterface.addresses.first.address
         );
       }
+      
       if(newInterface != null) newInterfaces.add(newInterface);
     }
 

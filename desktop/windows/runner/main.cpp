@@ -7,6 +7,27 @@
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
+  HANDLE single_instance_mutex = CreateMutexW(
+      nullptr, FALSE, L"Local\\com.mobilegamepad.desktop.single-instance");
+  if (single_instance_mutex != nullptr &&
+      GetLastError() == ERROR_ALREADY_EXISTS) {
+    HWND existing_window = nullptr;
+    for (int attempt = 0; attempt < 50 && existing_window == nullptr;
+         ++attempt) {
+      existing_window = FindWindowW(L"FLUTTER_RUNNER_WIN32_WINDOW", L"desktop");
+      if (existing_window == nullptr) {
+        Sleep(100);
+      }
+    }
+    if (existing_window != nullptr) {
+      ShowWindow(existing_window, IsIconic(existing_window) ? SW_RESTORE
+                                                             : SW_SHOW);
+      SetForegroundWindow(existing_window);
+    }
+    CloseHandle(single_instance_mutex);
+    return EXIT_SUCCESS;
+  }
+
   // Attach to console when present (e.g., 'flutter run') or create a
   // new console when running with a debugger.
   if (!::AttachConsole(ATTACH_PARENT_PROCESS) && ::IsDebuggerPresent()) {
@@ -39,5 +60,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   }
 
   ::CoUninitialize();
+  if (single_instance_mutex != nullptr) {
+    CloseHandle(single_instance_mutex);
+  }
   return EXIT_SUCCESS;
 }
