@@ -40,7 +40,7 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
   }){
     _initServerInterfaceSubscription();
     _initServerPortSubscritpion();
-    // connect();
+    connect();
   }
 
   // ---------------------- Server Address ---------------------

@@ -113,31 +113,61 @@ class DisconnectionBtn extends ConsumerWidget {
 }
 
 
-class ConnectBtn extends ConsumerWidget {
+class ConnectBtn extends ConsumerStatefulWidget {
   const ConnectBtn({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref){
+  ConsumerState<ConnectBtn> createState() => _ConnectBtnState();
+}
+
+class _ConnectBtnState extends ConsumerState<ConnectBtn> {
+  bool loading = false;
+  
+  @override
+  Widget build(BuildContext context){
     return Row(
       children: [
         Expanded(
           child: FilledButton(
-            onPressed : () async {
-              ref.read(connectionRepositoryProvider).connect();
-            },
+            onPressed : loading
+              ? null
+              : () async {
+                setState(() { loading = true; });
+                try{
+                  await ref.read(connectionRepositoryProvider).connect();
+                }catch(_){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Fail to start the server, if the error persists try reinstalling the app.")));
+                }
+                setState(() { loading = false; });
+              },
             style: FilledButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: .circular(8),
                 
               )
             ),
-            child : Text(
-              "Start Server" ,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary
-              ),  
+            child : Row(
+              mainAxisSize: .max,
+              mainAxisAlignment: .center,
+              children: [
+                if(loading)...[
+                  SizedBox( 
+                    height: 16,
+                    width: 16,
+                    child: const CircularProgressIndicator(strokeWidth: 3,)),
+                  const SizedBox(width: 8,)
+                ],
+
+                Text(
+                  loading ? "Starting..." : "Start Server" ,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary
+                  ),  
+                ),
+              ],
             ) 
           ),
         ),
