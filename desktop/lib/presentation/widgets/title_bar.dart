@@ -1,5 +1,5 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:window_manager/window_manager.dart';
 
 class TitleBar extends StatelessWidget implements PreferredSizeWidget{
   const TitleBar({
@@ -7,125 +7,58 @@ class TitleBar extends StatelessWidget implements PreferredSizeWidget{
   });
 
   @override
-  Size get preferredSize => .fromHeight(53);
+  Size get preferredSize => Size.fromHeight(64);
 
   @override
   Widget build(BuildContext context) {
-    final cc = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final cs = Theme.of(context).colorScheme;
 
-    return Container(
-      color: cc.surface,
-      height: preferredSize.height,
-      child: WindowTitleBarBox(
+    return GestureDetector(
+      onPanStart: (_) => windowManager.startDragging(),
+      child: Container(
+        
+        height: preferredSize.height,
+        width: .infinity,
+        color: Colors.transparent,
+
         child: Row(
           crossAxisAlignment: .center,
+          mainAxisSize: .max,
           children: [
-            Expanded(
-              child: MoveWindow(
-                child: Row(
-                  crossAxisAlignment: .center,
-                  mainAxisAlignment: .start,
-                  children: [
-                    const SizedBox(width: 16,),
-
-                    Text(
-                      "Mobile Gamepad Server",
-                      style: tt.titleLarge?.copyWith(
-                        color: cc.onSurface
-                      ),
-                    ),
-                  ]
-                ),
-              )
+            const SizedBox(width: 16,),
+            Text(
+              "Mobile Gamepad Server", 
+              style: tt.headlineMedium?.copyWith(
+                color: cs.onSurface
+              ),
             ),
+            const Spacer(),
 
-
-            MyMinimizeWindowButton(),
-            const SizedBox(width: 8,),
-            MyCloseWindowButton(),
+            IconButton(
+              style: ButtonStyle(
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: .circular(8)
+                ))
+              ),
+              hoverColor: cs.surfaceContainerHighest,
+              onPressed: windowManager.minimize, 
+              icon: Icon(Icons.horizontal_rule_outlined)
+            ),
+            
+            IconButton(
+              style: ButtonStyle(
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                  borderRadius: .circular(8)
+                ))
+              ),
+              hoverColor: cs.surfaceContainerHighest,
+              onPressed: windowManager.close, 
+              icon: Icon(Icons.close)
+            ),
+            
             const SizedBox(width: 8,)
           ],
-        ),
-      ),
-    );
-  }
-}
-
-
-class MyMinimizeWindowButton extends StatelessWidget{
-  const MyMinimizeWindowButton({
-    super.key
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final cc = Theme.of(context).colorScheme;
-    
-    return Transform.scale(
-      scale: 1.3,
-      child: MinimizeWindowButton(
-        colors: WindowButtonColors(
-          normal: Colors.transparent,
-          mouseOver: cc.surfaceBright,
-          mouseDown: cc.secondaryContainer,
-          
-          iconNormal   : cc.onSurface,
-          iconMouseOver: cc.onSurfaceVariant,
-          iconMouseDown: cc.onSecondaryContainer,
-        ),
-      ),
-    );
-  }
-}
-
-class MyMaximizeWindowButton extends StatelessWidget{
-  const MyMaximizeWindowButton({
-    super.key
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final cc = Theme.of(context).colorScheme;
-    
-    return Transform.scale(
-      scale: 1.3,
-      child: MaximizeWindowButton(
-        colors: WindowButtonColors(
-          normal: Colors.transparent,
-          mouseOver: cc.surfaceBright,
-          mouseDown: cc.secondaryContainer,
-          
-          iconNormal   : cc.onSurface,
-          iconMouseOver: cc.onSurfaceVariant,
-          iconMouseDown: cc.onSecondaryContainer,
-        ),
-      ),
-    );
-  }
-}
-
-
-class MyCloseWindowButton extends StatelessWidget{
-  const MyCloseWindowButton({
-    super.key
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final cc = Theme.of(context).colorScheme;
-    
-    return Transform.scale(
-      scale: 1.3,
-      child: CloseWindowButton(
-        colors: WindowButtonColors(
-          normal: Colors.transparent,
-          mouseOver: cc.surfaceBright,
-          mouseDown: cc.secondaryContainer,
-          
-          iconNormal   : cc.onSurface,
-          iconMouseOver: cc.onSurfaceVariant,
-          iconMouseDown: cc.onSecondaryContainer,
         ),
       ),
     );

@@ -12,35 +12,37 @@ class HomeView extends ConsumerWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     final playersState = ref.watch(playersStateProvider).value;
     
-    return CustomScrollView(
-      slivers: [
-        const SliverToBoxAdapter(child: ConnectionHeader()),
-        
-        if(playersState != null)
-        if(playersState.isNotEmpty)
-          SliverList.separated(
-            separatorBuilder: (context, index) => const SizedBox(height: 8,),
-            itemCount: playersState.length,
-            itemBuilder: (context, index){
-              final playerState = playersState[index];
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ListTile(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: .circular(12)
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          const SliverToBoxAdapter(child: ConnectionHeader()),
+          
+          if(playersState != null)
+          if(playersState.isNotEmpty)
+            SliverList.separated(
+              separatorBuilder: (context, index) => const SizedBox(height: 8,),
+              itemCount: playersState.length,
+              itemBuilder: (context, index){
+                final playerState = playersState[index];
+      
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: .circular(12)
+                    ),
+                    tileColor: Theme.of(context).colorScheme.surfaceContainer,
+                    title : Text(playerState.player.name),
+                    subtitle: Text(playerState.player.deviceName),
+                    trailing: Text(playerState.connectionStatus.name),
                   ),
-                  tileColor: Theme.of(context).colorScheme.surfaceContainer,
-                  title : Text(playerState.player.name),
-                  subtitle: Text(playerState.player.deviceName),
-                  trailing: Text(playerState.connectionStatus.name),
-                ),
-              );
-            }
-          )
-        
-        
-      ],
+                );
+              }
+            )
+          
+          
+        ],
+      ),
     );
   }
 }

@@ -1,23 +1,28 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:desktop/core/theme/theme_provider.dart';
 import 'package:desktop/presentation/screens/home/home_view.dart';
-import 'package:desktop/presentation/widgets/navigation_frame.dart';
+import 'package:desktop/presentation/widgets/title_bar_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:window_manager/window_manager.dart';
 
-void main() {
-  runApp(const ProviderScope(child: DesktopGamePadClient()));
 
-  doWhenWindowReady(() {
-    const initialSize = Size(500, 700);
-    appWindow.minSize   = initialSize;
-    appWindow.size      = initialSize;
-    appWindow.maxSize   = initialSize;
-    
-    appWindow.alignment = Alignment.center;
-    appWindow.title     = 'GamePad Server';
-    appWindow.show();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = WindowOptions(
+    size: Size(600, 800),
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: true,
+    titleBarStyle: TitleBarStyle.hidden,
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
   });
+
+  runApp(const ProviderScope(child: DesktopGamePadClient()));
 }
 
 
@@ -38,9 +43,9 @@ class DesktopGamePadClient extends ConsumerWidget{
       darkTheme: ref.read(themeProvider.notifier).darkTheme,
       themeMode: theme.themeMode,
 
-      home: NavigationFrame(
-        pageBuilder: (context) => HomeView()
-      ),
+      home: const TitleBarFrame(
+        child: HomeView(),
+      )
     );   
   }
 }
