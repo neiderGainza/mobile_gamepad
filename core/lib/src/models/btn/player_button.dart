@@ -6,8 +6,8 @@ enum PlayerButton {
 
   dpad(4, "Dpad", hasAxis: true),
 
-  lb(5, "LB"),
-  rb(6, "RB"),
+  // lb(5, "LB"),
+  // rb(6, "RB"),
 
   lt(7, "LT"),
   rt(8, "RT"),

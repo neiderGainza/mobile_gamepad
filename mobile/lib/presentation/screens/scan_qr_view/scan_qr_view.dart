@@ -29,12 +29,12 @@ class _ScanQrViewState extends State<ScanQrView> {
         onDetect: onDetect
       ),
 
-     floatingActionButton: FloatingActionButton(
+     floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           _hasFinished = true;
           context.pop(null);
         },
-        child: Text(AppLocalizations.of(context)!.cancel),
+        label: Text(AppLocalizations.of(context)!.cancel),
       ),
     );
   }

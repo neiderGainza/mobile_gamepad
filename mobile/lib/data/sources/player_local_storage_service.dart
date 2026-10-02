@@ -28,6 +28,12 @@ abstract interface class PlayerLocalStorageService {
   (String,int) ? get lastServerAddress;
 
   Future<void> upsertLastServerAddress(String server, int port);
+
+
+  // First launch or not
+  bool isFirstLaunch();
+
+  Future<void> setFirstLaunchToFalse();
 }
 
 // ------------------------ implementation -------------------------
@@ -106,6 +112,35 @@ class PlayerLocalStorageServiceImpl implements PlayerLocalStorageService{
       );
     }catch(e){
       debugPrint("Error upserting Player $e");
+      rethrow;
+    }
+  }
+
+
+  @override
+  bool isFirstLaunch() {
+    try{
+      final firstLaunch = _box.get(
+        LocalStorageKeys.isFirstLaunchKey, defaultValue: null);
+    
+      if(firstLaunch == null){
+        return true;
+      }
+      return false;
+    }catch(e){
+      debugPrint("Error loading first launch $e");
+      rethrow;
+    }
+  }
+
+
+  @override
+  Future<void> setFirstLaunchToFalse() async {
+    try{
+      await _box.put(
+        LocalStorageKeys.isFirstLaunchKey, DateTime.now());
+    }catch(e){
+      debugPrint("Error settingFirstLaunch $e");
       rethrow;
     }
   }

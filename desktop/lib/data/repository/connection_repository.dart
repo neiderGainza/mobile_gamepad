@@ -134,7 +134,7 @@ class ConnectionRepositoryImpl implements ConnectionRepository{
       );
     } else if (Platform.isLinux) {
       await Process.start(
-        'gamepad_server-dev',
+        'gamepad_server',
         [],
         mode: ProcessStartMode.detached,
       );

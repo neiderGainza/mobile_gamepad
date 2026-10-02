@@ -42,33 +42,27 @@ contents:
   # ---------------------------------------------------------------------------
   # 1. Servidor y Librería C (uinput)
   # ---------------------------------------------------------------------------
-  - src: "gamepad_server/bundle/bin/server"
-    dst: "/usr/bin/gamepad_server-dev"
+  - src: "server/bin/server"
+    dst: "/usr/bin/gamepad_server"
     file_info:
       mode: 0755
 
-  - src: "gamepad_server/bundle/lib/libvirtual_device.so"
+  - src: "server/lib/libvirtual_device.so"
     dst: "/usr/lib/libvirtual_device.so"
     file_info:
       mode: 0755
-
-  # Regla udev para permitir /dev/uinput sin ser root
-  - src: "gamepad_server/99-gamepad-uinput.rules"
-    dst: "/usr/lib/udev/rules.d/99-gamepad-uinput.rules"
-    file_info:
-      mode: 0644
 
   # ---------------------------------------------------------------------------
   # 2. Cliente Desktop (Flutter App)
   # ---------------------------------------------------------------------------
   # Flutter necesita conservar los directorios lib/ y data/ del bundle.
-  - src: "gamepad_desktop/bundle/data"
+  - src: "desktop/data"
     dst: "/opt/gamepad-desktop/data"
 
-  - src: "gamepad_desktop/bundle/lib"
+  - src: "desktop/lib"
     dst: "/opt/gamepad-desktop/lib"
 
-  - src: "gamepad_desktop/bundle/desktop"
+  - src: "desktop/desktop"
     dst: "/opt/gamepad-desktop/desktop"
 
   # Enlace simbólico para lanzar 'gamepad-desktop' desde terminal
@@ -77,7 +71,7 @@ contents:
     type: "symlink"
 
   # Icono de la aplicación
-  - src: "gamepad_desktop/bundle/data/flutter_assets/assets/icons/icon.png"
+  - src: "desktop/data/flutter_assets/assets/icons/icon.png"
     dst: "/usr/share/icons/hicolor/256x256/apps/gamepad-desktop.png"
     file_info:
       mode: 0644

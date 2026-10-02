@@ -241,4 +241,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String connectionErrorDetails(String address, String port) {
     return 'Error al conectar con $address:$port. Verifica la dirección.';
   }
+
+  @override
+  String get welcome => 'Welcome!';
+
+  @override
+  String get welcome1 =>
+      'To connect your phone as a gamepad, you must first install the Gamepad Server on your computer.';
+
+  @override
+  String get welcome2 =>
+      'Download the server, available for windows and linux, from the official website.';
+
+  @override
+  String get welcome3 => 'Download Page';
+
+  @override
+  String get welcome4 => 'Continue';
 }

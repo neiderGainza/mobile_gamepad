@@ -92,6 +92,10 @@
             "address": { "type": "String" },
             "port": { "type": "String" }
         }
-    }
-
+    },
+    "welcome":"Welcome!",
+    "welcome1":"To connect your phone as a gamepad, you must first install the Gamepad Server on your computer.",
+    "welcome2":"Download the server, available for windows and linux, from the official website.",
+    "welcome3":"Download Page",
+    "welcome4":"Continue"    
 }

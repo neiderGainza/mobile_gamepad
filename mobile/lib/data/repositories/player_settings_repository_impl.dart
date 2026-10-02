@@ -33,4 +33,19 @@ class PlayerSettingsRepositoryImpl extends PlayerSettingsRepository{
       rethrow;
     }
   }
+
+  @override
+  bool isFirstLaunch() {
+    try{
+      final result = _plss.isFirstLaunch();
+
+      if(result == false){
+        _plss.setFirstLaunchToFalse();
+      }
+
+      return result;
+    }catch(e){
+      return false;
+    }
+  }
 }
