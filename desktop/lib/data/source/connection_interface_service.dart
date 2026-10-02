@@ -106,7 +106,7 @@ class ConnectionInterfaceServiceImpl implements ConnectionInterfaceService{
       // windows all interfaces
       if(Platform.isWindows){
         newInterfaces.add(ServerInterface(
-          interfaceName: rawInterface.name, 
+          interfaceName: rawInterface.name.replaceAll('-', '_'), 
           ip: rawInterface.addresses.first.address
         ));
         continue;
