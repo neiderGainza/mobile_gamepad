@@ -54,23 +54,23 @@ class DefaultBtnCollection{
     ), 
     buttonCodes: [.rt],
   );
-  static Button lb = Button(
-    buttonData: ButtonData(
-      label: 'LB', 
-      shape: .rectangle,
-      borderRadius: 10,
-    ), 
-    buttonCodes: [.lb],
-  );
+  // static Button lb = Button(
+  //   buttonData: ButtonData(
+  //     label: 'LB', 
+  //     shape: .rectangle,
+  //     borderRadius: 10,
+  //   ), 
+  //   buttonCodes: [.lb],
+  // );
 
-  static Button rb = Button(
-    buttonData: ButtonData(
-      label: 'RB', 
-      shape: .rectangle,
-      borderRadius: 10,
-    ), 
-    buttonCodes: [.rb],
-  );
+  // static Button rb = Button(
+  //   buttonData: ButtonData(
+  //     label: 'RB', 
+  //     shape: .rectangle,
+  //     borderRadius: 10,
+  //   ), 
+  //   buttonCodes: [.rb],
+  // );
 
 
   static Button leftJoystick = Button(

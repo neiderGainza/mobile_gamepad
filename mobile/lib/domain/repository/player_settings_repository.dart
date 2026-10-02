@@ -6,4 +6,8 @@ abstract class PlayerSettingsRepository {
   Future<Player> get player;
 
   Future<void> updatePlayerName(String playerName);
+
+
+  /// returns true if it is and sets it to false
+  bool isFirstLaunch();
 }

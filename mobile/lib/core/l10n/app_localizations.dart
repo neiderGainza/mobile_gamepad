@@ -535,6 +535,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error connecting to {address}:{port}. Please verify the address.'**
   String connectionErrorDetails(String address, String port);
+
+  /// No description provided for @welcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome!'**
+  String get welcome;
+
+  /// No description provided for @welcome1.
+  ///
+  /// In en, this message translates to:
+  /// **'To connect your phone as a gamepad, you must first install the Gamepad Server on your computer.'**
+  String get welcome1;
+
+  /// No description provided for @welcome2.
+  ///
+  /// In en, this message translates to:
+  /// **'Download the server, available for windows and linux, from the official website.'**
+  String get welcome2;
+
+  /// No description provided for @welcome3.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Page'**
+  String get welcome3;
+
+  /// No description provided for @welcome4.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get welcome4;
 }
 
 class _AppLocalizationsDelegate

@@ -13,7 +13,6 @@ class ServerAddress {
     required this.interface
   });
 
-
   String encode() => '$port-${interface.interfaceName}-${interface.ip}';
   factory ServerAddress.decode(String source){
     try{

@@ -10,9 +10,9 @@ class ButtonGroupsCollection {
     .singleButtonGroup(button: DefaultBtnCollection.btnY),
 
     .singleButtonGroup(button: DefaultBtnCollection.lt),
-    .singleButtonGroup(button: DefaultBtnCollection.lb),
+    // .singleButtonGroup(button: DefaultBtnCollection.lb),
     .singleButtonGroup(button: DefaultBtnCollection.rt),
-    .singleButtonGroup(button: DefaultBtnCollection.rb),
+    // .singleButtonGroup(button: DefaultBtnCollection.rb),
     
     .singleButtonGroup(button: DefaultBtnCollection.menu , screenRelativeSize: 0.09),
     .singleButtonGroup(button: DefaultBtnCollection.play , screenRelativeSize: 0.09),
@@ -38,15 +38,15 @@ class ButtonGroupsCollection {
       DefaultBtnCollection.play
     ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 0),
 
-    ButtonGroup(buttons: [
-      DefaultBtnCollection.rb,
-      DefaultBtnCollection.rt
-    ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 90),
+    // ButtonGroup(buttons: [
+    //   DefaultBtnCollection.rb,
+    //   DefaultBtnCollection.rt
+    // ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 90),
     
-    ButtonGroup(buttons: [
-      DefaultBtnCollection.lb,
-      DefaultBtnCollection.lt
-    ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 90)
+    // ButtonGroup(buttons: [
+    //   DefaultBtnCollection.lb,
+    //   DefaultBtnCollection.lt
+    // ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 90)
     
   ];
 }

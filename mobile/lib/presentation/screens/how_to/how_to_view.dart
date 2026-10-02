@@ -16,16 +16,19 @@ class HowToView extends StatelessWidget{
         title: Text(AppLocalizations.of(context)!.howToUseTitle),
       ),
       
-      body: ListView(
-        
-        children: [
-          const HowToUse(),
-          const SizedBox(height: 8,),
-          const HowManyUserCanIConnect(),
-          const SizedBox(height: 8,),
-          const HowToConnectoThroughtBluetooth(),
-          const SizedBox(height: 8,),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          
+          children: [
+            const HowToUse(),
+            const SizedBox(height: 8,),
+            const HowManyUserCanIConnect(),
+            const SizedBox(height: 8,),
+            const HowToConnectoThroughtBluetooth(),
+            const SizedBox(height: 8,),
+          ],
+        ),
       ),
     );
   }

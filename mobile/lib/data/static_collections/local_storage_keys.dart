@@ -5,4 +5,5 @@ class LocalStorageKeys {
   static String controllerIdsKey = 'controllerIds';
   static String lastServerAddressKey = 'lastServerAddress';
   static String customButtonsKey = 'customButtons';
+  static String isFirstLaunchKey = 'firstLaunchKey';
 }

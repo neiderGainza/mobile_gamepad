@@ -19,12 +19,12 @@ class UinputXbox implements VirtualDevice {
     .btnB : const VirtualDeviceSinglePressButton(code: BTN_B, i10nKey: 'btnB'),
     .btnX : const VirtualDeviceSinglePressButton(code: BTN_X, i10nKey: 'btnX'),
     .btnY : const VirtualDeviceSinglePressButton(code: BTN_Y, i10nKey: 'btnY'),
-    .lb   : const VirtualDeviceSinglePressButton(code: BTN_TL, i10nKey: 'lb'),
-    .rb   : const VirtualDeviceSinglePressButton(code: BTN_TR, i10nKey: 'rb'),
+    // .lb   : const VirtualDeviceSinglePressButton(code: BTN_TL, i10nKey: 'lb'),
+    // .rb   : const VirtualDeviceSinglePressButton(code: BTN_TR, i10nKey: 'rb'),
     .lt   : const VirtualDeviceSinglePressButton(code: BTN_TL2, i10nKey: 'lt'),
     .rt   : const VirtualDeviceSinglePressButton(code: BTN_TR2, i10nKey: 'rt'),
     .menu : const VirtualDeviceSinglePressButton(code: BTN_START, i10nKey: 'menu'),
-    .view : const VirtualDeviceSinglePressButton(code: BTN_SELECT, i10nKey: 'xbox'),
+    .view : const VirtualDeviceSinglePressButton(code: BTN_SELECT, i10nKey: 'select'),
     
     .ls   : const VirtualDeviceAxisButton(
       codeByAxis: {.horizontal: ABS_X, .vertical: ABS_Y},

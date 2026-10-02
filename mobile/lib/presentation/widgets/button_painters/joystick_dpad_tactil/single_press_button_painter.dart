@@ -61,7 +61,7 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
             widthFactor: 0.6,
             heightFactor: 0.7,
             child: FittedBox(
-              fit: .fill,
+              fit: .scaleDown,
               child: Text(
                 buttonData.label,
                 style: TextStyle(

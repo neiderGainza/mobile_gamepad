@@ -17,7 +17,7 @@ class ScanAddressBtn extends ConsumerWidget {
     return FilledButton.tonal(
       onPressed : () async {
         final selectedServerAddress = await context.push('/scan');
-
+        
         if(selectedServerAddress is ServerAddress){
           ref.read(connectionRepositoryProvider).connect(
             selectedServerAddress.interface.ip, 

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:game_controller/data/repositories/player_settings_repository_impl.dart';
 import 'package:game_controller/presentation/screens/app_info_view/app_info_view.dart';
 import 'package:game_controller/presentation/screens/controller_details_view/controller_details_view.dart';
 import 'package:game_controller/presentation/screens/controller_form_view/controller_form_view.dart';
 import 'package:game_controller/presentation/screens/controller_list_view/controller_list_view.dart';
+import 'package:game_controller/presentation/screens/first_launch_view/first_launch_view.dart';
 import 'package:game_controller/presentation/screens/how_to/how_to_view.dart';
 import 'package:game_controller/presentation/screens/scan_qr_view/scan_qr_view.dart';
 import 'package:go_router/go_router.dart';
@@ -22,14 +24,19 @@ final navigationProvider = Provider<GoRouter>((ref){
     routes: [
       GoRoute(
         path: '/',
-        redirect: (context, state) => '/controllers',
+        redirect: (context, state){
+          final isFirstLaunch = ref.read(
+            playerSettingsRepositoryProvider).isFirstLaunch();
+          
+          if(isFirstLaunch) return '/firstLaunch';
+          
+          return '/controllers';
+        },
       ),
 
       GoRoute(
         path: '/controllers',
-        builder: (context, state){
-          return ControllerListView();
-        }
+        builder: (context, state) => const ControllerListView(),
       ),
       
       GoRoute(
@@ -67,6 +74,12 @@ final navigationProvider = Provider<GoRouter>((ref){
         path: '/how_to',
         builder: (context, state) => const HowToView()
       ),
+
+      GoRoute(
+        path: '/firstLaunch',
+        builder: (context, state) => const FirstLaunchView(), 
+      ),
+
     ]
   );
 });

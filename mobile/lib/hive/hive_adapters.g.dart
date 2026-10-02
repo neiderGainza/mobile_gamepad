@@ -100,10 +100,6 @@ class PlayerButtonAdapter extends TypeAdapter<PlayerButton> {
         return PlayerButton.btnY;
       case 4:
         return PlayerButton.dpad;
-      case 5:
-        return PlayerButton.lb;
-      case 6:
-        return PlayerButton.rb;
       case 7:
         return PlayerButton.lt;
       case 8:
@@ -134,10 +130,6 @@ class PlayerButtonAdapter extends TypeAdapter<PlayerButton> {
         writer.writeByte(3);
       case PlayerButton.dpad:
         writer.writeByte(4);
-      case PlayerButton.lb:
-        writer.writeByte(5);
-      case PlayerButton.rb:
-        writer.writeByte(6);
       case PlayerButton.lt:
         writer.writeByte(7);
       case PlayerButton.rt:

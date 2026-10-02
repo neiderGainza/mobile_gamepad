@@ -35,10 +35,6 @@ types:
         index: 3
       dpad:
         index: 4
-      lb:
-        index: 5
-      rb:
-        index: 6
       lt:
         index: 7
       rt:
