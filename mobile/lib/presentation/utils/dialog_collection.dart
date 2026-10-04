@@ -114,7 +114,7 @@ class DialogCollection {
               const SizedBox(height: 8,),
               FormBuilderTextField(
                 name: 'port',
-                initialValue: initIp,
+                initialValue: initPort,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)?.port 
                 ),

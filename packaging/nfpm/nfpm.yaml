@@ -52,6 +52,12 @@ contents:
     file_info:
       mode: 0755
 
+  # Da acceso a uinput mediante ACL al usuario de la sesión gráfica activa.
+  - src: "70-gamepad-uinput.rules"
+    dst: "/usr/lib/udev/rules.d/70-gamepad-uinput.rules"
+    file_info:
+      mode: 0644
+
   # ---------------------------------------------------------------------------
   # 2. Cliente Desktop (Flutter App)
   # ---------------------------------------------------------------------------

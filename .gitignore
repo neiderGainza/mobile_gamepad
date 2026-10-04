@@ -2,8 +2,14 @@
 **.tar.gz
 **.tar.zst
 **/builds/
-packagin/gamepad_desktop/
-packagin/gamepad_server/
+# Generated desktop/server bundles staged for Linux packaging.
+/packaging/nfpm/desktop/
+/packaging/nfpm/server/
+/packaging/nfpm/gamepad_desktop/
+/packaging/nfpm/gamepad_server/
+
+# Generated Windows desktop bundle staged for packaging.
+/packaging/windows/desktop/
 **.exe
 
 # Miscellaneous

@@ -1,0 +1,1 @@
+Compile desktop and server for windows and put then in desktop and server folders
