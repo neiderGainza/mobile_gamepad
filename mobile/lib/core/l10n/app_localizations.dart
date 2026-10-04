@@ -565,6 +565,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Continue'**
   String get welcome4;
+
+  /// No description provided for @typeServerAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Server Address'**
+  String get typeServerAddress;
+
+  /// No description provided for @port.
+  ///
+  /// In en, this message translates to:
+  /// **'port'**
+  String get port;
 }
 
 class _AppLocalizationsDelegate

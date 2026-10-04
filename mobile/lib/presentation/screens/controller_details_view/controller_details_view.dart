@@ -10,6 +10,7 @@ import 'package:game_controller/presentation/screens/controller_details_view/wid
 import 'package:game_controller/presentation/screens/controller_details_view/widgets/status_indicators.dart';
 import 'package:game_controller/presentation/utils/orientation_function_collection.dart';
 import 'package:game_controller/presentation/utils/snackbar_collection.dart';
+import 'package:game_controller/presentation/widgets/ads/mobile_gamepad_banner_ad.dart';
 import 'package:game_controller/presentation/widgets/button_painters/button_group_painter.dart';
 import 'package:game_controller/presentation/utils/inherited_value.dart';
 
@@ -104,10 +105,6 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
 
   Widget onData(BuildContext context, Controller controller){    
     
-    // for(final buttonGroup in controller.buttonGroups)
-    // print(buttonGroup.toJson());
-
-
     return InheritedValue<String>(
       value: widget.controllerId, 
       
@@ -124,13 +121,24 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
             child: ButtonGroupPainter(buttonGroup: posGroup.buttonGroup),
           ),
 
-          Align( 
-            alignment: .topLeft, 
-            child: MyAppBar(controller: controller,),),
-        
-          Align( 
-            alignment: .topRight, 
-            child: StatusIndicators(),),
+
+          Align(
+            alignment: .topLeft,
+            child: MyAppBar(controller: controller),
+          ),
+
+          const Align(
+            alignment: .topRight,
+            child: StatusIndicators(),
+          ),
+
+          Align(
+            alignment: .topCenter,
+            child: MobileGamepadBannerAdd( 
+              width: MediaQuery.of(context).size.longestSide * 0.5,
+            ),
+          ),
+
         ],
       ),
     );

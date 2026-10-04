@@ -184,11 +184,12 @@ class TypeAddressBtn extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref){
     return FilledButton.tonal(
       onPressed : () async {
-        final address = await DialogCollection.simplePopUpForm(
+        final lastSA = ref.read(connectionRepositoryProvider).lastServerAddress;
+        
+        final address = await DialogCollection.typeAddressForm(
           context, 
-          title: AppLocalizations.of(context)!.serverAddressPort,
-          initValue: ref.read(connectionRepositoryProvider).lastServerAddress,
-          keyboardType: .number
+          initIp: lastSA?.split(':')[0],
+          initPort: lastSA?.split(':')[1]
         );
     
         if(address != null){

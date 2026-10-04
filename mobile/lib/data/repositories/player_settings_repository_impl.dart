@@ -39,7 +39,7 @@ class PlayerSettingsRepositoryImpl extends PlayerSettingsRepository{
     try{
       final result = _plss.isFirstLaunch();
 
-      if(result == false){
+      if(result == true){
         _plss.setFirstLaunchToFalse();
       }
 

@@ -1,4 +1,4 @@
-package io.neiderGainza.mobile
+package io.neiderGainza.mobileGamepad
 
 import io.flutter.embedding.android.FlutterActivity
 

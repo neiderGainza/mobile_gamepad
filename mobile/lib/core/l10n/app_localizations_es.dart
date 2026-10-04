@@ -258,4 +258,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get welcome4 => 'Continue';
+
+  @override
+  String get typeServerAddress => 'Server Address';
+
+  @override
+  String get port => 'port';
 }

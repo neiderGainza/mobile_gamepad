@@ -76,6 +76,81 @@ class DialogCollection {
     );
   }
 
+
+  static Future<String?> typeAddressForm(
+    BuildContext context, 
+    {
+      String ? initIp,
+      String ? initPort
+    }
+  ){
+    final formKey = GlobalKey<FormBuilderState>();
+
+    return showDialog<String>(
+      context: context, 
+      builder: (context) => AlertDialog(
+        
+        title  : Text(AppLocalizations.of(context)?.typeServerAddress??'Server Address'),
+      
+        content: FormBuilder(
+          key: formKey,
+          child: Column(
+            mainAxisSize: .min,
+            children: [
+              FormBuilderTextField(
+                name: 'ip' ,
+                initialValue: initIp,
+                keyboardType: .number,
+                decoration: InputDecoration(
+                  labelText: "Ip" 
+                ),
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.fieldRequired;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 8,),
+              FormBuilderTextField(
+                name: 'port',
+                initialValue: initIp,
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)?.port 
+                ),
+                keyboardType: .number,
+                validator: (value) {
+                  if(value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.fieldRequired;
+                  }
+                  return null;
+                },
+              ),
+            ]
+          )
+        ),
+
+        actions: [
+          TextButton(
+            onPressed: (){ context.pop(); }, 
+            child: Text(AppLocalizations.of(context)!.cancel)
+          ),
+          TextButton(
+            onPressed: (){ 
+              if(formKey.currentState?.saveAndValidate()??false){
+                context.pop(
+                  '${formKey.currentState?.value['ip']}:'
+                  '${formKey.currentState?.value['port']}'
+                ); 
+              }  
+            }, 
+            child: Text(AppLocalizations.of(context)!.accept)
+          ),
+        ],
+      )
+    );
+  }
+
   static Future<ServerAddress?> pickServerAddress(
     BuildContext context, List<ServerAddress> addresses) async {
       
