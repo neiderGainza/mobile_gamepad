@@ -65,6 +65,7 @@ class DefaultController {
           ],
           screenRelativeSize: 0.23,
           internalMargin: 0.2,
+          rotationDegreess: 0
         ),
         relativePosition: const Offset(0.9811965811965812, 0.9870370370370369),
       ),

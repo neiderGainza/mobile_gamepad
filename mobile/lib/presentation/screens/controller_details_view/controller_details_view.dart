@@ -134,8 +134,11 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
 
           Align(
             alignment: .topCenter,
-            child: MobileGamepadBannerAdd( 
-              width: MediaQuery.of(context).size.longestSide * 0.5,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 32),
+              child: MobileGamepadBannerAdd( 
+                width: MediaQuery.of(context).size.longestSide * 0.5,
+              ),
             ),
           ),
 

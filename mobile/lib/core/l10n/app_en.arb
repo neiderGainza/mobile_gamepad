@@ -9,13 +9,20 @@
     "howToUseStep4": "4 . Enjoy.",
     
     "howManyUsers": "How many users can be connected?.",
-    "howManyUsersStep1" : "Tecnicly, you could connect as much users as you would like. \nHowever, we recomend connect the first 2 or 3 user by wifi and the four one by bluetooth, since there all others by cable",
+    "howManyUsersStep1" : "On Windows the maximun amount of connected Xbox Controllers is 4.\nOn Linux tecnicly you can connect any number of players.\n\nWe recommend to connect up to 4 users",
 
     "howConnectThroughtBluetooth": "How to connect throught bluetooth?.",
     "howConnectThroughtBluetoothStep1": "1. Connect your computer and your phone by bluetooth.",
     "howConnectThroughtBluetoothStep2": "2. Activate internet sharing throght bluetooth (tetering).",
     "howConnectThroughtBluetoothStep3": "3. Scan de QR code and select bluetooth",
 
+    "howToHelp": "How to help the developer?.",
+    "howToHelp1": "1. Consider clicking the ads once a day haha.",
+    "howToHelp2": "2. You can text me throw my email to share your ideas, i will be really happy to know someone cares enogh to do it.",
+    
+    "adsMissing": "Oh no, you are missing out on some cool ads!",
+    "adsMissing2": "Ads help us keep the app free and continuously improving.",
+    
     "downloadPage": "download page",
     "editingMenu": "Editing Menu",
     "size": "Size:",
@@ -52,12 +59,14 @@
     "selectActions": "Select your actions",
     "saveChangesError": "Error saving the changes. Please restart the app.",
     "howToUseTitle": "How to use",
+    "askDifferentQuestionByEmail": "Ask a different question by email?",
+    "askQuestionEmailSubject": "Question about Mobile Gamepad",
     "editUsername": "Edit username",
     "serverAddressPort": "Server address:port",
     "connectionFailed": "Connection failed",
     "typeAddress": "Type address",
     "disconnect": "Disconnect",
-    "unnamedController": "Unnamed Controller",
+    "unnamedController": "General Controller",
     "defaultController": "Default Controller",
     "deleteControllerConfirmation": "Are you sure you want to delete the controller {controllerName}?",
     "@deleteControllerConfirmation": {

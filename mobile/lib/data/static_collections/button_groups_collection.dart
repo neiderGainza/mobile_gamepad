@@ -31,11 +31,22 @@ class ButtonGroupsCollection {
       DefaultBtnCollection.btnB,
       DefaultBtnCollection.btnA,
       DefaultBtnCollection.btnX,
-    ], screenRelativeSize: 0.23, internalMargin: 0, rotationDegreess: 0),
+    ], screenRelativeSize: 0.21, internalMargin: 0, rotationDegreess: 0),
+
+    ButtonGroup(buttons: [
+      DefaultBtnCollection.btnY,
+      DefaultBtnCollection.btnA,
+      DefaultBtnCollection.btnX,
+    ], screenRelativeSize: 0.21, internalMargin: 0, rotationDegreess: 0),
   
     ButtonGroup(buttons: [
       DefaultBtnCollection.menu,
       DefaultBtnCollection.play
+    ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 0),
+
+    ButtonGroup(buttons: [
+      DefaultBtnCollection.lt,
+      DefaultBtnCollection.rt
     ], screenRelativeSize: 0.20, internalMargin: 0, rotationDegreess: 0),
 
     // ButtonGroup(buttons: [

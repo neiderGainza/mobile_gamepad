@@ -3,30 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:game_controller/core/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HowToView extends StatelessWidget{
-  const HowToView({
-    super.key,
-  });
+class HowToView extends StatelessWidget {
+  const HowToView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text(AppLocalizations.of(context)!.howToUseTitle),
+        title: Text(l10n.howToUseTitle),
       ),
-      
+
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ListView(
-          
           children: [
             const HowToUse(),
-            const SizedBox(height: 8,),
+            const SizedBox(height: 8),
             const HowManyUserCanIConnect(),
-            const SizedBox(height: 8,),
+            const SizedBox(height: 8),
             const HowToConnectoThroughtBluetooth(),
-            const SizedBox(height: 8,),
+            const SizedBox(height: 8),
+
+            const SizedBox(height: 8),
+            Center(
+              child: TextButton(
+                onPressed: () async {
+                  final emailUri = Uri(
+                    scheme: 'mailto',
+                    path: 'neidergainza1@gmail.com',
+                    queryParameters: {'subject': l10n.askQuestionEmailSubject},
+                  );
+
+                  if (await canLaunchUrl(emailUri)) {
+                    await launchUrl(
+                      emailUri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                  }
+                },
+                child: Text(l10n.askDifferentQuestionByEmail),
+              ),
+            ),
           ],
         ),
       ),
@@ -34,7 +54,7 @@ class HowToView extends StatelessWidget{
   }
 }
 
-class HowToTile extends StatelessWidget{
+class HowToTile extends StatelessWidget {
   const HowToTile({
     super.key,
     required this.title,
@@ -59,38 +79,28 @@ class HowToTile extends StatelessWidget{
         backgroundColor: cs.surfaceContainerHighest,
         collapsedBackgroundColor: cs.surfaceContainer,
         initiallyExpanded: initialyExpanded,
-        shape: RoundedRectangleBorder(
-          borderRadius: .circular(10)
-        ),
-        collapsedShape: RoundedRectangleBorder(
-          borderRadius: .circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: .circular(10)),
+        collapsedShape: RoundedRectangleBorder(borderRadius: .circular(10)),
         expandedCrossAxisAlignment: .start,
         expandedAlignment: .topLeft,
-        childrenPadding: .fromLTRB(16,0,16,8),
-        children: steps
+        childrenPadding: .fromLTRB(16, 0, 16, 8),
+        children: steps,
       ),
     );
   }
-
 }
 
-
-
 class HowToUse extends StatelessWidget {
-  const HowToUse({
-    super.key,
-  });
-
+  const HowToUse({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;    
+    final tt = Theme.of(context).textTheme;
 
     return HowToTile(
       initialyExpanded: true,
-      title: AppLocalizations.of(context)!.howToUse, 
+      title: AppLocalizations.of(context)!.howToUse,
       steps: [
         RichText(
           text: TextSpan(
@@ -101,33 +111,34 @@ class HowToUse extends StatelessWidget {
                 text: AppLocalizations.of(context)!.downloadPage,
                 style: tt.bodyMedium?.copyWith(
                   decoration: .underline,
-                  color: cs.tertiary
+                  color: cs.tertiary,
                 ),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    final url  = Uri.parse('https://neidergainza.github.io/gamepad_releases/#downloads');
+                    final url = Uri.parse(
+                      'https://neidergainza.github.io/gamepad_releases/#downloads',
+                    );
                     if (await canLaunchUrl(url)) {
-                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                      await launchUrl(
+                        url,
+                        mode: LaunchMode.externalApplication,
+                      );
                     }
-                  }
-              ), 
-              TextSpan( text:'.'),
-            ]
+                  },
+              ),
+              TextSpan(text: '.'),
+            ],
           ),
         ),
         Text(AppLocalizations.of(context)!.howToUseStep2),
         Text(AppLocalizations.of(context)!.howToUseStep3),
-      ]
+      ],
     );
   }
 }
 
-
 class HowManyUserCanIConnect extends StatelessWidget {
-  const HowManyUserCanIConnect({
-    super.key,
-  });
-
+  const HowManyUserCanIConnect({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -135,31 +146,42 @@ class HowManyUserCanIConnect extends StatelessWidget {
     // final tt = Theme.of(context).textTheme;
 
     return HowToTile(
-      title: AppLocalizations.of(context)!.howManyUsers, 
-      steps: [
-        Text(AppLocalizations.of(context)!.howManyUsersStep1),
-      ]
+      title: AppLocalizations.of(context)!.howManyUsers,
+      steps: [Text(AppLocalizations.of(context)!.howManyUsersStep1)],
     );
-
   }
 }
 
-
 class HowToConnectoThroughtBluetooth extends StatelessWidget {
-  const HowToConnectoThroughtBluetooth ({
-    super.key,
-  });
+  const HowToConnectoThroughtBluetooth({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
     return HowToTile(
       title: AppLocalizations.of(context)!.howConnectThroughtBluetooth,
       steps: [
         Text(AppLocalizations.of(context)!.howConnectThroughtBluetoothStep1),
         Text(AppLocalizations.of(context)!.howConnectThroughtBluetoothStep2),
         Text(AppLocalizations.of(context)!.howConnectThroughtBluetoothStep3),
-      ]
+      ],
     );
   }
 }
+
+
+class HowToConnectoHelpTheDeveloper extends StatelessWidget {
+  const HowToConnectoHelpTheDeveloper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return HowToTile(
+      title: AppLocalizations.of(context)!.howToHelp,
+      steps: [
+        Text(AppLocalizations.of(context)!.howToHelp1),
+        Text(AppLocalizations.of(context)!.howToHelp2),
+      ],
+    );
+  }
+}
+
+

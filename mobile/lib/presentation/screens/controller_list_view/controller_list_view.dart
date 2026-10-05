@@ -78,7 +78,8 @@ class _ControllerListViewState extends ConsumerState<ControllerListView> with Ro
           SliverAppBar(
             title: Text(AppLocalizations.of(context)!.appName),
             actions: [
-              const ThreeDotMenu()
+              const ThreeDotMenu(),
+              const SizedBox(width: 8,)
             ],
           ),
 

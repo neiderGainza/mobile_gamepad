@@ -88,19 +88,17 @@ class ConnectionHeader extends ConsumerWidget {
           ),
           const SizedBox(height: 8,),
 
-          Container(
-            clipBehavior: .antiAlias,
-            decoration: BoxDecoration(
-              color: cs.surfaceContainerHighest,
-              borderRadius: .circular(10),
-            ),
+          Material(
+            color: Colors.transparent,
             child: ListTile(
-              title: Text(l10n.howToUseTitle),
+              tileColor: cs.surfaceContainerHighest,
+              shape: RoundedRectangleBorder( borderRadius: .circular(10) ),
+              title:    Text(l10n.howToUseTitle),
               trailing: Icon(Icons.question_mark_rounded),
               onTap: () => context.push('how_to'),
             ),
           ),
-          
+                    
           const SizedBox(height: 8,),
           const ActionsTile()
         ],

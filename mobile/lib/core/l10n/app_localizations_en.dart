@@ -34,7 +34,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howManyUsersStep1 =>
-      'Tecnicly, you could connect as much users as you would like. \nHowever, we recomend connect the first 2 or 3 user by wifi and the four one by bluetooth, since there all others by cable';
+      'On Windows the maximun amount of connected Xbox Controllers is 4.\nOn Linux tecnicly you can connect any number of players.\n\nWe recommend to connect up to 4 users';
 
   @override
   String get howConnectThroughtBluetooth =>
@@ -51,6 +51,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get howConnectThroughtBluetoothStep3 =>
       '3. Scan de QR code and select bluetooth';
+
+  @override
+  String get howToHelp => 'How to help the developer?.';
+
+  @override
+  String get howToHelp1 => '1. Consider clicking the ads once a day haha.';
+
+  @override
+  String get howToHelp2 =>
+      '2. You can text me throw my email to share your ideas, i will be really happy to know someone cares enogh to do it.';
+
+  @override
+  String get adsMissing => 'Oh no, you are missing out on some cool ads!';
+
+  @override
+  String get adsMissing2 =>
+      'Ads help us keep the app free and continuously improving.';
 
   @override
   String get downloadPage => 'download page';
@@ -162,6 +179,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get howToUseTitle => 'How to use';
 
   @override
+  String get askDifferentQuestionByEmail =>
+      'Ask a different question by email?';
+
+  @override
+  String get askQuestionEmailSubject => 'Question about Mobile Gamepad';
+
+  @override
   String get editUsername => 'Edit username';
 
   @override
@@ -177,7 +201,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get disconnect => 'Disconnect';
 
   @override
-  String get unnamedController => 'Unnamed Controller';
+  String get unnamedController => 'General Controller';
 
   @override
   String get defaultController => 'Default Controller';

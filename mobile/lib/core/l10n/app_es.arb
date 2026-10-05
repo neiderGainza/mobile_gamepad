@@ -1,17 +1,22 @@
 {
-    "@@locale" : "es",
-    "appName": "Controlador de juegos",
+    "@@locale": "es",
+    "appName": "Mobile Gamepad",
     "howToUse": "¿Cómo se usa?",
     "howToUseStep1": "1. Descarga el servidor para tu ordenador (disponible para Linux y Windows) desde la ",
     "howToUseStep2": "2. Conecta el ordenador y el móvil a la misma red local.",
-    "howToUseStep3": "3. Escanea el código QR del servidor y selecciona la interfaz de red que quieras.",
+    "howToUseStep3": "3. Escanea el código QR del servidor y selecciona la interfaz de red que quieras usar.",
     "howToUseStep4": "4. ¡Disfruta!",
     "howManyUsers": "¿Cuántos usuarios pueden conectarse?",
-    "howManyUsersStep1": "Técnicamente, puedes conectar tantos usuarios como quieras. Sin embargo, recomendamos conectar los primeros 2 o 3 usuarios por wifi y el cuarto por Bluetooth; los demás pueden conectarse por cable.",
+    "howManyUsersStep1": "En Windows, el máximo es de 4 mandos Xbox conectados.\nEn Linux, técnicamente puedes conectar cualquier número de jugadores.\n\nRecomendamos conectar hasta 4 usuarios.",
     "howConnectThroughtBluetooth": "¿Cómo conectarse por Bluetooth?",
     "howConnectThroughtBluetoothStep1": "1. Conecta el ordenador y el móvil por Bluetooth.",
     "howConnectThroughtBluetoothStep2": "2. Activa el anclaje de red por Bluetooth.",
     "howConnectThroughtBluetoothStep3": "3. Escanea el código QR y selecciona Bluetooth.",
+    "howToHelp": "¿Cómo puedes ayudar al desarrollador?",
+    "howToHelp1": "1. Considera hacer clic en los anuncios una vez al día, ¡jaja!",
+    "howToHelp2": "2. Puedes escribirme por correo electrónico para compartir tus ideas. Me alegrará mucho saber que alguien se preocupa lo suficiente como para hacerlo.",
+    "adsMissing": "¡Vaya, te estás perdiendo algunos anuncios interesantes!",
+    "adsMissing2": "Los anuncios nos ayudan a mantener la aplicación gratuita y a mejorarla continuamente.",
     "downloadPage": "página de descargas",
     "editingMenu": "Menú de edición",
     "size": "Tamaño:",
@@ -42,18 +47,20 @@
     "accept": "Aceptar",
     "save": "Guardar",
     "labelRequired": "La etiqueta es obligatoria",
-    "labelMaxLength": "La etiqueta debe tener 5 caracteres o menos",
+    "labelMaxLength": "La etiqueta debe tener 5 caracteres como máximo",
     "actionsRequired": "Se requieren al menos 2 acciones",
     "shortcutCreator": "Creador de atajos",
-    "selectActions": "Selecciona tus acciones",
+    "selectActions": "Selecciona las acciones",
     "saveChangesError": "Error al guardar los cambios. Reinicia la aplicación.",
     "howToUseTitle": "Cómo se usa",
+    "askDifferentQuestionByEmail": "¿Tienes otra pregunta? Escríbeme por correo electrónico.",
+    "askQuestionEmailSubject": "Pregunta sobre Mobile Gamepad",
     "editUsername": "Editar nombre de usuario",
-    "serverAddressPort": "Dirección del servidor:puerto",
+    "serverAddressPort": "IP:port",
     "connectionFailed": "Error de conexión",
-    "typeAddress": "Introducir dirección",
+    "typeAddress": "Introducir IP",
     "disconnect": "Desconectar",
-    "unnamedController": "Mando sin nombre",
+    "unnamedController": "Mando genérico",
     "defaultController": "Mando predeterminado",
     "deleteControllerConfirmation": "¿Seguro que quieres eliminar el mando {controllerName}?",
     "@deleteControllerConfirmation": {
@@ -75,18 +82,25 @@
     "tactilePanel": "Panel táctil (RS)",
     "appVersion": "Versión",
     "developedBy": "Desarrollado por",
-    "contactAt": "Contacto",
+    "contactAt": "Contacto en",
     "pingIndicator": "Ping: {value} ms",
     "@pingIndicator": {
         "placeholders": {
             "value": { "type": "String" }
         }
     },
-    "connectionErrorDetails": "Error al conectar con {address}:{port}. Verifica la dirección.",
+    "connectionErrorDetails": "Error al conectar con {address}:{port}. Verifica la IP.",
     "@connectionErrorDetails": {
         "placeholders": {
             "address": { "type": "String" },
             "port": { "type": "String" }
         }
-    }
+    },
+    "welcome": "¡Te damos la bienvenida!",
+    "welcome1": "Para conectar tu teléfono como mando, primero debes instalar Gamepad Server en tu ordenador.",
+    "welcome2": "Descarga el servidor, disponible para Windows y Linux, desde el sitio web oficial.",
+    "welcome3": "Página de descargas",
+    "welcome4": "Continuar",
+    "typeServerAddress": "IP del servidor",
+    "port": "port"
 }

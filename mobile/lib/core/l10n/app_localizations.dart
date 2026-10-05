@@ -143,7 +143,7 @@ abstract class AppLocalizations {
   /// No description provided for @howManyUsersStep1.
   ///
   /// In en, this message translates to:
-  /// **'Tecnicly, you could connect as much users as you would like. \nHowever, we recomend connect the first 2 or 3 user by wifi and the four one by bluetooth, since there all others by cable'**
+  /// **'On Windows the maximun amount of connected Xbox Controllers is 4.\nOn Linux tecnicly you can connect any number of players.\n\nWe recommend to connect up to 4 users'**
   String get howManyUsersStep1;
 
   /// No description provided for @howConnectThroughtBluetooth.
@@ -169,6 +169,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'3. Scan de QR code and select bluetooth'**
   String get howConnectThroughtBluetoothStep3;
+
+  /// No description provided for @howToHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'How to help the developer?.'**
+  String get howToHelp;
+
+  /// No description provided for @howToHelp1.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Consider clicking the ads once a day haha.'**
+  String get howToHelp1;
+
+  /// No description provided for @howToHelp2.
+  ///
+  /// In en, this message translates to:
+  /// **'2. You can text me throw my email to share your ideas, i will be really happy to know someone cares enogh to do it.'**
+  String get howToHelp2;
+
+  /// No description provided for @adsMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Oh no, you are missing out on some cool ads!'**
+  String get adsMissing;
+
+  /// No description provided for @adsMissing2.
+  ///
+  /// In en, this message translates to:
+  /// **'Ads help us keep the app free and continuously improving.'**
+  String get adsMissing2;
 
   /// No description provided for @downloadPage.
   ///
@@ -386,6 +416,18 @@ abstract class AppLocalizations {
   /// **'How to use'**
   String get howToUseTitle;
 
+  /// No description provided for @askDifferentQuestionByEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a different question by email?'**
+  String get askDifferentQuestionByEmail;
+
+  /// No description provided for @askQuestionEmailSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Question about Mobile Gamepad'**
+  String get askQuestionEmailSubject;
+
   /// No description provided for @editUsername.
   ///
   /// In en, this message translates to:
@@ -419,7 +461,7 @@ abstract class AppLocalizations {
   /// No description provided for @unnamedController.
   ///
   /// In en, this message translates to:
-  /// **'Unnamed Controller'**
+  /// **'General Controller'**
   String get unnamedController;
 
   /// No description provided for @defaultController.
