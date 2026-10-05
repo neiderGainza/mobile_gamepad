@@ -6,40 +6,37 @@ import 'package:desktop/presentation/widgets/qr_address_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 class ConnectionHeader extends ConsumerWidget {
-  const ConnectionHeader({
-    super.key,
-  });
+  const ConnectionHeader({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) { 
+  Widget build(BuildContext context, WidgetRef ref) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
-    
+
     return Container(
       padding: .all(8),
-      height : 220,
-      margin : .all(8),
+      height: 220,
+      margin: .all(8),
       decoration: BoxDecoration(
         borderRadius: .circular(12),
-        border: Border.all( width: 2, color: cs.secondary ),
-        color: cs.surfaceContainer
+        border: Border.all(width: 2, color: cs.secondary),
+        color: cs.surfaceContainer,
       ),
 
       child: Row(
         crossAxisAlignment: .start,
-        children: [      
+        children: [
           Expanded(
             child: Column(
               mainAxisAlignment: .start,
               crossAxisAlignment: .start,
               children: [
-                ConnectionStatusIndicator( defaultStyle: tt.headlineMedium),
+                ConnectionStatusIndicator(defaultStyle: tt.headlineMedium),
                 Expanded(child: AddressList()),
-                const ActionTile()
+                const ActionTile(),
               ],
-            )
+            ),
           ),
 
           const QrAddressIndicator(),
@@ -47,63 +44,52 @@ class ConnectionHeader extends ConsumerWidget {
       ),
     );
   }
-
 }
 
-
-
 class ActionTile extends ConsumerWidget {
-  const ActionTile({
-    super.key,
-  });
+  const ActionTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectionStatus = ref.watch(connectionStatusProvider);
 
     return connectionStatus.when(
-      data: (status){
-        return switch(status){
-          .connected => Row(children: [ Expanded(child: DisconnectionBtn())],),
-          .connecting => const Center(child: CircularProgressIndicator(),), 
-          .disconnected => Row(children: [ Expanded(child: ConnectBtn())],),
-          .disconnecting => const Center(child: CircularProgressIndicator(),)
+      data: (status) {
+        return switch (status) {
+          .connected => Row(children: [Expanded(child: DisconnectionBtn())]),
+          .connecting => const Center(child: CircularProgressIndicator()),
+          .disconnected => Row(children: [Expanded(child: ConnectBtn())]),
+          .disconnecting => const Center(child: CircularProgressIndicator()),
         };
-      }, 
-      error: (e, t) => const SizedBox.shrink(), 
-      loading: ()   => const Center(child: CircularProgressIndicator(),)
+      },
+      error: (e, t) => const SizedBox.shrink(),
+      loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
 }
 
-
 class DisconnectionBtn extends ConsumerWidget {
-  const DisconnectionBtn({
-    super.key,
-  });
+  const DisconnectionBtn({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref){
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
         Expanded(
           child: FilledButton(
-            onPressed : () async {
+            onPressed: () async {
               ref.read(connectionRepositoryProvider).stopServer();
             },
             style: FilledButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: .circular(8),
-                
-              ),
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer
+              shape: RoundedRectangleBorder(borderRadius: .circular(8)),
+              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
             ),
-            child : Text(
-              "Stop server" ,
+            child: Text(
+              "Stop server",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSecondaryContainer
-              ),  
-            ) 
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+            ),
           ),
         ),
         // const SizedBox(width: 8,),
@@ -112,11 +98,8 @@ class DisconnectionBtn extends ConsumerWidget {
   }
 }
 
-
 class ConnectBtn extends ConsumerStatefulWidget {
-  const ConnectBtn({
-    super.key,
-  });
+  const ConnectBtn({super.key});
 
   @override
   ConsumerState<ConnectBtn> createState() => _ConnectBtnState();
@@ -124,51 +107,54 @@ class ConnectBtn extends ConsumerStatefulWidget {
 
 class _ConnectBtnState extends ConsumerState<ConnectBtn> {
   bool loading = false;
-  
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: FilledButton(
-            onPressed : loading
-              ? null
-              : () async {
-                setState(() { loading = true; });
-                try{
-                  await ref.read(connectionRepositoryProvider).connect();
-                }catch(_){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Fail to start the server, if the error persists try reinstalling the app.")));
-                }
-                setState(() { loading = false; });
-              },
+            onPressed: loading
+                ? null
+                : () async {
+                    setState(() {
+                      loading = true;
+                    });
+                    try {
+                      await ref.read(connectionRepositoryProvider).connect();
+                    } catch (_) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text("Fail to start the server, if the error persists try reinstalling the app.")));
+                    }
+                    setState(() {
+                      loading = false;
+                    });
+                  },
             style: FilledButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: .circular(8),
-                
-              )
+              shape: RoundedRectangleBorder(borderRadius: .circular(8)),
             ),
-            child : Row(
+            child: Row(
               mainAxisSize: .max,
               mainAxisAlignment: .center,
               children: [
-                if(loading)...[
-                  SizedBox( 
+                if (loading) ...[
+                  SizedBox(
                     height: 16,
                     width: 16,
-                    child: const CircularProgressIndicator(strokeWidth: 3,)),
-                  const SizedBox(width: 8,)
+                    child: const CircularProgressIndicator(strokeWidth: 3),
+                  ),
+                  const SizedBox(width: 8),
                 ],
 
                 Text(
-                  loading ? "Starting..." : "Start Server" ,
+                  loading ? "Starting..." : "Start Server",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary
-                  ),  
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
                 ),
               ],
-            ) 
+            ),
           ),
         ),
         // const SizedBox(width: 8,),
