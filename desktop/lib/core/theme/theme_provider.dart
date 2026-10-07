@@ -6,8 +6,7 @@ final themeProvider = NotifierProvider(ThemeNotifier.new);
 class ThemeNotifier extends Notifier<ThemeState>{
   
   @override
-  ThemeState build() => ThemeState(themeMode: .system);
-
+  ThemeState build() => ThemeState(themeMode: .dark);
 
   ThemeData get lightTheme => ThemeData(
     colorScheme: .fromSeed(seedColor: Colors.deepOrange, brightness: .light),

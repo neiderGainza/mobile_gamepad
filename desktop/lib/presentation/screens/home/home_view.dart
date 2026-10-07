@@ -1,5 +1,6 @@
 import 'package:desktop/presentation/providers/players_state_provider.dart';
 import 'package:desktop/presentation/screens/home/widgets/connection_header.dart';
+import 'package:desktop/presentation/widgets/title_bar_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,8 +13,8 @@ class HomeView extends ConsumerWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     final playersState = ref.watch(playersStateProvider).value;
     
-    return Scaffold(
-      body: CustomScrollView(
+    return TitleBarFrame(
+      child: CustomScrollView(
         slivers: [
           const SliverToBoxAdapter(child: ConnectionHeader()),
           
