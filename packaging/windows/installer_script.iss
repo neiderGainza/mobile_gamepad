@@ -51,7 +51,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#PackageDir}\desktop\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#PackageDir}\server\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#PackageDir}\ViGEmBus_1.22.0_x64_x86_arm64.exe"; DestDir: "{tmp}"; Flags: dontcopy
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -60,36 +59,4 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
-[Code]
-function PrepareToInstall(var NeedsRestart: Boolean): String;
-var
-	ResultCode: Integer;
-begin
-	Result := '';
-	if RegKeyExists(HKLM, 'SYSTEM\CurrentControlSet\Services\ViGEmBus') and
-		FileExists(ExpandConstant('{sys}\drivers\ViGEmBus.sys')) then
-		Exit;
-
-	ExtractTemporaryFile('ViGEmBus_1.22.0_x64_x86_arm64.exe');
-
-	if not Exec(
-		ExpandConstant('{tmp}\ViGEmBus_1.22.0_x64_x86_arm64.exe'),
-		'/exenoui /qn /norestart',
-		'',
-		SW_SHOW,
-		ewWaitUntilTerminated,
-		ResultCode) then
-	begin
-		Result := 'Could not start the ViGEmBus driver installer.';
-	end
-	else if (ResultCode <> 0) and (ResultCode <> 3010) then
-	begin
-		Result := Format('ViGEmBus installation failed with exit code %d.', [ResultCode]);
-	end
-	else if ResultCode = 3010 then
-	begin
-		NeedsRestart := True;
-	end;
-end;
 

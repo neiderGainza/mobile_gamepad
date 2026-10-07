@@ -1,1 +1,1 @@
-Compile desktop and server for windows and put then in desktop and server folders
+Compile desktop and server for windows and put then in desktop and server folders , rename the server executable to gamepad_server

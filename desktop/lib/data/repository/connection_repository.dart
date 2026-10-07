@@ -4,8 +4,6 @@ import 'dart:io';
 import 'package:core/core.dart';
 import 'package:desktop/data/source/connection_interface_service.dart';
 import 'package:desktop/data/source/connection_service.dart';
-import 'package:core/src/models/network/server_address.dart';
-import 'package:core/src/models/network/server_interface.dart';
 import 'package:desktop/domain/repository/connection_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,7 +38,7 @@ class ConnectionRepositoryImpl implements ConnectionRepository {
   }) {
     _initServerInterfaceSubscription();
     _initServerPortSubscritpion();
-    connect();
+    _tryToConnect();
   }
 
   // ---------------------- Server Address ---------------------
@@ -72,24 +70,27 @@ class ConnectionRepositoryImpl implements ConnectionRepository {
   Future<void> connect() async {
     try {
       final lastPort = await ServerConfigService.serverPort;
+      bool isConnected = false;
 
-      if (lastPort != null) {
-        final isConnected = await connectionService.connectToServer(lastPort);
+      if(lastPort != null){
+        isConnected = await connectionService.connectToServer(lastPort);
+      }
 
-        if (!isConnected) {
-          await _initServer();
-
-          for (int i = 0; i < 3; i++) {
-            await Future.delayed(Duration(seconds: 1));
-            final lastPort = await ServerConfigService.serverPort;
-
-            if (lastPort != null) {
-              if (await connectionService.connectToServer(lastPort)) break;
-            }
-          }
+      if(!isConnected){
+        await _initServer();
+        
+        for(int i = 0 ; i < 3; i++){
+          await Future.delayed(Duration(seconds: 1));
+          final lastPort = await ServerConfigService.serverPort;
+          
+          if(lastPort != null){
+            if(await connectionService.connectToServer(lastPort)) break;
+          }          
         }
       }
-    } catch (e) {
+    
+
+    }catch(e){
       debugPrint("Error ConnectionRepository.connect $e");
       rethrow;
     }
@@ -121,8 +122,12 @@ class ConnectionRepositoryImpl implements ConnectionRepository {
     final appDir = File(Platform.resolvedExecutable).parent.path;
 
     if (Platform.isWindows) {
-      final serverPath = p.join(appDir, 'bin/server.exe');
-      await Process.start(serverPath, [], mode: ProcessStartMode.detached);
+      final serverPath = p.join(appDir, 'bin/gamepad_server.exe');
+      await Process.start(
+        serverPath,
+        [],
+        mode: ProcessStartMode.detached,
+      );
     } else if (Platform.isLinux) {
       await _ensureUinputAccess();
       await Process.start(
@@ -162,6 +167,15 @@ class ConnectionRepositoryImpl implements ConnectionRepository {
     ]);
   }
 
+  
+  void _tryToConnect() async {
+    try{
+      final lastPort = await ServerConfigService.serverPort;
+      if(lastPort != null){
+        await connectionService.connectToServer(lastPort);
+      }
+    }catch(_){}
+  }
 
   Future<void> _ensureUinputAccess() async {
     if (!Platform.isLinux) return;
