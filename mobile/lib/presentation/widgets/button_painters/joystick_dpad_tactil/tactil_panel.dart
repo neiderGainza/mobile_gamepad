@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:game_controller/core/l10n/app_localizations.dart';
@@ -38,9 +39,9 @@ class _TactilPanelState extends State<TactilPanel> {
       child: Stack(
         children: [
           GestureDetector(
-            onPanStart: (details) => _onPanStart(details.globalPosition),
+            onPanStart : (details) => _onPanStart(details.globalPosition),
             onPanUpdate: (details) => _onPanUpdated(details.globalPosition),
-            onPanEnd: (details) => _onPanStop(),
+            onPanEnd   : (details) => _onPanStop(),
 
             child: Container(
               width: double.infinity,
@@ -90,19 +91,19 @@ class _TactilPanelState extends State<TactilPanel> {
       widget.callBackFreequency,
       (_) {
         final currentPosition = _currentPosition;
-        final vx = (currentPosition.dx - _lastPosition.dx)
-                    / widget.callBackFreequency.inMilliseconds;
-        final vy = (currentPosition.dy - _lastPosition.dy)
-                    / widget.callBackFreequency.inMilliseconds;
-        
-        final vLimit = 2;
+        final director = currentPosition - _lastPosition;
+
+        final vNormalizer = 1 / 12; // experimentation constant
 
         widget.onUpdated(
-          (vx / vLimit).clamp(-1, 1),
-          (vy / vLimit).clamp(-1, 1)
+          (director.dx * vNormalizer / widget.callBackFreequency.inMilliseconds).clamp(-1, 1),
+          (director.dy * vNormalizer / widget.callBackFreequency.inMilliseconds).clamp(-1, 1)
         );
 
-        _lastPosition = currentPosition;
+        _lastPosition += Offset.fromDirection(
+          (director.direction),
+          sqrt(director.distance) / 15
+        );
       }, 
     );
   }

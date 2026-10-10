@@ -5,13 +5,8 @@ import 'package:game_controller/data/repositories/connection_repository_impl.dar
 import 'package:game_controller/domain/model/button.dart';
 import 'package:game_controller/presentation/widgets/button_painters/joystick_dpad_tactil/tactil_panel.dart';
 
-
-/// TODO : definir cambio minimo q no se envia
-class TactilPanelPainter extends ConsumerStatefulWidget{
-  const TactilPanelPainter({
-    super.key, 
-    required this.button
-  });
+class TactilPanelPainter extends ConsumerStatefulWidget {
+  const TactilPanelPainter({super.key, required this.button});
 
   final Button button;
 
@@ -20,38 +15,51 @@ class TactilPanelPainter extends ConsumerStatefulWidget{
 }
 
 class _TactilPanelPainterState extends ConsumerState<TactilPanelPainter> {
+  static const double _minChangeToSend = 0.05;
+
+  Offset _lastSent = Offset.zero;
+
   @override
-  Widget build(BuildContext context) {  
+  Widget build(BuildContext context) {
     final connectionRepo = ref.watch(connectionRepositoryProvider);
-    
+
     return TactilPanel(
       button: widget.button,
       callBackFreequency: const Duration(milliseconds: 5),
-      onStop: (){
-        connectionRepo.send(ButtonPlayerEvent(
-          btn  : .rs, 
-          axis : .vertical, 
-          value: 0
-        ));
-        connectionRepo.send(ButtonPlayerEvent(
-          btn  : .rs, 
-          axis : .horizontal, 
-          value: 0
-        ));
+      onStop: () {
+        connectionRepo.send(
+          ButtonPlayerEvent(
+            btn: widget.button.buttonCodes.first,
+            axis: .vertical,
+            value: 0,
+          ),
+        );
+        connectionRepo.send(
+          ButtonPlayerEvent(
+            btn: widget.button.buttonCodes.first,
+            axis: .horizontal,
+            value: 0,
+          ),
+        );
+        _lastSent = Offset.zero;
       },
-      onUpdated: (vx, vy){
+      onUpdated: (vx, vy) {
+        final buttonCode = widget.button.buttonCodes.first;
 
-        connectionRepo.send(ButtonPlayerEvent(
-          btn  : .rs, 
-          axis : .vertical, 
-          value:  vy
-        ));
-        connectionRepo.send(ButtonPlayerEvent(
-          btn  : .rs, 
-          axis : .horizontal, 
-          value: vx
-        ));    
+        if ((vx - _lastSent.dx).abs() > _minChangeToSend) {
+          connectionRepo.send(
+            ButtonPlayerEvent(btn: buttonCode, axis: .horizontal, value: vx),
+          );
+          _lastSent = Offset(vx, _lastSent.dy);
+        }
+
+        if ((vy - _lastSent.dy).abs() > _minChangeToSend) {
+          connectionRepo.send(
+            ButtonPlayerEvent(btn: buttonCode, axis: .vertical, value: vy),
+          );
+          _lastSent = Offset(_lastSent.dx, vy);
+        }
       },
-    ); 
+    );
   }
 }

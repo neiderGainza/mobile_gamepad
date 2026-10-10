@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_controller/domain/model/button.dart';
 import 'package:game_controller/presentation/widgets/button_painters/joystick_dpad_tactil/dpad_painter.dart';
+import 'package:game_controller/presentation/widgets/button_painters/joystick_dpad_tactil/gravity_button_painter.dart';
 import 'package:game_controller/presentation/widgets/button_painters/joystick_dpad_tactil/joystick_button_painter.dart';
 import 'package:game_controller/presentation/widgets/button_painters/joystick_dpad_tactil/single_press_button_painter.dart';
 import 'package:game_controller/presentation/widgets/button_painters/joystick_dpad_tactil/tactil_panel_painter.dart';
@@ -31,6 +32,8 @@ class ButtonPainter extends StatelessWidget {
         .joystick    => JoystickButtonPainter(button: button),
         .dpad        => DpadPainter( button: button, margin: margin ?? 0.1),
         .tactilPanel => TactilPanelPainter( button: button, ),
+        .gravityH    => GravityButtonPainter(button: button, orietation: .horizontal,),
+        .gravityV    => GravityButtonPainter(button: button, orietation: .vertical,),
       },
     );
   }

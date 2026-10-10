@@ -400,6 +400,10 @@ class ButtonTypeAdapter extends TypeAdapter<ButtonType> {
         return ButtonType.tactilPanel;
       case 3:
         return ButtonType.dpad;
+      case 4:
+        return ButtonType.gravityH;
+      case 5:
+        return ButtonType.gravityV;
       default:
         return ButtonType.sinlgePress;
     }
@@ -416,6 +420,10 @@ class ButtonTypeAdapter extends TypeAdapter<ButtonType> {
         writer.writeByte(2);
       case ButtonType.dpad:
         writer.writeByte(3);
+      case ButtonType.gravityH:
+        writer.writeByte(4);
+      case ButtonType.gravityV:
+        writer.writeByte(5);
     }
   }
 

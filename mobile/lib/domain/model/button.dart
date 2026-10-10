@@ -36,5 +36,9 @@ enum ButtonType {
   tactilPanel,
   @JsonValue(3)
   dpad,
+  @JsonValue(4)
+  gravityH,
+  @JsonValue(5)
+  gravityV,
 }
 

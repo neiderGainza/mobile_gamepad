@@ -22,7 +22,7 @@ class ButtonGroupsCollection {
     .singleButtonGroup(button: DefaultBtnCollection.leftJoystick  , screenRelativeSize: 0.23),
     .singleButtonGroup(button: DefaultBtnCollection.rightJoystick , screenRelativeSize: 0.23),    
     .singleButtonGroup(button: DefaultBtnCollection.dpad, screenRelativeSize: 0.23),
-    .singleButtonGroup(button: DefaultBtnCollection.tactilPanel, screenRelativeSize: 0.30)
+    .singleButtonGroup(button: DefaultBtnCollection.tactilPanel, screenRelativeSize: 0.30),
   ];
 
   static List<ButtonGroup> multipleButtons  = [

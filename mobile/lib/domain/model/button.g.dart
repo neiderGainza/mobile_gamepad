@@ -29,4 +29,6 @@ const _$ButtonTypeEnumMap = {
   ButtonType.joystick: 1,
   ButtonType.tactilPanel: 2,
   ButtonType.dpad: 3,
+  ButtonType.gravityH: 4,
+  ButtonType.gravityV: 5,
 };

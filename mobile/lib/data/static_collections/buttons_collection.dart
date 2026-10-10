@@ -111,5 +111,22 @@ class DefaultBtnCollection{
     ), 
     buttonCodes: [.rs]
   );
+
+  static Button gravityHorizontal = Button(
+    buttonType: .gravityH,
+    buttonData: ButtonData(label: "Gravity -", borderWidth: 2), 
+    buttonCodes: [
+      .ls
+    ]
+  );
+
+  static Button gravityVertical = Button(
+    buttonType: .gravityV,
+    buttonData: ButtonData(label: "Gravity |", borderWidth: 2), 
+    buttonCodes: [
+      .ls
+    ]
+  );
+
 }
 

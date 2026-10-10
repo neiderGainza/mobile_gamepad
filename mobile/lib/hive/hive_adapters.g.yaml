@@ -115,7 +115,7 @@ types:
         index: 1
   ButtonType:
     typeId: 11
-    nextIndex: 4
+    nextIndex: 6
     fields:
       sinlgePress:
         index: 0
@@ -125,6 +125,10 @@ types:
         index: 2
       dpad:
         index: 3
+      gravityH:
+        index: 4
+      gravityV:
+        index: 5
   Player:
     typeId: 12
     nextIndex: 3
