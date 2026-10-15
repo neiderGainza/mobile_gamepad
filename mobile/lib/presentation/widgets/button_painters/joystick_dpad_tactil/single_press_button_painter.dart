@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +21,7 @@ class SinglePressButtonPainter extends ConsumerStatefulWidget{
 }
 
 class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPainter> {
-  // Timer  ? releaseTimer;
+  bool isSwitchPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +38,37 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
           ),
 
       child: InkWell(
-        onTapDown: (_) => send(),
+        onTapDown: (_){
+          HapticFeedback.vibrate();
+
+          if(widget.button.isSwitch == true){
+            if(isSwitchPressed){
+              release();
+            }else{
+              send();
+            }
+
+            setState(() { isSwitchPressed = !isSwitchPressed; });
+          }else{
+            send();
+          }
+        },
 
         onTapCancel: () {
-          release();
+          if(widget.button.isSwitch != true) release();
         },
         onTapUp: (details) {
-          release();
+          if(widget.button.isSwitch != true) release();
         },
+
         child: Container(
           margin: .all(8),
           decoration: BoxDecoration(
             shape: buttonData.shape ?? .circle,
-            color: buttonData.backgroundColor,   
+            color: isSwitchPressed 
+              ? buttonData.backgroundColor.withGreen(255)
+              : buttonData.backgroundColor,   
+              
             borderRadius: buttonData.shape != .rectangle 
               ? null 
               : .circular(buttonData.borderRadius),
@@ -77,7 +97,9 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
     );
   }
 
-  void release(){
+  void release() async{
+    await Future.delayed(Duration(milliseconds: 4));
+
     final connectionRepo = ref.watch(connectionRepositoryProvider);
     if(widget.button.buttonCodes.length == 1){
       connectionRepo.send(ButtonPlayerEvent(
@@ -101,7 +123,6 @@ class _SinglePressButtonPainterState extends ConsumerState<SinglePressButtonPain
   }
 
   void send(){
-    HapticFeedback.vibrate();
 
     if(widget.button.buttonCodes.length == 1){
       ref.read(connectionRepositoryProvider).send(ButtonPlayerEvent(

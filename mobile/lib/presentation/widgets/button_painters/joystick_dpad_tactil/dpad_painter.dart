@@ -28,6 +28,7 @@ class _DpadPainterState extends ConsumerState<DpadPainter> {
     return Dpad(
       button: widget.button, 
       margin: widget.margin,
+      
       onPress: (pressed) {
         final connectionRepository = ref.read(connectionRepositoryProvider);
 

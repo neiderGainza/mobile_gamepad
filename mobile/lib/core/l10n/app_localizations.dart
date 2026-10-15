@@ -260,6 +260,12 @@ abstract class AppLocalizations {
   /// **'Elevation:'**
   String get elevation;
 
+  /// No description provided for @switchBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch\nButton:'**
+  String get switchBtn;
+
   /// No description provided for @borderWidth.
   ///
   /// In en, this message translates to:

@@ -27,6 +27,7 @@
     "groupProperties": "Propiedades del grupo:",
     "buttonProperties": "Propiedades del botón:",
     "elevation": "Elevación:",
+    "switchBtn":"Botón\nSwitch:",
     "borderWidth": "Ancho del\nborde:",
     "shape": "Forma:",
     "rectangle": "Rectángulo",

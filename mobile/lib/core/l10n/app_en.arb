@@ -33,6 +33,7 @@
     "groupProperties": "Group properties:",
     "buttonProperties": "Button properties:",
     "elevation": "Elevation:",
+    "switchBtn": "Switch\nButton:",
     "borderWidth": "Border\nWidth:",
     "shape": "Shape:",
     "rectangle": "Rectangle",

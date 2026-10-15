@@ -74,6 +74,7 @@ class EditMenu extends ConsumerWidget{
                 
                 // button edits
                 ButtonPropertiesTitle(),
+                EditButtonSwitchTile(),
                 EditButtonShapeTile(),
                 EditButtonBorderRadiusTile(),
                 EditButtonBorderWithTile(),
@@ -446,8 +447,8 @@ class ButtonPropertiesTitle extends ConsumerWidget {
 }
 
 
-class EditButtonElevationTile extends ConsumerWidget {
-  const EditButtonElevationTile({
+class EditButtonSwitchTile extends ConsumerWidget {
+  const EditButtonSwitchTile({
     super.key,
   });
 
@@ -455,32 +456,27 @@ class EditButtonElevationTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref){
     final controllerId = InheritedValue.of<String?>(context);
     
-    final btnElevation = ref.watch(controllerEditProvider(controllerId)
+    final isSwitch = ref.watch(controllerEditProvider(controllerId)
       .select(
-        (cs) => cs.selectedBtn?.buttonData.elevation
+        (cs) => cs.selectedBtn?.isSwitch
       ));
 
-    if(btnElevation == null) return SizedBox.shrink();
+    if(isSwitch == null) return SizedBox.shrink();
 
     return ListTile(
       visualDensity: .compact,
       title: FittedBox(
         fit: .scaleDown,
         alignment: .centerStart,
-        child: Text(AppLocalizations.of(context)!.elevation)),
-      trailing: LessStringPlus(
-        plus: (){
-          updateValue(controllerId, 1, ref);
-        }, 
-        less: (){
-          updateValue(controllerId, -1, ref);
-        }, 
-        label: btnElevation.toString()
-      ),
+        child: Text(AppLocalizations.of(context)!.switchBtn)),
+      trailing: Switch(
+        value: isSwitch, 
+        onChanged: (value) => updateValue(controllerId, value, ref)
+      )
     );
   }
 
-  void updateValue(String? controllerId, int change, WidgetRef ref){
+  void updateValue(String? controllerId, bool value, WidgetRef ref){
     final selectedBtn = ref.read(controllerEditProvider(controllerId))
       .selectedBtn;
     
@@ -491,9 +487,7 @@ class EditButtonElevationTile extends ConsumerWidget {
     ref.read(controllerEditProvider(controllerId).notifier)
       .editSelectedButton(
         selectedBtn.copyWith( 
-          buttonData: selectedBtn.buttonData.copyWith(
-            elevation: selectedBtn.buttonData.elevation + change
-          )
+          isSwitch: value
         )
     );
   }
@@ -882,6 +876,8 @@ class EditButtonColorTile extends ConsumerWidget {
     );
   }
 }
+
+
 
 
 class LessStringPlus extends StatelessWidget{

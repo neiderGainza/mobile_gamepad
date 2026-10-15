@@ -11,6 +11,7 @@ Button _$ButtonFromJson(Map<String, dynamic> json) => Button(
   buttonType:
       $enumDecodeNullable(_$ButtonTypeEnumMap, json['buttonType']) ??
       .sinlgePress,
+  isSwitch: json['isSwitch'] as bool?,
   buttonCodes: (json['buttonCodes'] as List<dynamic>)
       .map((e) => const ButtonCodeConverter().fromJson(e as String))
       .toList(),
@@ -22,6 +23,7 @@ Map<String, dynamic> _$ButtonToJson(Button instance) => <String, dynamic>{
   'buttonCodes': instance.buttonCodes
       .map(const ButtonCodeConverter().toJson)
       .toList(),
+  'isSwitch': instance.isSwitch,
 };
 
 const _$ButtonTypeEnumMap = {

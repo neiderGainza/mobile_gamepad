@@ -13,7 +13,7 @@ types:
         index: 1
   Button:
     typeId: 1
-    nextIndex: 7
+    nextIndex: 8
     fields:
       buttonData:
         index: 0
@@ -21,9 +21,11 @@ types:
         index: 1
       buttonCodes:
         index: 6
+      isSwitch:
+        index: 7
   PlayerButton:
     typeId: 2
-    nextIndex: 14
+    nextIndex: 16
     fields:
       btnA:
         index: 0
@@ -47,6 +49,10 @@ types:
         index: 11
       menu:
         index: 12
+      lb:
+        index: 14
+      rb:
+        index: 15
   Offset:
     typeId: 3
     nextIndex: 2

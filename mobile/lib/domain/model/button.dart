@@ -13,10 +13,17 @@ class Button with _$Button{
   final ButtonType buttonType;
   @ButtonCodeConverter()
   final List<PlayerButton> buttonCodes;
+  
+  /// if null no option will appear
+  /// if is true the botton should be press and press again ffor release
+  /// if false the button behaived like normal
+  /// only single press buttons can be swtich
+  final bool ? isSwitch;
 
   const Button({
     required this.buttonData,
     this.buttonType = .sinlgePress,
+    this.isSwitch,
     required this.buttonCodes,
   });
 

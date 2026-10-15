@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Button {
 
- ButtonData get buttonData; ButtonType get buttonType; List<PlayerButton> get buttonCodes;
+ ButtonData get buttonData; ButtonType get buttonType; List<PlayerButton> get buttonCodes; bool? get isSwitch;
 /// Create a copy of Button
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ButtonCopyWith<Button> get copyWith => _$ButtonCopyWithImpl<Button>(this as But
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Button&&(identical(other.buttonData, buttonData) || other.buttonData == buttonData)&&(identical(other.buttonType, buttonType) || other.buttonType == buttonType)&&const DeepCollectionEquality().equals(other.buttonCodes, buttonCodes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Button&&(identical(other.buttonData, buttonData) || other.buttonData == buttonData)&&(identical(other.buttonType, buttonType) || other.buttonType == buttonType)&&const DeepCollectionEquality().equals(other.buttonCodes, buttonCodes)&&(identical(other.isSwitch, isSwitch) || other.isSwitch == isSwitch));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,buttonData,buttonType,const DeepCollectionEquality().hash(buttonCodes));
+int get hashCode => Object.hash(runtimeType,buttonData,buttonType,const DeepCollectionEquality().hash(buttonCodes),isSwitch);
 
 @override
 String toString() {
-  return 'Button(buttonData: $buttonData, buttonType: $buttonType, buttonCodes: $buttonCodes)';
+  return 'Button(buttonData: $buttonData, buttonType: $buttonType, buttonCodes: $buttonCodes, isSwitch: $isSwitch)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ButtonCopyWith<$Res>  {
   factory $ButtonCopyWith(Button value, $Res Function(Button) _then) = _$ButtonCopyWithImpl;
 @useResult
 $Res call({
- ButtonData buttonData, ButtonType buttonType, List<PlayerButton> buttonCodes
+ ButtonData buttonData, ButtonType buttonType, bool? isSwitch, List<PlayerButton> buttonCodes
 });
 
 
@@ -62,11 +62,12 @@ class _$ButtonCopyWithImpl<$Res>
 
 /// Create a copy of Button
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? buttonData = null,Object? buttonType = null,Object? buttonCodes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? buttonData = null,Object? buttonType = null,Object? isSwitch = freezed,Object? buttonCodes = null,}) {
   return _then(Button(
 buttonData: null == buttonData ? _self.buttonData : buttonData // ignore: cast_nullable_to_non_nullable
 as ButtonData,buttonType: null == buttonType ? _self.buttonType : buttonType // ignore: cast_nullable_to_non_nullable
-as ButtonType,buttonCodes: null == buttonCodes ? _self.buttonCodes : buttonCodes // ignore: cast_nullable_to_non_nullable
+as ButtonType,isSwitch: freezed == isSwitch ? _self.isSwitch : isSwitch // ignore: cast_nullable_to_non_nullable
+as bool?,buttonCodes: null == buttonCodes ? _self.buttonCodes : buttonCodes // ignore: cast_nullable_to_non_nullable
 as List<PlayerButton>,
   ));
 }

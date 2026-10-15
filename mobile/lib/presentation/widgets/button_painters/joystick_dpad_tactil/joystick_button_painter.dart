@@ -35,7 +35,7 @@ class _JoystickButtonPainterState extends ConsumerState<JoystickButtonPainter> {
 
       onDragUpdated: onDrag,
       onDragEnd    : onDragEnded,
-    
+      timeFrequency: const Duration(milliseconds: 10),
       label: buttonData.label,
       borderWidth: buttonData.borderWidth,          
       fontColor: buttonData.color,

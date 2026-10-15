@@ -100,6 +100,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get elevation => 'Elevation:';
 
   @override
+  String get switchBtn => 'Switch\nButton:';
+
+  @override
   String get borderWidth => 'Border\nWidth:';
 
   @override

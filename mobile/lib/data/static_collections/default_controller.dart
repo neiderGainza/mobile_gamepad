@@ -36,6 +36,7 @@ class DefaultController {
                 label: 'Y',
               ),
               buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
               buttonCodes: [PlayerButton.btnY],
             ),
             Button(
@@ -44,6 +45,7 @@ class DefaultController {
                 label: 'B',
               ),
               buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
               buttonCodes: [PlayerButton.btnB],
             ),
             Button(
@@ -52,6 +54,7 @@ class DefaultController {
                 label: 'A',
               ),
               buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
               buttonCodes: [PlayerButton.btnA],
             ),
             Button(
@@ -60,6 +63,7 @@ class DefaultController {
                 label: 'X',
               ),
               buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
               buttonCodes: [PlayerButton.btnX],
             ),
           ],
@@ -81,6 +85,7 @@ class DefaultController {
                 borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
               buttonCodes: [PlayerButton.menu],
             ),
             Button(
@@ -92,6 +97,7 @@ class DefaultController {
               ),
               buttonType: ButtonType.sinlgePress,
               buttonCodes: [PlayerButton.view],
+              isSwitch: false,
             ),
           ],
           screenRelativeSize: 0.18,
@@ -104,16 +110,17 @@ class DefaultController {
       PositionedButtonGroup(
         buttonGroup: ButtonGroup(
           buttons: [
-            // Button(
-            //   buttonData: ButtonData(
-            //     shape: BoxShape.rectangle,
-            //     backgroundColorValue: 4280693304,
-            //     label: 'RB',
-            //     borderRadius: 10.0,
-            //   ),
-            //   buttonType: ButtonType.sinlgePress,
-            //   buttonCodes: [PlayerButton.rb],
-            // ),
+            Button(
+              buttonData: ButtonData(
+                shape: BoxShape.rectangle,
+                backgroundColorValue: 4280693304,
+                label: 'RB',
+                borderRadius: 10.0,
+              ),
+              buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
+              buttonCodes: [PlayerButton.rb],
+            ),
             Button(
               buttonData: ButtonData(
                 shape: BoxShape.rectangle,
@@ -122,10 +129,11 @@ class DefaultController {
                 borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
               buttonCodes: [PlayerButton.rt],
             ),
           ],
-          screenRelativeSize: 0.09,
+          screenRelativeSize: 0.18,
           internalMargin: 0.0,
           rotationDegreess: 90,
         ),
@@ -135,16 +143,17 @@ class DefaultController {
       PositionedButtonGroup(
         buttonGroup: ButtonGroup(
           buttons: [
-            // Button(
-            //   buttonData: ButtonData(
-            //     shape: BoxShape.rectangle,
-            //     backgroundColorValue: 4280693304,
-            //     label: 'LB',
-            //     borderRadius: 10.0,
-            //   ),
-            //   buttonType: ButtonType.sinlgePress,
-            //   buttonCodes: [PlayerButton.lb],
-            // ),
+            Button(
+              buttonData: ButtonData(
+                shape: BoxShape.rectangle,
+                backgroundColorValue: 4280693304,
+                label: 'LB',
+                borderRadius: 10.0,
+              ),
+              buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
+              buttonCodes: [PlayerButton.lb],
+            ),
             Button(
               buttonData: ButtonData(
                 shape: BoxShape.rectangle,
@@ -153,10 +162,11 @@ class DefaultController {
                 borderRadius: 10.0,
               ),
               buttonType: ButtonType.sinlgePress,
+              isSwitch: false,
               buttonCodes: [PlayerButton.lt,]
             ),
           ],
-          screenRelativeSize: 0.09,
+          screenRelativeSize: 0.18,
           internalMargin: 0.0,
           rotationDegreess: 90,
         ),

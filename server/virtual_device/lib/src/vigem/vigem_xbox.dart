@@ -20,7 +20,9 @@ class VigemXBox implements VirtualDevice {
     .btnB : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_B.value , i10nKey: 'btnB'),
     .btnX : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_X.value , i10nKey: 'btnX'),
     .btnY : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_Y.value , i10nKey: 'btnY'),
-    
+    .lb   : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER.value, i10nKey: 'lb'),
+    .rb   : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER.value, i10nKey: 'rb'),
+
     .menu : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_BACK.value  , i10nKey: 'menu'),
     .view : VirtualDeviceSinglePressButton(code: XUSB_BUTTON.XUSB_GAMEPAD_START.value , i10nKey: 'view'),
     

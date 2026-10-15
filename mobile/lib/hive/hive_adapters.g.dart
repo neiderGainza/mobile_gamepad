@@ -56,6 +56,7 @@ class ButtonAdapter extends TypeAdapter<Button> {
     return Button(
       buttonData: fields[0] as ButtonData,
       buttonType: fields[1] == null ? .sinlgePress : fields[1] as ButtonType,
+      isSwitch: fields[7] as bool?,
       buttonCodes: (fields[6] as List).cast<PlayerButton>(),
     );
   }
@@ -63,13 +64,15 @@ class ButtonAdapter extends TypeAdapter<Button> {
   @override
   void write(BinaryWriter writer, Button obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.buttonData)
       ..writeByte(1)
       ..write(obj.buttonType)
       ..writeByte(6)
-      ..write(obj.buttonCodes);
+      ..write(obj.buttonCodes)
+      ..writeByte(7)
+      ..write(obj.isSwitch);
   }
 
   @override
@@ -112,6 +115,10 @@ class PlayerButtonAdapter extends TypeAdapter<PlayerButton> {
         return PlayerButton.view;
       case 12:
         return PlayerButton.menu;
+      case 14:
+        return PlayerButton.lb;
+      case 15:
+        return PlayerButton.rb;
       default:
         return PlayerButton.btnA;
     }
@@ -142,6 +149,10 @@ class PlayerButtonAdapter extends TypeAdapter<PlayerButton> {
         writer.writeByte(11);
       case PlayerButton.menu:
         writer.writeByte(12);
+      case PlayerButton.lb:
+        writer.writeByte(14);
+      case PlayerButton.rb:
+        writer.writeByte(15);
     }
   }
 

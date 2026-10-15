@@ -5,7 +5,7 @@ publish_to: 'none'
 flutter_app_name:
   name: "Mobile Gamepad"
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.11.4
@@ -43,7 +43,7 @@ dependencies:
   google_mobile_ads: ^9.1.0
   internet_connection_checker_plus: ^3.1.2
   # sensors_plus: ^7.1.1
-  flutter_rotation_sensor: ^0.4.0
+  # flutter_rotation_sensor: ^0.4.0
   
 
 dev_dependencies:

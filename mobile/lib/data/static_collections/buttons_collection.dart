@@ -4,20 +4,24 @@ import 'package:game_controller/domain/model/button_data.dart';
 
 class DefaultBtnCollection{
   static Button btnA = Button(
-    buttonData: ButtonData(label: 'A', backgroundColorValue: 4294901760), 
+    buttonData: ButtonData(label: 'A', backgroundColorValue: 4294901760, shape: .circle), 
     buttonCodes: [.btnA],
+    isSwitch: false
   );
   static Button btnB = Button(
-    buttonData: ButtonData(label: 'B'), 
+    buttonData: ButtonData(label: 'B', shape: .circle), 
     buttonCodes: [.btnB],
+    isSwitch: false
   );
   static Button btnX = Button(
-    buttonData: ButtonData(label: 'X'), 
+    buttonData: ButtonData(label: 'X', shape: .circle), 
     buttonCodes: [.btnX],
+    isSwitch: false
   );
   static Button btnY = Button(
-    buttonData: ButtonData(label: 'Y'), 
+    buttonData: ButtonData(label: 'Y', shape: .circle), 
     buttonCodes: [.btnY],
+    isSwitch: false
   );
   
   static Button menu = Button(
@@ -45,6 +49,7 @@ class DefaultBtnCollection{
       borderRadius: 10,
     ), 
     buttonCodes: [.lt],
+    isSwitch: false
   );
   static Button rt = Button(
     buttonData: ButtonData(
@@ -53,24 +58,27 @@ class DefaultBtnCollection{
       borderRadius: 10,
     ), 
     buttonCodes: [.rt],
+    isSwitch: false
   );
-  // static Button lb = Button(
-  //   buttonData: ButtonData(
-  //     label: 'LB', 
-  //     shape: .rectangle,
-  //     borderRadius: 10,
-  //   ), 
-  //   buttonCodes: [.lb],
-  // );
+  static Button lb = Button(
+    buttonData: ButtonData(
+      label: 'LB', 
+      shape: .rectangle,
+      borderRadius: 10,
+    ), 
+    buttonCodes: [.lb],
+    isSwitch: false
+  );
 
-  // static Button rb = Button(
-  //   buttonData: ButtonData(
-  //     label: 'RB', 
-  //     shape: .rectangle,
-  //     borderRadius: 10,
-  //   ), 
-  //   buttonCodes: [.rb],
-  // );
+  static Button rb = Button(
+    buttonData: ButtonData(
+      label: 'RB', 
+      shape: .rectangle,
+      borderRadius: 10,
+    ), 
+    buttonCodes: [.rb],
+    isSwitch: false
+  );
 
 
   static Button leftJoystick = Button(

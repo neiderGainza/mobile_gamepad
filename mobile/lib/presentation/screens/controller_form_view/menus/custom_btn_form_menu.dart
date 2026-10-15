@@ -93,7 +93,8 @@ class _CreateBtnFormMenuState extends State<CreateBtnFormMenu> {
             label: actions.map((a) => a.i10n).join('+'),
             shape: .rectangle
           ), 
-          buttonCodes: actions
+          buttonCodes: actions,
+          isSwitch: false
         ),
       );
     }

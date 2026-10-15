@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:game_controller/core/l10n/app_localizations.dart';
@@ -24,18 +23,32 @@ class TactilPanel extends StatefulWidget{
   State<TactilPanel> createState() => _TactilPanelState();
 }
 
-
 class _TactilPanelState extends State<TactilPanel> {
+  static const double _beta = 0.8;
+  late final double _decayVelocity;
+  late final double _stdFactor;
+
   Timer ? _callbackTimer;  
   
   Offset _lastPosition = .zero;
   Offset _currentPosition = .zero;
+  Offset _momentum1 = .zero;
   
+  double _steps = 0;
+
+
+  @override
+  void initState() {
+    _decayVelocity = widget.callBackFreequency.inMilliseconds / 2000;
+    _stdFactor     = 1 / (widget.callBackFreequency.inMilliseconds * 8);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      widthFactor: 1,
-      heightFactor: 0.7,
+      widthFactor : 1,
+      heightFactor: 1,
       child: Stack(
         children: [
           GestureDetector(
@@ -71,6 +84,8 @@ class _TactilPanelState extends State<TactilPanel> {
 
   void _onPanStart(Offset gPosition){
     _lastPosition = gPosition;
+    _currentPosition = gPosition;
+    _steps = 0;
     _runCallback();
   }
 
@@ -82,6 +97,8 @@ class _TactilPanelState extends State<TactilPanel> {
     _callbackTimer?.cancel();
     _lastPosition = .zero;
     _currentPosition = .zero;
+    _momentum1 = .zero;
+    _steps = 0;
     widget.onStop();
   }
 
@@ -90,19 +107,29 @@ class _TactilPanelState extends State<TactilPanel> {
     _callbackTimer = Timer.periodic(
       widget.callBackFreequency,
       (_) {
-        final currentPosition = _currentPosition;
-        final director = currentPosition - _lastPosition;
-
-        final vNormalizer = 1 / 12; // experimentation constant
-
-        widget.onUpdated(
-          (director.dx * vNormalizer / widget.callBackFreequency.inMilliseconds).clamp(-1, 1),
-          (director.dy * vNormalizer / widget.callBackFreequency.inMilliseconds).clamp(-1, 1)
+        final director  = _currentPosition - _lastPosition;  
+        
+        /// no tenemos un maximo de velocidad existente en el movimiento de un 
+        /// dedo , asi q utilizaremos este factor experimental para 
+        /// estandarizar los valores de movimiento
+        final stdDirector = Offset(
+          (director.dx * _stdFactor).clamp(-1, 1),
+          (director.dy * _stdFactor).clamp(-1, 1),
         );
+        
+        if(_momentum1 != .zero){
+          _momentum1 = _momentum1 * _beta  + stdDirector * (1 - _beta);
+        }else{
+          _momentum1 = stdDirector;
+        }
+        
+        if(_momentum1.distance > 0.05){  
+          widget.onUpdated( _momentum1.dx, _momentum1.dy);
+        }
 
         _lastPosition += Offset.fromDirection(
-          (director.direction),
-          sqrt(director.distance) / 15
+          director.direction,  
+          director.distance * _decayVelocity  
         );
       }, 
     );
@@ -113,4 +140,4 @@ class _TactilPanelState extends State<TactilPanel> {
     _callbackTimer?.cancel();
     super.dispose();
   }
-} 
+}

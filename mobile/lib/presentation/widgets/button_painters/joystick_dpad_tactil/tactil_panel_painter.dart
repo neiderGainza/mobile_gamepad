@@ -25,7 +25,7 @@ class _TactilPanelPainterState extends ConsumerState<TactilPanelPainter> {
 
     return TactilPanel(
       button: widget.button,
-      callBackFreequency: const Duration(milliseconds: 5),
+      callBackFreequency: const Duration(milliseconds: 10),
       onStop: () {
         connectionRepo.send(
           ButtonPlayerEvent(
