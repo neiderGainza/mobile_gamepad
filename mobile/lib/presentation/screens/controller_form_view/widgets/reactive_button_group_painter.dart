@@ -62,7 +62,7 @@ class _ReactiveButtonGroupPainterState extends ConsumerState<ReactiveButtonGroup
       
           
 
-          onLongPressMoveUpdate: (details){
+          onPanUpdate: (details){
             
             final double dx = (
               (details.globalPosition.dx + details.localPosition.dx)/ size.width 

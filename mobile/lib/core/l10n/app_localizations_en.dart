@@ -34,7 +34,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howManyUsersStep1 =>
-      'On Windows the maximun amount of connected Xbox Controllers is 4.\nOn Linux tecnicly you can connect any number of players.\n\nWe recommend to connect up to 4 users';
+      'On Windows the maximun amount of connected Xbox Controllers is 4.\nOn Linux technically you can connect any number of players.\n\nWe recommend to connect up to 4 users';
 
   @override
   String get howConnectThroughtBluetooth =>

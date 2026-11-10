@@ -143,7 +143,7 @@ abstract class AppLocalizations {
   /// No description provided for @howManyUsersStep1.
   ///
   /// In en, this message translates to:
-  /// **'On Windows the maximun amount of connected Xbox Controllers is 4.\nOn Linux tecnicly you can connect any number of players.\n\nWe recommend to connect up to 4 users'**
+  /// **'On Windows the maximun amount of connected Xbox Controllers is 4.\nOn Linux technically you can connect any number of players.\n\nWe recommend to connect up to 4 users'**
   String get howManyUsersStep1;
 
   /// No description provided for @howConnectThroughtBluetooth.

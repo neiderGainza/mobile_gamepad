@@ -10,7 +10,6 @@ import 'package:game_controller/presentation/screens/controller_details_view/wid
 import 'package:game_controller/presentation/screens/controller_details_view/widgets/status_indicators.dart';
 import 'package:game_controller/presentation/utils/orientation_function_collection.dart';
 import 'package:game_controller/presentation/utils/snackbar_collection.dart';
-import 'package:game_controller/presentation/widgets/ads/mobile_gamepad_banner_ad.dart';
 import 'package:game_controller/presentation/widgets/button_painters/button_group_painter.dart';
 import 'package:game_controller/presentation/utils/inherited_value.dart';
 
@@ -130,16 +129,6 @@ class _ControllerDetailsViewState extends ConsumerState<ControllerDetailsView> w
           const Align(
             alignment: .topRight,
             child: StatusIndicators(),
-          ),
-
-          Align(
-            alignment: .topCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 32),
-              child: MobileGamepadBannerAdd( 
-                width: MediaQuery.of(context).size.longestSide * 0.5,
-              ),
-            ),
           ),
 
         ],
